@@ -4,43 +4,47 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import {
   Leaf,
-  BarChart3,
-  Shield,
-  Zap,
   ArrowRight,
   CheckCircle2,
-  Globe,
   TreePine,
+  FileCheck,
+  IndianRupee,
+  BadgeCheck,
+  Calendar,
 } from "lucide-react";
+import heroImage from "@/assets/hero-india-solar.jpg";
+import greenBuilding from "@/assets/green-building-india.jpg";
+import sustainableFactory from "@/assets/sustainable-factory-india.jpg";
 
-const features = [
+const valueProps = [
   {
-    icon: BarChart3,
-    title: "Real-time Analytics",
-    description: "Track your carbon footprint with detailed dashboards and visualizations.",
+    icon: FileCheck,
+    title: "BRSR Compliance",
+    description: "Meet SEBI's Business Responsibility and Sustainability Reporting requirements with automated data collection and audit-ready reports.",
+    image: greenBuilding,
+    imageAlt: "Green building in India with solar panels",
   },
   {
-    icon: Shield,
-    title: "Compliance Ready",
-    description: "Meet regulatory requirements with comprehensive emissions reporting.",
+    icon: IndianRupee,
+    title: "Cost Savings",
+    description: "Identify energy inefficiencies and reduce operational costs by up to 30% through data-driven sustainability insights.",
+    image: sustainableFactory,
+    imageAlt: "Sustainable factory in India with wind turbines",
   },
   {
-    icon: Zap,
-    title: "Automated Tracking",
-    description: "Connect your systems for automatic emissions data collection.",
-  },
-  {
-    icon: Globe,
-    title: "Carbon Marketplace",
-    description: "Buy verified carbon credits directly through our platform.",
+    icon: BadgeCheck,
+    title: "Carbon Credits",
+    description: "Generate and trade verified carbon credits through India's carbon market. Monetize your sustainability efforts.",
+    image: heroImage,
+    imageAlt: "Solar panel farm in India",
   },
 ];
 
 const stats = [
-  { value: "50K+", label: "Tons CO₂ Tracked" },
-  { value: "2,500+", label: "Organizations" },
-  { value: "98%", label: "Accuracy Rate" },
-  { value: "35%", label: "Avg. Reduction" },
+  { value: "500+", label: "Indian Companies" },
+  { value: "₹50Cr+", label: "Cost Savings" },
+  { value: "1M+", label: "Tons CO₂ Tracked" },
+  { value: "100%", label: "BRSR Compliant" },
 ];
 
 const Index = () => {
@@ -49,43 +53,62 @@ const Index = () => {
       <Navbar />
       
       {/* Hero Section */}
-      <section className="relative overflow-hidden gradient-hero">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
-        <div className="container relative py-24 lg:py-32">
-          <div className="mx-auto max-w-3xl text-center">
-            <div className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-1.5 text-sm font-medium text-accent-foreground mb-6 animate-fade-in">
+      <section className="relative overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img 
+            src={heroImage} 
+            alt="Solar panels in India" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-background/40" />
+        </div>
+        
+        <div className="container relative py-24 lg:py-36">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 px-4 py-1.5 text-sm font-medium text-primary mb-6 animate-fade-in">
               <Leaf className="h-4 w-4" />
-              <span>Sustainability made simple</span>
+              <span>India's #1 Carbon Management Platform</span>
             </div>
-            <h1 className="text-4xl font-bold font-display tracking-tight sm:text-5xl lg:text-6xl mb-6 animate-slide-up text-balance">
-              Track, Reduce, and{" "}
-              <span className="text-primary">Offset</span> Your Carbon Footprint
+            <h1 className="text-4xl font-bold font-display tracking-tight sm:text-5xl lg:text-6xl mb-6 animate-slide-up text-balance text-foreground">
+              Track Your Carbon Footprint in{" "}
+              <span className="text-primary">India</span>
             </h1>
-            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto animate-slide-up text-balance" style={{ animationDelay: "0.1s" }}>
-              Comprehensive carbon emissions tracking platform for businesses committed to sustainability. Make data-driven decisions to reduce your environmental impact.
+            <p className="text-lg text-muted-foreground mb-8 max-w-xl animate-slide-up text-balance" style={{ animationDelay: "0.1s" }}>
+              Comprehensive carbon emissions tracking for Indian businesses. Achieve BRSR compliance, reduce costs, and access India's growing carbon credit market.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up" style={{ animationDelay: "0.2s" }}>
+            <div className="flex flex-col sm:flex-row gap-4 animate-slide-up" style={{ animationDelay: "0.2s" }}>
               <Link to="/signup">
                 <Button variant="hero" size="xl" className="w-full sm:w-auto gap-2">
                   Start Free Trial
                   <ArrowRight className="h-5 w-5" />
                 </Button>
               </Link>
-              <Link to="/dashboard">
-                <Button variant="heroOutline" size="xl" className="w-full sm:w-auto">
-                  View Demo Dashboard
-                </Button>
-              </Link>
+              <Button variant="heroOutline" size="xl" className="w-full sm:w-auto gap-2">
+                <Calendar className="h-5 w-5" />
+                Book Demo
+              </Button>
+            </div>
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-8 text-sm text-muted-foreground animate-slide-up" style={{ animationDelay: "0.3s" }}>
+              <span className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-primary" />
+                14-day free trial
+              </span>
+              <span className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-primary" />
+                No credit card required
+              </span>
+              <span className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-primary" />
+                Setup in 5 minutes
+              </span>
             </div>
           </div>
         </div>
-        
-        {/* Decorative elements */}
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       </section>
 
       {/* Stats Section */}
-      <section className="border-b bg-card">
+      <section className="border-y bg-card">
         <div className="container py-12">
           <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
             {stats.map((stat, index) => (
@@ -100,29 +123,36 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Value Propositions Section */}
       <section className="py-24">
         <div className="container">
           <div className="mx-auto max-w-2xl text-center mb-16">
             <h2 className="text-3xl font-bold font-display mb-4">
-              Everything you need to manage emissions
+              Why Indian Businesses Choose CarbonTrack
             </h2>
             <p className="text-muted-foreground text-lg">
-              From data collection to carbon offsetting, we provide the tools to make your sustainability journey seamless.
+              Built specifically for India's regulatory landscape and sustainability goals.
             </p>
           </div>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {features.map((feature, index) => (
+          <div className="grid gap-8 lg:grid-cols-3">
+            {valueProps.map((prop, index) => (
               <Card
                 key={index}
-                className="group transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border-transparent bg-gradient-to-b from-card to-accent/30"
+                className="group overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border-transparent bg-card"
               >
+                <div className="aspect-[4/3] overflow-hidden">
+                  <img 
+                    src={prop.image} 
+                    alt={prop.imageAlt}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                </div>
                 <CardContent className="p-6">
                   <div className="rounded-xl bg-primary/10 p-3 w-fit mb-4 group-hover:bg-primary/20 transition-colors">
-                    <feature.icon className="h-6 w-6 text-primary" />
+                    <prop.icon className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="font-semibold text-lg mb-2">{feature.title}</h3>
-                  <p className="text-muted-foreground text-sm">{feature.description}</p>
+                  <h3 className="font-semibold text-xl mb-2">{prop.title}</h3>
+                  <p className="text-muted-foreground">{prop.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -138,10 +168,10 @@ const Index = () => {
               <TreePine className="h-10 w-10" />
             </div>
             <h2 className="text-3xl lg:text-4xl font-bold font-display mb-4">
-              Ready to reduce your carbon footprint?
+              Ready to achieve net-zero in India?
             </h2>
             <p className="text-primary-foreground/80 text-lg mb-8 max-w-xl mx-auto">
-              Join thousands of organizations already tracking and reducing their emissions with CarbonTrack.
+              Join 500+ Indian companies already tracking and reducing their emissions with CarbonTrack.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/signup">
@@ -149,19 +179,27 @@ const Index = () => {
                   size="xl"
                   className="w-full sm:w-auto gap-2 bg-primary-foreground text-primary hover:bg-primary-foreground/90"
                 >
-                  Get Started Free
+                  Start Free Trial
                   <ArrowRight className="h-5 w-5" />
                 </Button>
               </Link>
+              <Button
+                size="xl"
+                variant="outline"
+                className="w-full sm:w-auto gap-2 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10"
+              >
+                <Calendar className="h-5 w-5" />
+                Book Demo
+              </Button>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 mt-8 text-sm text-primary-foreground/70">
               <span className="flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4" />
-                No credit card required
+                BRSR Compliant
               </span>
               <span className="flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4" />
-                14-day free trial
+                Made for India
               </span>
               <span className="flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4" />
@@ -183,7 +221,7 @@ const Index = () => {
               <span className="font-display font-semibold">CarbonTrack</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              © 2024 CarbonTrack. All rights reserved.
+              © 2024 CarbonTrack India. All rights reserved.
             </p>
           </div>
         </div>
