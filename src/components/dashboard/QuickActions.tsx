@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Plus, FileText, BadgeCheck, Calculator, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
 import { EmissionsInputForm } from "./EmissionsInputForm";
+import { CarbonCalculator } from "./CarbonCalculator";
 
 export function QuickActions() {
   return (
@@ -58,10 +59,15 @@ export function QuickActions() {
               <Upload className="h-4 w-4" />
               Import CSV
             </Button>
-            <Button variant="ghost" size="sm" className="flex-1 gap-2">
+            <CarbonCalculator
+              trigger={
+                <Button variant="ghost" size="sm" className="flex-1 gap-2">
               <Calculator className="h-4 w-4" />
-              Calculator
-            </Button>
+                  <Calculator className="h-4 w-4" />
+                  Calculator
+                </Button>
+              }
+            />
           </div>
         </div>
       </CardContent>
