@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { FileText, Download, Calendar, TrendingDown, Building2, Truck, Zap, Factory } from "lucide-react";
+import { BRSRReportGenerator } from "@/components/reports/BRSRReportGenerator";
 
 const reports = [
   {
@@ -59,10 +60,14 @@ const Reports = () => {
               Generate and download emissions reports
             </p>
           </div>
-          <Button className="gap-2">
-            <FileText className="h-4 w-4" />
-            Generate Report
-          </Button>
+          <BRSRReportGenerator
+            trigger={
+              <Button className="gap-2">
+                <FileText className="h-4 w-4" />
+                Generate BRSR Report
+              </Button>
+            }
+          />
         </div>
 
         {/* Quick Stats */}
