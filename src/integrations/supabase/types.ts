@@ -14,6 +14,56 @@ export type Database = {
   }
   public: {
     Tables: {
+      emissions: {
+        Row: {
+          category: string
+          co2e: number
+          created_at: string
+          date: string
+          emission_factor: number | null
+          id: string
+          quantity: number
+          scope: number
+          unit: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category: string
+          co2e: number
+          created_at?: string
+          date?: string
+          emission_factor?: number | null
+          id?: string
+          quantity: number
+          scope: number
+          unit: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          co2e?: number
+          created_at?: string
+          date?: string
+          emission_factor?: number | null
+          id?: string
+          quantity?: number
+          scope?: number
+          unit?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "emissions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       users: {
         Row: {
           city: string | null
