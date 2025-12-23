@@ -214,7 +214,7 @@ export function BRSRReportGenerator({ trigger }: BRSRReportGeneratorProps) {
       doc.setFontSize(8);
       doc.setTextColor(128, 128, 128);
       doc.text(
-        `Generated on ${new Date().toLocaleDateString("en-IN")} | CarbonTrack India | SEBI BRSR Compliant`,
+        `Generated on ${new Date().toLocaleDateString("en-IN")} | Bharat Carbon | SEBI BRSR Compliant`,
         pageWidth / 2,
         doc.internal.pageSize.getHeight() - 10,
         { align: "center" }

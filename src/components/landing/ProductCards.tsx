@@ -15,7 +15,7 @@ const products = [
   {
     icon: BarChart3,
     title: "Carbon Tracking Platform",
-    subtitle: "CarbonTrack Pro",
+    subtitle: "Bharat Carbon Pro",
     description: "Comprehensive carbon management platform for Indian businesses to calculate, track, and report emissions across all scopes.",
     href: "/dashboard",
     featured: true,

@@ -3,12 +3,12 @@ import { Quote } from "lucide-react";
 
 const testimonials = [
   {
-    quote: "CarbonTrack has transformed our sustainability reporting. The BRSR compliance features saved us weeks of manual work and gave us audit-ready reports.",
+    quote: "Bharat Carbon has transformed our sustainability reporting. The BRSR compliance features saved us weeks of manual work and gave us audit-ready reports.",
     company: "Tata Steel",
     role: "Sustainability Director",
   },
   {
-    quote: "As an MSME, we thought carbon tracking was only for large corporations. CarbonTrack made it accessible and affordable for us to start our net zero journey.",
+    quote: "As an MSME, we thought carbon tracking was only for large corporations. Bharat Carbon made it accessible and affordable for us to start our net zero journey.",
     company: "Infosys BPM",
     role: "Environmental Manager",
   },
@@ -18,7 +18,7 @@ const testimonials = [
     role: "Chief Sustainability Officer",
   },
   {
-    quote: "Working with CarbonTrack has been excellent. Their team understands Indian regulatory requirements and helped us navigate BRSR effectively.",
+    quote: "Working with Bharat Carbon has been excellent. Their team understands Indian regulatory requirements and helped us navigate BRSR effectively.",
     company: "Hindustan Unilever",
     role: "ESG Lead",
   },
@@ -28,7 +28,7 @@ const testimonials = [
     role: "Carbon Management Head",
   },
   {
-    quote: "From our first carbon assessment, CarbonTrack has been instrumental in shaping our sustainable business practices for the Indian market.",
+    quote: "From our first carbon assessment, Bharat Carbon has been instrumental in shaping our sustainable business practices for the Indian market.",
     company: "Reliance Industries",
     role: "VP Sustainability",
   },

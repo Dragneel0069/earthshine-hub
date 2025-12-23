@@ -125,7 +125,7 @@ export function Navbar() {
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
             <Leaf className="h-5 w-5 text-primary-foreground" />
           </div>
-          <span className="font-display text-xl font-bold text-foreground">CarbonTrack</span>
+          <span className="font-display text-xl font-bold text-foreground">Bharat Carbon</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -242,9 +242,9 @@ export function Navbar() {
         {/* Contact info and CTA */}
         <div className="hidden lg:flex items-center gap-4">
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <a href="mailto:info@carbontrack.in" className="flex items-center gap-1 hover:text-foreground transition-colors">
+            <a href="mailto:info@bharatcarbon.in" className="flex items-center gap-1 hover:text-foreground transition-colors">
               <Mail className="h-4 w-4" />
-              <span className="hidden xl:inline">info@carbontrack.in</span>
+              <span className="hidden xl:inline">info@bharatcarbon.in</span>
             </a>
             <a href="tel:+911800XXXXXXX" className="flex items-center gap-1 hover:text-foreground transition-colors">
               <Phone className="h-4 w-4" />

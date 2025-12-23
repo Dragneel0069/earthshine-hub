@@ -212,7 +212,7 @@ const Consultation = () => {
                     </div>
                     <div className="flex items-center gap-3">
                       <Mail className="h-5 w-5" />
-                      <span>consulting@carbontrack.in</span>
+                      <span>consulting@bharatcarbon.in</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <MapPin className="h-5 w-5" />
@@ -255,7 +255,7 @@ const Consultation = () => {
       {/* Footer */}
       <footer className="border-t py-8 bg-card">
         <div className="container text-center text-sm text-muted-foreground">
-          © 2024 CarbonTrack India. All rights reserved.
+          © 2024 Bharat Carbon. All rights reserved.
         </div>
       </footer>
     </div>
