@@ -1,13 +1,117 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Leaf, LayoutDashboard, FileText, ShoppingBag, Settings, Menu, X } from "lucide-react";
+import { 
+  Leaf, 
+  LayoutDashboard, 
+  FileText, 
+  ShoppingBag, 
+  Menu, 
+  X, 
+  Calculator,
+  ChevronDown,
+  Building2,
+  Users,
+  Factory,
+  Briefcase,
+  TreePine,
+  Shield,
+  Phone,
+  Mail,
+  Info
+} from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
 
-const navLinks = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/reports", label: "Reports", icon: FileText },
-  { href: "/marketplace", label: "Marketplace", icon: ShoppingBag },
+const solutions = [
+  {
+    title: "For Corporates",
+    description: "Enterprise carbon tracking and BRSR compliance",
+    icon: Building2,
+    href: "/dashboard",
+  },
+  {
+    title: "For SMEs",
+    description: "Affordable carbon management for small businesses",
+    icon: Briefcase,
+    href: "/dashboard",
+  },
+  {
+    title: "For MSMEs",
+    description: "Simple and cost-effective solutions for micro enterprises",
+    icon: Factory,
+    href: "/dashboard",
+  },
+];
+
+const platforms = [
+  {
+    title: "Carbon Tracking",
+    description: "Monitor and manage your emissions",
+    icon: LayoutDashboard,
+    href: "/dashboard",
+  },
+  {
+    title: "BRSR Reports",
+    description: "Automated compliance reporting",
+    icon: FileText,
+    href: "/reports",
+  },
+  {
+    title: "Marketplace",
+    description: "Buy verified carbon credits",
+    icon: ShoppingBag,
+    href: "/marketplace",
+  },
+];
+
+const calculators = [
+  {
+    title: "Individual Calculator",
+    description: "Calculate your personal carbon footprint",
+    icon: Users,
+    href: "/calculators",
+  },
+  {
+    title: "Business Calculator",
+    description: "SME and MSME carbon calculations",
+    icon: Briefcase,
+    href: "/calculators",
+  },
+  {
+    title: "Corporate Calculator",
+    description: "Enterprise-grade emissions tracking",
+    icon: Building2,
+    href: "/calculators",
+  },
+];
+
+const information = [
+  {
+    title: "Carbon Offsetting",
+    description: "Learn about carbon credits and offsetting",
+    icon: TreePine,
+    href: "/marketplace",
+  },
+  {
+    title: "BRSR Compliance",
+    description: "SEBI requirements explained",
+    icon: Shield,
+    href: "/reports",
+  },
+  {
+    title: "About Us",
+    description: "Our mission and team",
+    icon: Info,
+    href: "/about",
+  },
 ];
 
 export function Navbar() {
@@ -25,35 +129,136 @@ export function Navbar() {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden items-center gap-1 md:flex">
-          {navLinks.map((link) => {
-            const isActive = location.pathname === link.href;
-            return (
-              <Link key={link.href} to={link.href}>
-                <Button
-                  variant={isActive ? "secondary" : "ghost"}
-                  size="sm"
-                  className={cn(
-                    "gap-2",
-                    isActive && "bg-accent text-accent-foreground"
-                  )}
-                >
-                  <link.icon className="h-4 w-4" />
-                  {link.label}
-                </Button>
-              </Link>
-            );
-          })}
+        <div className="hidden lg:flex items-center">
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="bg-transparent">Solutions</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[400px] gap-3 p-4">
+                    {solutions.map((item) => (
+                      <li key={item.title}>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            to={item.href}
+                            className="flex items-start gap-3 rounded-lg p-3 hover:bg-muted transition-colors"
+                          >
+                            <div className="rounded-lg bg-primary/10 p-2">
+                              <item.icon className="h-5 w-5 text-primary" />
+                            </div>
+                            <div>
+                              <div className="font-medium">{item.title}</div>
+                              <p className="text-sm text-muted-foreground">{item.description}</p>
+                            </div>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+              
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="bg-transparent">Our Platforms</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[400px] gap-3 p-4">
+                    {platforms.map((item) => (
+                      <li key={item.title}>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            to={item.href}
+                            className="flex items-start gap-3 rounded-lg p-3 hover:bg-muted transition-colors"
+                          >
+                            <div className="rounded-lg bg-primary/10 p-2">
+                              <item.icon className="h-5 w-5 text-primary" />
+                            </div>
+                            <div>
+                              <div className="font-medium">{item.title}</div>
+                              <p className="text-sm text-muted-foreground">{item.description}</p>
+                            </div>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="bg-transparent">Calculators</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[400px] gap-3 p-4">
+                    {calculators.map((item) => (
+                      <li key={item.title}>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            to={item.href}
+                            className="flex items-start gap-3 rounded-lg p-3 hover:bg-muted transition-colors"
+                          >
+                            <div className="rounded-lg bg-primary/10 p-2">
+                              <item.icon className="h-5 w-5 text-primary" />
+                            </div>
+                            <div>
+                              <div className="font-medium">{item.title}</div>
+                              <p className="text-sm text-muted-foreground">{item.description}</p>
+                            </div>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="bg-transparent">Information</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[400px] gap-3 p-4">
+                    {information.map((item) => (
+                      <li key={item.title}>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            to={item.href}
+                            className="flex items-start gap-3 rounded-lg p-3 hover:bg-muted transition-colors"
+                          >
+                            <div className="rounded-lg bg-primary/10 p-2">
+                              <item.icon className="h-5 w-5 text-primary" />
+                            </div>
+                            <div>
+                              <div className="font-medium">{item.title}</div>
+                              <p className="text-sm text-muted-foreground">{item.description}</p>
+                            </div>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
         </div>
 
-        <div className="hidden items-center gap-3 md:flex">
-          <Link to="/login">
-            <Button variant="ghost" size="sm">
-              Log in
+        {/* Contact info and CTA */}
+        <div className="hidden lg:flex items-center gap-4">
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <a href="mailto:info@carbontrack.in" className="flex items-center gap-1 hover:text-foreground transition-colors">
+              <Mail className="h-4 w-4" />
+              <span className="hidden xl:inline">info@carbontrack.in</span>
+            </a>
+            <a href="tel:+911800XXXXXXX" className="flex items-center gap-1 hover:text-foreground transition-colors">
+              <Phone className="h-4 w-4" />
+              <span className="hidden xl:inline">+91 1800-XXX-XXXX</span>
+            </a>
+          </div>
+          <div className="h-6 w-px bg-border" />
+          <Link to="/marketplace">
+            <Button variant="outline" size="sm">
+              Buy Offsets
             </Button>
           </Link>
-          <Link to="/signup">
-            <Button size="sm">Get Started</Button>
+          <Link to="/consultation">
+            <Button size="sm">Get a Consultation</Button>
           </Link>
         </div>
 
@@ -61,7 +266,7 @@ export function Navbar() {
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden"
+          className="lg:hidden"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -70,33 +275,53 @@ export function Navbar() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="border-t bg-background md:hidden animate-fade-in">
-          <div className="container py-4 space-y-2">
-            {navLinks.map((link) => {
-              const isActive = location.pathname === link.href;
-              return (
+        <div className="border-t bg-background lg:hidden animate-fade-in">
+          <div className="container py-4 space-y-4">
+            <div className="space-y-2">
+              <p className="text-xs font-semibold text-muted-foreground uppercase px-4">Solutions</p>
+              {solutions.map((item) => (
                 <Link
-                  key={link.href}
-                  to={link.href}
+                  key={item.title}
+                  to={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={cn(
-                    "flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors",
-                    isActive
-                      ? "bg-accent text-accent-foreground"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                  )}
+                  className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-muted"
                 >
-                  <link.icon className="h-5 w-5" />
-                  {link.label}
+                  <item.icon className="h-5 w-5 text-primary" />
+                  {item.title}
                 </Link>
-              );
-            })}
-            <div className="flex flex-col gap-2 pt-4 border-t">
-              <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
-                <Button variant="outline" className="w-full">Log in</Button>
+              ))}
+            </div>
+            <div className="space-y-2">
+              <p className="text-xs font-semibold text-muted-foreground uppercase px-4">Platforms</p>
+              {platforms.map((item) => (
+                <Link
+                  key={item.title}
+                  to={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-muted"
+                >
+                  <item.icon className="h-5 w-5 text-primary" />
+                  {item.title}
+                </Link>
+              ))}
+            </div>
+            <div className="space-y-2">
+              <p className="text-xs font-semibold text-muted-foreground uppercase px-4">Calculators</p>
+              <Link
+                to="/calculators"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-muted"
+              >
+                <Calculator className="h-5 w-5 text-primary" />
+                All Calculators
               </Link>
-              <Link to="/signup" onClick={() => setMobileMenuOpen(false)}>
-                <Button className="w-full">Get Started</Button>
+            </div>
+            <div className="flex flex-col gap-2 pt-4 border-t">
+              <Link to="/marketplace" onClick={() => setMobileMenuOpen(false)}>
+                <Button variant="outline" className="w-full">Buy Offsets</Button>
+              </Link>
+              <Link to="/consultation" onClick={() => setMobileMenuOpen(false)}>
+                <Button className="w-full">Get a Consultation</Button>
               </Link>
             </div>
           </div>
