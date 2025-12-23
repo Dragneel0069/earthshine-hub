@@ -252,13 +252,13 @@ export function Navbar() {
             </a>
           </div>
           <div className="h-6 w-px bg-border" />
-          <Link to="/marketplace">
-            <Button variant="outline" size="sm">
-              Buy Offsets
+          <Link to="/login">
+            <Button variant="ghost" size="sm">
+              Login
             </Button>
           </Link>
-          <Link to="/consultation">
-            <Button size="sm">Get a Consultation</Button>
+          <Link to="/signup">
+            <Button size="sm">Sign Up</Button>
           </Link>
         </div>
 
@@ -317,11 +317,11 @@ export function Navbar() {
               </Link>
             </div>
             <div className="flex flex-col gap-2 pt-4 border-t">
-              <Link to="/marketplace" onClick={() => setMobileMenuOpen(false)}>
-                <Button variant="outline" className="w-full">Buy Offsets</Button>
+              <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
+                <Button variant="outline" className="w-full">Login</Button>
               </Link>
-              <Link to="/consultation" onClick={() => setMobileMenuOpen(false)}>
-                <Button className="w-full">Get a Consultation</Button>
+              <Link to="/signup" onClick={() => setMobileMenuOpen(false)}>
+                <Button className="w-full">Sign Up</Button>
               </Link>
             </div>
           </div>
