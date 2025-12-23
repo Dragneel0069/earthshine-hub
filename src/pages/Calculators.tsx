@@ -23,7 +23,7 @@ const calculatorTypes = [
   {
     icon: User,
     title: "Individuals / Households",
-    subtitle: "CarbonTrack Vita",
+    subtitle: "Bharat Carbon Vita",
     description: "Free online carbon footprint calculator for individuals and families. Calculate your personal emissions from home energy, transport, and lifestyle.",
     features: ["Home energy consumption", "Personal transport", "Diet & lifestyle", "Travel emissions"],
     href: "/dashboard",
@@ -33,7 +33,7 @@ const calculatorTypes = [
   {
     icon: Briefcase,
     title: "Small Companies",
-    subtitle: "CarbonTrack Lite",
+    subtitle: "Bharat Carbon Lite",
     description: "Free for micro businesses. Affordable carbon tracking for SMEs and MSMEs with simplified Scope 1, 2, and 3 calculations.",
     features: ["Scope 1 & 2 emissions", "Basic Scope 3", "BRSR Lite reports", "GST integration"],
     href: "/dashboard",
@@ -43,7 +43,7 @@ const calculatorTypes = [
   {
     icon: Building2,
     title: "Larger Corporates",
-    subtitle: "CarbonTrack Pro",
+    subtitle: "Bharat Carbon Pro",
     description: "Enterprise-grade software tracking platform for listed companies and large organizations with comprehensive GHG accounting.",
     features: ["Full Scope 1, 2 & 3", "Multi-site tracking", "BRSR compliance", "Supply chain emissions"],
     href: "/dashboard",
@@ -237,7 +237,7 @@ const Calculators = () => {
       {/* Footer */}
       <footer className="border-t py-8 bg-card">
         <div className="container text-center text-sm text-muted-foreground">
-          © 2024 CarbonTrack India. All rights reserved.
+          © 2024 Bharat Carbon. All rights reserved.
         </div>
       </footer>
     </div>

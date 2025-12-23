@@ -151,7 +151,7 @@ const Index = () => {
               Ready to achieve Net Zero in India?
             </h2>
             <p className="text-muted-foreground text-lg mb-8 max-w-xl mx-auto">
-              Join 500+ Indian companies already tracking and reducing their emissions with CarbonTrack.
+              Join 500+ Indian companies already tracking and reducing their emissions with Bharat Carbon.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/signup">
@@ -197,7 +197,7 @@ const Index = () => {
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
                   <Leaf className="h-4 w-4 text-primary-foreground" />
                 </div>
-                <span className="font-display font-semibold">CarbonTrack</span>
+                <span className="font-display font-semibold">Bharat Carbon</span>
               </div>
               <p className="text-sm text-muted-foreground">
                 India's leading carbon management platform for businesses committed to Net Zero.
@@ -224,7 +224,7 @@ const Index = () => {
             <div>
               <h4 className="font-semibold mb-4">Contact</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>info@carbontrack.in</li>
+                <li>info@bharatcarbon.in</li>
                 <li>+91 1800-XXX-XXXX</li>
                 <li>Mumbai, Maharashtra, India</li>
               </ul>
@@ -232,7 +232,7 @@ const Index = () => {
           </div>
           <div className="border-t pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground">
-              © 2024 CarbonTrack India. All rights reserved.
+              © 2024 Bharat Carbon. All rights reserved.
             </p>
             <div className="flex gap-6 text-sm text-muted-foreground">
               <a href="#" className="hover:text-foreground transition-colors">Terms</a>
