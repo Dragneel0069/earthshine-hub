@@ -1,7 +1,19 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
 
-const data = [
+interface MonthlyData {
+  month: string;
+  emissions: number;
+  target?: number;
+}
+
+interface MonthlyTrendChartProps {
+  data?: MonthlyData[];
+  target?: number;
+  isLoading?: boolean;
+}
+
+const defaultData = [
   { month: "Apr '24", emissions: 185.2 },
   { month: "May '24", emissions: 172.5 },
   { month: "Jun '24", emissions: 168.3 },
@@ -13,21 +25,43 @@ const data = [
   { month: "Dec '24", emissions: 128.5 },
 ];
 
-const target = 120;
+export function MonthlyTrendChart({ 
+  data, 
+  target = 120, 
+  isLoading = false 
+}: MonthlyTrendChartProps) {
+  const chartData = data && data.some(d => d.emissions > 0) ? data : defaultData;
+  const hasRealData = data && data.some(d => d.emissions > 0);
+  
+  const firstEmission = chartData[0]?.emissions || 0;
+  const lastEmission = chartData[chartData.length - 1]?.emissions || 0;
+  const reduction = firstEmission > 0 ? ((firstEmission - lastEmission) / firstEmission) * 100 : 0;
 
-export function MonthlyTrendChart() {
+  if (isLoading) {
+    return (
+      <Card className="col-span-full lg:col-span-2">
+        <CardHeader>
+          <CardTitle className="text-xl">Monthly Emissions Trend</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="animate-pulse h-[350px] bg-muted rounded"></div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card className="col-span-full lg:col-span-2">
       <CardHeader>
         <CardTitle className="text-xl">Monthly Emissions Trend</CardTitle>
         <p className="text-sm text-muted-foreground">
-          Tracking progress towards FY 2024-25 reduction target
+          {hasRealData ? "Live data from your emissions records" : "Tracking progress towards FY 2024-25 reduction target"}
         </p>
       </CardHeader>
       <CardContent>
         <div className="h-[350px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+            <LineChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
               <XAxis
                 dataKey="month"
@@ -41,7 +75,6 @@ export function MonthlyTrendChart() {
                 tickLine={false}
                 className="text-xs text-muted-foreground"
                 tickFormatter={(value) => `${value}`}
-                domain={[100, 200]}
               />
               <Tooltip
                 contentStyle={{
@@ -51,7 +84,7 @@ export function MonthlyTrendChart() {
                   boxShadow: "var(--shadow-lg)",
                 }}
                 labelStyle={{ color: "hsl(var(--foreground))" }}
-                formatter={(value: number) => [`${value} tCO₂e`, "Emissions"]}
+                formatter={(value: number) => [`${value.toFixed(1)} tCO₂e`, "Emissions"]}
               />
               <ReferenceLine 
                 y={target} 
@@ -86,7 +119,9 @@ export function MonthlyTrendChart() {
               <span className="text-muted-foreground">Target Line</span>
             </div>
           </div>
-          <span className="text-primary font-medium">↓ 30.6% reduction</span>
+          {reduction > 0 && (
+            <span className="text-primary font-medium">↓ {reduction.toFixed(1)}% reduction</span>
+          )}
         </div>
       </CardContent>
     </Card>
