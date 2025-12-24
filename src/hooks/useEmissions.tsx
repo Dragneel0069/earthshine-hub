@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect } from "react";
+import { useAuth } from "./useAuth";
 
 export interface Emission {
   id: string;
@@ -17,9 +18,13 @@ export interface Emission {
 }
 
 export function useEmissions() {
+  const { user } = useAuth();
+
   const query = useQuery({
-    queryKey: ["emissions"],
+    queryKey: ["emissions", user?.id],
     queryFn: async () => {
+      if (!user) return [];
+      
       const { data, error } = await supabase
         .from("emissions")
         .select("*")
@@ -28,10 +33,13 @@ export function useEmissions() {
       if (error) throw error;
       return data as Emission[];
     },
+    enabled: !!user,
   });
 
   // Set up realtime subscription
   useEffect(() => {
+    if (!user) return;
+
     const channel = supabase
       .channel("emissions-changes")
       .on(
@@ -50,7 +58,7 @@ export function useEmissions() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [query]);
+  }, [user, query]);
 
   return query;
 }
@@ -58,7 +66,7 @@ export function useEmissions() {
 export function useEmissionsSummary() {
   const { data: emissions, isLoading, error } = useEmissions();
 
-  const summary = emissions
+  const summary = emissions && emissions.length > 0
     ? {
         totalEmissions: emissions.reduce((sum, e) => sum + e.co2e, 0),
         byScope: {
@@ -95,6 +103,6 @@ function getMonthlyTrend(emissions: Emission[]) {
   return months.map((month) => ({
     month,
     emissions: monthlyData[month] || 0,
-    target: 100, // Default target
+    target: 100,
   }));
 }
