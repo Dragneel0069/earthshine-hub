@@ -6,15 +6,33 @@ interface TotalEmissionsCounterProps {
   previousEmissions: number;
   currency?: string;
   costSavings?: number;
+  isLoading?: boolean;
 }
 
 export function TotalEmissionsCounter({
-  totalEmissions = 1284.5,
-  previousEmissions = 1852.3,
+  totalEmissions = 0,
+  previousEmissions = 0,
   currency = "₹",
-  costSavings = 1250000,
+  costSavings = 0,
+  isLoading = false,
 }: TotalEmissionsCounterProps) {
-  const reduction = ((previousEmissions - totalEmissions) / previousEmissions) * 100;
+  const reduction = previousEmissions > 0 
+    ? ((previousEmissions - totalEmissions) / previousEmissions) * 100 
+    : 0;
+
+  if (isLoading) {
+    return (
+      <Card className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground overflow-hidden relative">
+        <CardContent className="p-6">
+          <div className="animate-pulse space-y-4">
+            <div className="h-4 bg-primary-foreground/20 rounded w-1/3"></div>
+            <div className="h-12 bg-primary-foreground/20 rounded w-2/3"></div>
+            <div className="h-8 bg-primary-foreground/20 rounded w-1/2"></div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
   
   return (
     <Card className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground overflow-hidden relative">
@@ -30,24 +48,28 @@ export function TotalEmissionsCounter({
           <p className="text-sm text-primary-foreground/70 mb-1">Total Carbon Emissions (YTD)</p>
           <div className="flex items-baseline gap-2">
             <span className="text-5xl font-bold font-display tracking-tight">
-              {totalEmissions.toLocaleString('en-IN')}
+              {totalEmissions.toLocaleString('en-IN', { maximumFractionDigits: 1 })}
             </span>
             <span className="text-xl text-primary-foreground/80">tCO₂e</span>
           </div>
         </div>
         
         <div className="flex flex-wrap gap-6">
-          <div className="flex items-center gap-2 bg-primary-foreground/10 rounded-lg px-3 py-2">
-            <TrendingDown className="h-4 w-4" />
-            <span className="text-sm font-medium">
-              {reduction.toFixed(1)}% vs last year
-            </span>
-          </div>
-          <div className="flex items-center gap-2 bg-primary-foreground/10 rounded-lg px-3 py-2">
-            <span className="text-sm font-medium">
-              Cost Savings: {currency}{(costSavings / 100000).toFixed(1)}L
-            </span>
-          </div>
+          {reduction > 0 && (
+            <div className="flex items-center gap-2 bg-primary-foreground/10 rounded-lg px-3 py-2">
+              <TrendingDown className="h-4 w-4" />
+              <span className="text-sm font-medium">
+                {reduction.toFixed(1)}% vs last year
+              </span>
+            </div>
+          )}
+          {costSavings > 0 && (
+            <div className="flex items-center gap-2 bg-primary-foreground/10 rounded-lg px-3 py-2">
+              <span className="text-sm font-medium">
+                Cost Savings: {currency}{(costSavings / 100000).toFixed(1)}L
+              </span>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>

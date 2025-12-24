@@ -4,42 +4,45 @@ import { EmissionsByScope } from "@/components/dashboard/EmissionsByScope";
 import { MonthlyTrendChart } from "@/components/dashboard/MonthlyTrendChart";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { FileCheck, Target, Leaf, IndianRupee } from "lucide-react";
-
-const statsCards = [
-  {
-    title: "BRSR Status",
-    value: "Compliant",
-    badge: "FY 24-25",
-    icon: FileCheck,
-    color: "text-primary",
-  },
-  {
-    title: "Reduction Target",
-    value: "30%",
-    badge: "On Track",
-    icon: Target,
-    color: "text-secondary",
-  },
-  {
-    title: "Carbon Credits",
-    value: "850",
-    badge: "Available",
-    icon: Leaf,
-    color: "text-primary",
-  },
-  {
-    title: "Monthly Savings",
-    value: "₹12.5L",
-    badge: "+18%",
-    icon: IndianRupee,
-    color: "text-secondary",
-  },
-];
+import { useEmissionsSummary } from "@/hooks/useEmissions";
 
 const Dashboard = () => {
+  const { summary, isLoading } = useEmissionsSummary();
+
+  const statsCards = [
+    {
+      title: "BRSR Status",
+      value: "Compliant",
+      badge: "FY 24-25",
+      icon: FileCheck,
+      color: "text-primary",
+    },
+    {
+      title: "Reduction Target",
+      value: "30%",
+      badge: summary && summary.totalEmissions < 1500 ? "On Track" : "Behind",
+      icon: Target,
+      color: "text-secondary",
+    },
+    {
+      title: "Carbon Credits",
+      value: "850",
+      badge: "Available",
+      icon: Leaf,
+      color: "text-primary",
+    },
+    {
+      title: "Monthly Savings",
+      value: "₹12.5L",
+      badge: "+18%",
+      icon: IndianRupee,
+      color: "text-secondary",
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -60,9 +63,10 @@ const Dashboard = () => {
         {/* Total Emissions Counter */}
         <div className="mb-8">
           <TotalEmissionsCounter 
-            totalEmissions={1284.5}
+            totalEmissions={summary?.totalEmissions || 0}
             previousEmissions={1852.3}
-            costSavings={1250000}
+            costSavings={summary ? Math.round(summary.totalEmissions * 850) : 0}
+            isLoading={isLoading}
           />
         </div>
 
@@ -90,14 +94,26 @@ const Dashboard = () => {
 
         {/* Charts Grid */}
         <div className="grid gap-6 lg:grid-cols-3 mb-8">
-          <MonthlyTrendChart />
-          <EmissionsByScope />
+          <MonthlyTrendChart 
+            data={summary?.monthlyTrend} 
+            target={150}
+            isLoading={isLoading}
+          />
+          <EmissionsByScope 
+            scope1={summary?.byScope.scope1}
+            scope2={summary?.byScope.scope2}
+            scope3={summary?.byScope.scope3}
+            isLoading={isLoading}
+          />
         </div>
 
         {/* Bottom Section */}
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <RecentActivity />
+            <RecentActivity 
+              activities={summary?.recentActivity} 
+              isLoading={isLoading}
+            />
           </div>
           <QuickActions />
         </div>
