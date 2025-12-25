@@ -181,16 +181,13 @@ const Index = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.1 }}
                 >
-                  <span className="text-foreground">Your Path to Net-Zero</span>
-                  <br />
-                  <span className="text-foreground">is a </span>
                   <motion.span 
                     className="bg-gradient-to-r from-primary via-secondary to-lime bg-clip-text text-transparent"
                     animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
                     transition={{ duration: 5, repeat: Infinity }}
                     style={{ backgroundSize: "200% 200%" }}
                   >
-                    Complex Graph
+                    India's Path to Net Zero
                   </motion.span>
                 </motion.h1>
                 
