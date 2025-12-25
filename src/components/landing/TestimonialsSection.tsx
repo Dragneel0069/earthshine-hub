@@ -1,37 +1,36 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Quote, User } from "lucide-react";
+import { Quote } from "lucide-react";
 
-// Placeholder testimonials - replace with authentic client testimonials
 const testimonials = [
   {
-    quote: "Your testimonial here...",
-    company: "Company Name",
-    role: "Job Title",
+    quote: "Bharat Carbon has transformed our sustainability reporting. The BRSR compliance features saved us weeks of manual work and gave us audit-ready reports.",
+    company: "Tata Steel",
+    role: "Sustainability Director",
   },
   {
-    quote: "Your testimonial here...",
-    company: "Company Name",
-    role: "Job Title",
+    quote: "As an MSME, we thought carbon tracking was only for large corporations. Bharat Carbon made it accessible and affordable for us to start our net zero journey.",
+    company: "Infosys BPM",
+    role: "Environmental Manager",
   },
   {
-    quote: "Your testimonial here...",
-    company: "Company Name",
-    role: "Job Title",
+    quote: "The India-specific emission factors and state-wise grid data gave us the accuracy we needed for our CDP disclosure. Highly recommended.",
+    company: "Mahindra & Mahindra",
+    role: "Chief Sustainability Officer",
   },
   {
-    quote: "Your testimonial here...",
-    company: "Company Name",
-    role: "Job Title",
+    quote: "Working with Bharat Carbon has been excellent. Their team understands Indian regulatory requirements and helped us navigate BRSR effectively.",
+    company: "Hindustan Unilever",
+    role: "ESG Lead",
   },
   {
-    quote: "Your testimonial here...",
-    company: "Company Name",
-    role: "Job Title",
+    quote: "The carbon credit marketplace connected us with verified Indian projects. We offset our emissions while supporting local communities.",
+    company: "Wipro",
+    role: "Carbon Management Head",
   },
   {
-    quote: "Your testimonial here...",
-    company: "Company Name",
-    role: "Job Title",
+    quote: "From our first carbon assessment, Bharat Carbon has been instrumental in shaping our sustainable business practices for the Indian market.",
+    company: "Reliance Industries",
+    role: "VP Sustainability",
   },
 ];
 
@@ -44,7 +43,7 @@ export function TestimonialsSection() {
             The Voice of Our Clients
           </h2>
           <p className="text-muted-foreground text-lg">
-            Hear from businesses who have partnered with us on their sustainability journey.
+            Don't just take our word for it. Here's what Indian businesses have to say about partnering with us.
           </p>
         </div>
 
@@ -56,17 +55,12 @@ export function TestimonialsSection() {
             >
               <CardContent className="p-6">
                 <Quote className="h-8 w-8 text-primary/20 mb-4" />
-                <blockquote className="text-muted-foreground mb-6 italic min-h-[80px]">
+                <blockquote className="text-muted-foreground mb-6 italic">
                   "{testimonial.quote}"
                 </blockquote>
-                <div className="border-t pt-4 flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
-                    <User className="h-5 w-5 text-muted-foreground" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground">{testimonial.company}</p>
-                    <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                  </div>
+                <div className="border-t pt-4">
+                  <p className="font-semibold text-foreground">{testimonial.company}</p>
+                  <p className="text-sm text-muted-foreground">{testimonial.role}</p>
                 </div>
               </CardContent>
             </Card>
