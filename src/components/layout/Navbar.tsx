@@ -1,7 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { 
-  Leaf, 
   LayoutDashboard, 
   FileText, 
   ShoppingBag, 
@@ -16,8 +15,7 @@ import {
   Shield,
   Phone,
   Mail,
-  Info,
-  Activity
+  Info
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -30,6 +28,7 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { motion } from "framer-motion";
+import zeroGraphLogo from "@/assets/zerograph-logo.png";
 
 const solutions = [
   {
@@ -134,9 +133,11 @@ export function Navbar() {
     >
       <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-80">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary via-secondary to-lime">
-            <Leaf className="h-5 w-5 text-primary-foreground" />
-          </div>
+          <img 
+            src={zeroGraphLogo} 
+            alt="Zero Graph Logo" 
+            className="h-10 w-10 object-contain"
+          />
           <span className="font-display text-xl font-bold text-foreground">Zero Graph</span>
           <div className="hidden sm:flex items-center gap-1 ml-2">
             <span className="relative flex h-2 w-2">
