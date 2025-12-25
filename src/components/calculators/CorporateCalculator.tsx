@@ -35,6 +35,7 @@ import {
   Recycle,
   Users
 } from "lucide-react";
+import { ShareReport } from "./ShareReport";
 
 // Comprehensive emission factors for enterprise
 const EMISSION_FACTORS = {
@@ -566,10 +567,17 @@ export function CorporateCalculator({ trigger }: CorporateCalculatorProps) {
         {/* Total Results */}
         {hasInput && (
           <div className="space-y-4 pt-6 border-t mt-6">
-            <h3 className="font-semibold text-lg flex items-center gap-2">
-              <Leaf className="h-5 w-5 text-primary" />
-              Corporate GHG Inventory Summary
-            </h3>
+            <div className="flex items-center justify-between">
+              <h3 className="font-semibold text-lg flex items-center gap-2">
+                <Leaf className="h-5 w-5 text-primary" />
+                Corporate GHG Inventory Summary
+              </h3>
+              <ShareReport 
+                totalTonnes={totalTonnes} 
+                treesNeeded={treesNeeded} 
+                calculatorType="corporate" 
+              />
+            </div>
 
             {/* Scope Breakdown */}
             <div className="grid grid-cols-3 gap-2">
