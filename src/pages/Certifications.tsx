@@ -293,9 +293,9 @@ export default function Certifications() {
   });
 
   const existingCertTypes = certifications?.map((c) => c.certification_type) || [];
-  const availableCertTypes = Object.keys(CERTIFICATION_INFO).filter(
+  const availableCertTypes = (Object.keys(CERTIFICATION_INFO) as CertificationType[]).filter(
     (key) => !existingCertTypes.includes(key)
-  ) as CertificationType[];
+  );
 
   const getCertificationProgress = (cert: any) => {
     if (!cert.certification_milestones?.length) return 0;
@@ -303,8 +303,7 @@ export default function Certifications() {
     return Math.round((completed / cert.certification_milestones.length) * 100);
   };
 
-              const infoKey = key as CertificationType;
-              return (
+  return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <main className="container py-8">
@@ -540,7 +539,7 @@ export default function Certifications() {
             {Object.entries(CERTIFICATION_INFO).map(([key, info]) => {
               const Icon = info.icon;
               return (
-                <Card key={infoKey} className="hover:shadow-md transition-shadow">
+                <Card key={key} className="hover:shadow-md transition-shadow">
                   <CardContent className="p-4">
                     <div className="flex items-start gap-3">
                       <div className={`p-2 rounded-lg ${info.bgColor}`}>
