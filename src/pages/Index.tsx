@@ -49,9 +49,9 @@ const AnimatedGraphLine = () => (
   >
     <defs>
       <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stopColor="hsl(var(--cyan))" stopOpacity="0" />
-        <stop offset="50%" stopColor="hsl(var(--cyan))" stopOpacity="1" />
-        <stop offset="100%" stopColor="hsl(var(--neon-green))" stopOpacity="0.5" />
+        <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0" />
+        <stop offset="50%" stopColor="hsl(var(--primary))" stopOpacity="1" />
+        <stop offset="100%" stopColor="hsl(var(--secondary))" stopOpacity="0.5" />
       </linearGradient>
       <filter id="glow">
         <feGaussianBlur stdDeviation="3" result="coloredBlur" />
@@ -79,13 +79,13 @@ const DataStream = ({ delay = 0 }: { delay?: number }) => (
     {[...Array(20)].map((_, i) => (
       <motion.div
         key={i}
-        className="absolute text-primary/20 text-xs font-mono whitespace-nowrap"
+        className="absolute text-primary/30 text-xs font-mono whitespace-nowrap"
         style={{
           left: `${(i * 5) % 100}%`,
           top: `${Math.random() * 100}%`,
         }}
         initial={{ y: "100vh", opacity: 0 }}
-        animate={{ y: "-100vh", opacity: [0, 0.5, 0] }}
+        animate={{ y: "-100vh", opacity: [0, 0.6, 0] }}
         transition={{
           duration: 15 + Math.random() * 10,
           repeat: Infinity,
@@ -104,7 +104,18 @@ const DataStream = ({ delay = 0 }: { delay?: number }) => (
 
 const Index = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: containerRef });
+  const { scrollYProgress: heroScrollProgress } = useScroll({ 
+    target: heroRef,
+    offset: ["start start", "end start"]
+  });
+  
+  // Parallax transforms for the globe
+  const globeY = useTransform(heroScrollProgress, [0, 1], [0, 200]);
+  const globeScale = useTransform(heroScrollProgress, [0, 1], [1, 0.8]);
+  const globeOpacity = useTransform(heroScrollProgress, [0, 0.5], [1, 0.3]);
+  const globeRotate = useTransform(heroScrollProgress, [0, 1], [0, 30]);
   
   const heroY = useTransform(scrollYProgress, [0, 0.3], [0, -100]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
@@ -114,27 +125,35 @@ const Index = () => {
       <div ref={containerRef} className="min-h-screen bg-background overflow-hidden">
         <Navbar />
 
-        {/* Section 1: Hero - The Problem */}
-        <section className="relative min-h-screen flex items-center overflow-hidden">
+        {/* Section 1: Hero with Parallax 3D Globe */}
+        <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden">
           {/* Animated Grid Background */}
-          <div className="absolute inset-0 grid-background opacity-20" />
+          <div className="absolute inset-0 grid-background opacity-30" />
           
-          {/* Gradient Orbs */}
+          {/* Green gradient orbs */}
           <motion.div 
-            className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[150px]"
+            className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-primary/25 rounded-full blur-[180px]"
             animate={{ 
-              scale: [1, 1.1, 1],
-              opacity: [0.2, 0.3, 0.2],
+              scale: [1, 1.2, 1],
+              opacity: [0.2, 0.35, 0.2],
             }}
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           />
           <motion.div 
-            className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-secondary/15 rounded-full blur-[120px]"
+            className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-secondary/20 rounded-full blur-[150px]"
             animate={{ 
               scale: [1, 1.15, 1],
-              opacity: [0.15, 0.25, 0.15],
+              opacity: [0.15, 0.3, 0.15],
             }}
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          />
+          <motion.div 
+            className="absolute top-1/2 right-1/3 w-[400px] h-[400px] bg-lime/15 rounded-full blur-[120px]"
+            animate={{ 
+              scale: [1, 1.1, 1],
+              x: [0, 50, 0],
+            }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
           />
 
           <motion.div 
@@ -166,7 +185,7 @@ const Index = () => {
                   <br />
                   <span className="text-foreground">is a </span>
                   <motion.span 
-                    className="bg-gradient-to-r from-primary via-cyan-glow to-secondary bg-clip-text text-transparent text-glow-cyan"
+                    className="bg-gradient-to-r from-primary via-secondary to-lime bg-clip-text text-transparent"
                     animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
                     transition={{ duration: 5, repeat: Infinity }}
                     style={{ backgroundSize: "200% 200%" }}
@@ -205,15 +224,31 @@ const Index = () => {
                 </motion.div>
               </div>
 
+              {/* Parallax 3D Globe */}
               <motion.div 
                 className="relative"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
+                style={{ 
+                  y: globeY, 
+                  scale: globeScale, 
+                  opacity: globeOpacity,
+                  rotateX: globeRotate 
+                }}
               >
                 <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-radial from-primary/20 via-transparent to-transparent rounded-full blur-3xl" />
-                  <EarthGlobe />
+                  {/* Glow effect behind globe */}
+                  <div className="absolute inset-0 bg-gradient-radial from-primary/30 via-secondary/10 to-transparent rounded-full blur-3xl scale-110" />
+                  <motion.div
+                    animate={{ 
+                      rotateY: [0, 360],
+                    }}
+                    transition={{ 
+                      duration: 60, 
+                      repeat: Infinity, 
+                      ease: "linear" 
+                    }}
+                  >
+                    <EarthGlobe />
+                  </motion.div>
                 </div>
               </motion.div>
             </div>

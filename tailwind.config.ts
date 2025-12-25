@@ -87,6 +87,10 @@ export default {
           green: 'hsl(var(--neon-green))',
           'green-glow': 'hsl(var(--neon-green-glow))'
         },
+        lime: {
+          DEFAULT: 'hsl(var(--lime))',
+          glow: 'hsl(var(--lime-glow))'
+        },
         space: {
           dark: 'hsl(var(--space-dark))',
           mid: 'hsl(var(--space-mid))'
