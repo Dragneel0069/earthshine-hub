@@ -95,22 +95,28 @@ const calculators = [
 
 const information = [
   {
-    title: "Carbon Offsetting",
-    description: "Learn about carbon credits and offsetting",
-    icon: TreePine,
-    href: "/marketplace",
-  },
-  {
-    title: "BRSR Compliance",
-    description: "SEBI requirements explained",
-    icon: Shield,
-    href: "/reports",
-  },
-  {
-    title: "About Us",
-    description: "Our mission and team",
+    title: "Climate Education",
+    description: "Learn about carbon accounting and sustainability",
     icon: Info,
-    href: "/about",
+    href: "/blog",
+  },
+  {
+    title: "Certifications",
+    description: "Track B Corp, CDP, GRI progress",
+    icon: Shield,
+    href: "/certifications",
+  },
+  {
+    title: "Compliance Hub",
+    description: "CSRD, BRSR, SEC reporting",
+    icon: FileText,
+    href: "/compliance",
+  },
+  {
+    title: "Readiness Quiz",
+    description: "Assess your sustainability maturity",
+    icon: TreePine,
+    href: "/quiz",
   },
 ];
 
