@@ -33,7 +33,8 @@ import {
   TreePine,
   Leaf,
   Home,
-  Droplets
+  Droplets,
+  Cylinder
 } from "lucide-react";
 
 // Indian emission factors
@@ -86,6 +87,7 @@ export function IndividualCalculator({ trigger }: IndividualCalculatorProps) {
   // Home Energy
   const [electricity, setElectricity] = useState("");
   const [lpg, setLpg] = useState("");
+  const [lpgUnit, setLpgUnit] = useState<"kg" | "cylinder">("kg");
   const [png, setPng] = useState("");
   
   // Transport
@@ -106,10 +108,13 @@ export function IndividualCalculator({ trigger }: IndividualCalculatorProps) {
   const [clothingSpend, setClothingSpend] = useState("");
   const [electronicsSpend, setElectronicsSpend] = useState("");
 
+  // Calculate LPG in kg (1 cylinder = 14.2 kg)
+  const lpgInKg = lpgUnit === "cylinder" ? parseFloat(lpg || "0") * 14.2 : parseFloat(lpg || "0");
+  
   // Calculate emissions
   const homeEmissions = 
     (parseFloat(electricity || "0") * EMISSION_FACTORS.electricity * 12) +
-    (parseFloat(lpg || "0") * EMISSION_FACTORS.lpg * 12) +
+    (lpgInKg * EMISSION_FACTORS.lpg * 12) +
     (parseFloat(png || "0") * EMISSION_FACTORS.png * 12);
 
   const transportEmissions = 
@@ -138,6 +143,7 @@ export function IndividualCalculator({ trigger }: IndividualCalculatorProps) {
   const handleReset = () => {
     setElectricity("");
     setLpg("");
+    setLpgUnit("kg");
     setPng("");
     setPetrolKm("");
     setDieselKm("");
@@ -225,17 +231,41 @@ export function IndividualCalculator({ trigger }: IndividualCalculatorProps) {
               <div className="space-y-2">
                 <Label className="flex items-center gap-2">
                   <Flame className="h-4 w-4 text-orange-500" />
-                  Monthly LPG Consumption (kg)
+                  Monthly LPG Consumption
                 </Label>
-                <Input
-                  type="number"
-                  placeholder="e.g., 14.2 (1 cylinder)"
-                  value={lpg}
-                  onChange={(e) => setLpg(e.target.value)}
-                  min="0"
-                />
+                <div className="flex gap-2">
+                  <Input
+                    type="number"
+                    placeholder={lpgUnit === "cylinder" ? "e.g., 1" : "e.g., 14.2"}
+                    value={lpg}
+                    onChange={(e) => setLpg(e.target.value)}
+                    min="0"
+                    className="flex-1"
+                  />
+                  <Select value={lpgUnit} onValueChange={(v: "kg" | "cylinder") => setLpgUnit(v)}>
+                    <SelectTrigger className="w-[130px]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="kg">
+                        <span className="flex items-center gap-2">
+                          <Flame className="h-3 w-3" />
+                          kg
+                        </span>
+                      </SelectItem>
+                      <SelectItem value="cylinder">
+                        <span className="flex items-center gap-2">
+                          <Cylinder className="h-3 w-3" />
+                          Cylinders
+                        </span>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
                 <p className="text-xs text-muted-foreground">
-                  1 LPG cylinder = 14.2 kg
+                  {lpgUnit === "cylinder" 
+                    ? "1 cylinder = 14.2 kg LPG" 
+                    : "Average household: 1-2 cylinders/month"}
                 </p>
               </div>
 
