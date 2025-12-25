@@ -1,13 +1,25 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { TotalEmissionsCounter } from "@/components/dashboard/TotalEmissionsCounter";
-import { EmissionsByScope } from "@/components/dashboard/EmissionsByScope";
 import { MonthlyTrendChart } from "@/components/dashboard/MonthlyTrendChart";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
-import { Card, CardContent } from "@/components/ui/card";
+import { Dashboard3DScene } from "@/components/3d/Dashboard3DScene";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { FileCheck, Target, Leaf, IndianRupee } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { 
+  FileCheck, 
+  Target, 
+  Leaf, 
+  IndianRupee, 
+  TrendingDown,
+  Zap,
+  Globe2,
+  ArrowUpRight,
+  Activity
+} from "lucide-react";
 import { useEmissionsSummary } from "@/hooks/useEmissions";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const { summary, isLoading } = useEmissionsSummary();
@@ -18,75 +30,170 @@ const Dashboard = () => {
       value: "Compliant",
       badge: "FY 24-25",
       icon: FileCheck,
-      color: "text-primary",
+      gradient: "from-emerald-500 to-teal-600",
+      trend: "+12%",
     },
     {
       title: "Reduction Target",
       value: "30%",
       badge: summary && summary.totalEmissions < 1500 ? "On Track" : "Behind",
       icon: Target,
-      color: "text-secondary",
+      gradient: "from-blue-500 to-indigo-600",
+      trend: "-8%",
     },
     {
       title: "Carbon Credits",
       value: "850",
       badge: "Available",
       icon: Leaf,
-      color: "text-primary",
+      gradient: "from-amber-500 to-orange-600",
+      trend: "+24%",
     },
     {
       title: "Monthly Savings",
       value: "₹12.5L",
       badge: "+18%",
       icon: IndianRupee,
-      color: "text-secondary",
+      gradient: "from-purple-500 to-pink-600",
+      trend: "+18%",
     },
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-b from-background to-card/50">
       <Navbar />
       <main className="container py-8">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-3xl font-bold font-display">Emissions Dashboard</h1>
-            <Badge variant="outline" className="gap-1">
-              🇮🇳 India
-            </Badge>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-2">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <h1 className="text-3xl lg:text-4xl font-bold font-display">Emissions Dashboard</h1>
+                <Badge variant="outline" className="gap-1 bg-card">
+                  🇮🇳 India
+                </Badge>
+              </div>
+              <p className="text-muted-foreground">
+                Track and manage your organization's carbon footprint • FY 2024-25
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <Link to="/reports">
+                <Button variant="outline" size="sm" className="gap-2">
+                  <FileCheck className="h-4 w-4" />
+                  Generate Report
+                </Button>
+              </Link>
+              <Link to="/marketplace">
+                <Button size="sm" className="gap-2">
+                  <Leaf className="h-4 w-4" />
+                  Buy Offsets
+                </Button>
+              </Link>
+            </div>
           </div>
-          <p className="text-muted-foreground">
-            Track and manage your organization's carbon footprint • FY 2024-25
-          </p>
         </div>
 
-        {/* Total Emissions Counter */}
-        <div className="mb-8">
-          <TotalEmissionsCounter 
-            totalEmissions={summary?.totalEmissions || 0}
-            previousEmissions={1852.3}
-            costSavings={summary ? Math.round(summary.totalEmissions * 850) : 0}
-            isLoading={isLoading}
-          />
+        {/* Main Grid */}
+        <div className="grid gap-6 lg:grid-cols-3 mb-8">
+          {/* 3D Visualization - Spans 2 columns */}
+          <Card className="lg:col-span-2 overflow-hidden border-0 bg-gradient-to-br from-card via-card to-primary/5">
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="text-lg font-display flex items-center gap-2">
+                    <Globe2 className="h-5 w-5 text-primary" />
+                    3D Emissions Overview
+                  </CardTitle>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Interactive visualization of your carbon footprint by scope
+                  </p>
+                </div>
+                <Badge variant="secondary" className="gap-1">
+                  <Activity className="h-3 w-3" />
+                  Live
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent className="p-0">
+              <Dashboard3DScene 
+                scope1={summary?.byScope.scope1 || 450}
+                scope2={summary?.byScope.scope2 || 380}
+                scope3={summary?.byScope.scope3 || 720}
+              />
+              {/* Legend */}
+              <div className="flex flex-wrap items-center justify-center gap-6 p-4 border-t border-border/50">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-emerald-500" />
+                  <span className="text-sm text-muted-foreground">Scope 1: {summary?.byScope.scope1?.toFixed(0) || 450} tCO₂e</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-blue-500" />
+                  <span className="text-sm text-muted-foreground">Scope 2: {summary?.byScope.scope2?.toFixed(0) || 380} tCO₂e</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-amber-500" />
+                  <span className="text-sm text-muted-foreground">Scope 3: {summary?.byScope.scope3?.toFixed(0) || 720} tCO₂e</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Total Emissions Counter */}
+          <div className="space-y-6">
+            <TotalEmissionsCounter 
+              totalEmissions={summary?.totalEmissions || 0}
+              previousEmissions={1852.3}
+              costSavings={summary ? Math.round(summary.totalEmissions * 850) : 0}
+              isLoading={isLoading}
+            />
+            
+            {/* Quick Insight Card */}
+            <Card className="border-0 bg-gradient-to-br from-primary/10 to-primary/5">
+              <CardContent className="p-4">
+                <div className="flex items-start gap-3">
+                  <div className="p-2 rounded-lg bg-primary/20">
+                    <TrendingDown className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">AI Insight</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Your emissions are 12% lower than the industry average. Consider investing in renewable energy to further reduce Scope 2.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
         {/* Stats Grid */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-          {statsCards.map((stat) => (
-            <Card key={stat.title}>
-              <CardContent className="p-4">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">{stat.title}</p>
-                    <p className="text-2xl font-bold font-display">{stat.value}</p>
+          {statsCards.map((stat, index) => (
+            <Card 
+              key={stat.title} 
+              className="group relative overflow-hidden border-0 bg-card hover:shadow-lg transition-all duration-300"
+            >
+              <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} opacity-0 group-hover:opacity-5 transition-opacity`} />
+              <CardContent className="p-5">
+                <div className="flex items-start justify-between mb-3">
+                  <div className={`p-2.5 rounded-xl bg-gradient-to-br ${stat.gradient}`}>
+                    <stat.icon className="h-5 w-5 text-white" />
                   </div>
-                  <div className={`rounded-lg bg-muted p-2 ${stat.color}`}>
-                    <stat.icon className="h-5 w-5" />
-                  </div>
+                  <Badge 
+                    variant="secondary" 
+                    className="text-xs font-medium"
+                  >
+                    {stat.badge}
+                  </Badge>
                 </div>
-                <Badge variant="secondary" className="mt-2 text-xs">
-                  {stat.badge}
-                </Badge>
+                <p className="text-sm text-muted-foreground mb-1">{stat.title}</p>
+                <div className="flex items-baseline gap-2">
+                  <p className="text-2xl font-bold font-display">{stat.value}</p>
+                  <span className={`text-xs font-medium ${stat.trend.startsWith('+') ? 'text-emerald-500' : 'text-blue-500'}`}>
+                    {stat.trend}
+                  </span>
+                </div>
               </CardContent>
             </Card>
           ))}
@@ -94,17 +201,14 @@ const Dashboard = () => {
 
         {/* Charts Grid */}
         <div className="grid gap-6 lg:grid-cols-3 mb-8">
-          <MonthlyTrendChart 
-            data={summary?.monthlyTrend} 
-            target={150}
-            isLoading={isLoading}
-          />
-          <EmissionsByScope 
-            scope1={summary?.byScope.scope1}
-            scope2={summary?.byScope.scope2}
-            scope3={summary?.byScope.scope3}
-            isLoading={isLoading}
-          />
+          <div className="lg:col-span-2">
+            <MonthlyTrendChart 
+              data={summary?.monthlyTrend} 
+              target={150}
+              isLoading={isLoading}
+            />
+          </div>
+          <QuickActions />
         </div>
 
         {/* Bottom Section */}
@@ -115,7 +219,35 @@ const Dashboard = () => {
               isLoading={isLoading}
             />
           </div>
-          <QuickActions />
+          
+          {/* CTA Card */}
+          <Card className="border-0 bg-gradient-to-br from-primary via-emerald-600 to-teal-600 text-white overflow-hidden relative">
+            <div className="absolute inset-0 opacity-20">
+              <div 
+                className="absolute inset-0"
+                style={{
+                  backgroundImage: `radial-gradient(circle at 2px 2px, rgba(255,255,255,0.3) 1px, transparent 0)`,
+                  backgroundSize: '20px 20px',
+                }}
+              />
+            </div>
+            <CardContent className="p-6 relative z-10">
+              <div className="flex items-center gap-2 mb-4">
+                <Zap className="h-8 w-8" />
+                <span className="text-sm font-medium opacity-90">Pro Feature</span>
+              </div>
+              <h3 className="text-xl font-bold font-display mb-2">
+                Unlock Advanced Analytics
+              </h3>
+              <p className="text-sm opacity-80 mb-6">
+                Get AI-powered predictions, automated BRSR reports, and priority support.
+              </p>
+              <Button variant="secondary" className="w-full gap-2">
+                Upgrade to Pro
+                <ArrowUpRight className="h-4 w-4" />
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </main>
     </div>
