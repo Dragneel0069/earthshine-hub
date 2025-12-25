@@ -216,11 +216,11 @@ const Consultation = () => {
                     </div>
                     <div className="flex items-center gap-3">
                       <MapPin className="h-5 w-5" />
-                      <span>Mumbai, Maharashtra, India</span>
+                      <span>Jamshedpur, Jharkhand, India</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <Clock className="h-5 w-5" />
-                      <span>Mon - Fri: 9:00 AM - 6:00 PM IST</span>
+                      <span>9:00 AM - 6:00 PM IST</span>
                     </div>
                   </div>
                 </CardContent>
