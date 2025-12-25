@@ -344,7 +344,7 @@ const Index = () => {
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-emerald-600">
                     <Leaf className="h-5 w-5 text-primary-foreground" />
                   </div>
-                  <span className="font-display font-bold text-xl">Bharat Carbon</span>
+                  <span className="font-display font-bold text-xl">Zero Graph</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
                   India's leading carbon intelligence platform for enterprises committed to Net Zero.
@@ -370,7 +370,7 @@ const Index = () => {
               <ScrollReveal delay={0.3}>
                 <h4 className="font-semibold mb-4">Connect</h4>
                 <ul className="space-y-3 text-sm text-muted-foreground">
-                  <li>info@bharatcarbon.in</li>
+                  <li>info@zerograph.in</li>
                   <li>+91 1800-XXX-XXXX</li>
                   <li>Mumbai, India</li>
                 </ul>
@@ -378,7 +378,7 @@ const Index = () => {
             </div>
             <div className="border-t pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
               <p className="text-sm text-muted-foreground">
-                © 2024 Bharat Carbon. All rights reserved.
+                © 2024 Zero Graph. All rights reserved.
               </p>
               <div className="flex gap-6 text-sm text-muted-foreground">
                 <a href="#" className="hover:text-foreground transition-colors">Terms</a>

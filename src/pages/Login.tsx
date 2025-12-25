@@ -79,7 +79,7 @@ const Login = () => {
             </div>
             <CardTitle className="text-2xl font-display">Welcome back</CardTitle>
             <CardDescription>
-              Sign in to your Bharat Carbon account
+              Sign in to your Zero Graph account
             </CardDescription>
           </CardHeader>
           <CardContent>

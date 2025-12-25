@@ -202,7 +202,7 @@ export function CorporateCalculator({ trigger }: CorporateCalculatorProps) {
               <Building2 className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <SheetTitle className="text-2xl">Bharat Carbon Pro</SheetTitle>
+              <SheetTitle className="text-2xl">Zero Graph Pro</SheetTitle>
               <SheetDescription>
                 Enterprise GHG Inventory Calculator (GHG Protocol Aligned)
               </SheetDescription>

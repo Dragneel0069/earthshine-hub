@@ -95,7 +95,7 @@ const Signup = () => {
               Start your sustainability journey
             </h1>
             <p className="text-muted-foreground text-lg mb-8">
-              Join thousands of organizations reducing their environmental impact with Bharat Carbon.
+              Join thousands of organizations reducing their environmental impact with Zero Graph.
             </p>
             <ul className="space-y-4">
               {benefits.map((benefit, index) => (
@@ -115,7 +115,7 @@ const Signup = () => {
               </div>
               <CardTitle className="text-2xl font-display">Create an account</CardTitle>
               <CardDescription>
-                Get started with Bharat Carbon in minutes
+                Get started with Zero Graph in minutes
               </CardDescription>
             </CardHeader>
             <CardContent>

@@ -143,7 +143,7 @@ export function BusinessCalculator({ trigger }: BusinessCalculatorProps) {
               <Briefcase className="h-5 w-5 text-secondary" />
             </div>
             <div>
-              <SheetTitle className="text-2xl">Bharat Carbon Lite</SheetTitle>
+              <SheetTitle className="text-2xl">Zero Graph Lite</SheetTitle>
               <SheetDescription>
                 SME Carbon Footprint Calculator (Annual)
               </SheetDescription>

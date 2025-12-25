@@ -24,7 +24,7 @@ export function ShareReport({ totalTonnes, treesNeeded, calculatorType }: ShareR
         ? "business" 
         : "corporate";
     
-    return `🌱 I calculated my ${typeLabel} carbon footprint with Bharat Carbon!\n\n📊 Annual Emissions: ${totalTonnes.toFixed(2)} tonnes CO₂e\n🌳 Trees needed to offset: ${treesNeeded.toLocaleString("en-IN")}\n\nCalculate yours at: ${window.location.origin}/calculators\n\n#NetZero #CarbonFootprint #Sustainability #ClimateAction`;
+    return `🌱 I calculated my ${typeLabel} carbon footprint with Zero Graph!\n\n📊 Annual Emissions: ${totalTonnes.toFixed(2)} tonnes CO₂e\n🌳 Trees needed to offset: ${treesNeeded.toLocaleString("en-IN")}\n\nCalculate yours at: ${window.location.origin}/calculators\n\n#NetZero #CarbonFootprint #Sustainability #ClimateAction`;
   };
 
   const shareUrl = `${window.location.origin}/calculators`;
@@ -42,7 +42,7 @@ export function ShareReport({ totalTonnes, treesNeeded, calculatorType }: ShareR
   };
 
   const handleTwitterShare = () => {
-    const tweetText = `🌱 My carbon footprint: ${totalTonnes.toFixed(2)} tonnes CO₂e/year. Calculate yours at Bharat Carbon! #NetZero #ClimateAction`;
+    const tweetText = `🌱 My carbon footprint: ${totalTonnes.toFixed(2)} tonnes CO₂e/year. Calculate yours at Zero Graph! #NetZero #ClimateAction`;
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(shareUrl)}`;
     window.open(twitterUrl, "_blank");
   };
