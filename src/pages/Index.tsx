@@ -107,14 +107,14 @@ const Index = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.1 }}
                 >
-                  The Future of
+                  Powering Bharat's
                   <motion.span 
                     className="block mt-2 bg-gradient-to-r from-primary via-emerald-400 to-teal-400 bg-clip-text text-transparent"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.6, delay: 0.3 }}
                   >
-                    Carbon Intelligence
+                    Net Zero Journey
                   </motion.span>
                 </motion.h1>
                 
