@@ -36,6 +36,7 @@ import {
   Droplets,
   Cylinder
 } from "lucide-react";
+import { ShareReport } from "./ShareReport";
 
 // Indian emission factors
 const EMISSION_FACTORS = {
@@ -518,11 +519,17 @@ export function IndividualCalculator({ trigger }: IndividualCalculatorProps) {
         {/* Total Results */}
         {hasInput && (
           <div className="space-y-4 pt-6 border-t mt-6">
-            <h3 className="font-semibold text-lg flex items-center gap-2">
-              <Leaf className="h-5 w-5 text-primary" />
-              Your Annual Carbon Footprint
-            </h3>
-
+            <div className="flex items-center justify-between">
+              <h3 className="font-semibold text-lg flex items-center gap-2">
+                <Leaf className="h-5 w-5 text-primary" />
+                Your Annual Carbon Footprint
+              </h3>
+              <ShareReport 
+                totalTonnes={totalTonnes} 
+                treesNeeded={treesNeeded} 
+                calculatorType="individual" 
+              />
+            </div>
             <Card className="p-4 bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
               <div className="text-center">
                 <p className="text-sm text-muted-foreground mb-1">Total Annual Emissions</p>

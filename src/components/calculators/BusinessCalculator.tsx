@@ -32,6 +32,7 @@ import {
   Truck,
   Package
 } from "lucide-react";
+import { ShareReport } from "./ShareReport";
 
 // Indian emission factors for business
 const EMISSION_FACTORS = {
@@ -391,10 +392,17 @@ export function BusinessCalculator({ trigger }: BusinessCalculatorProps) {
         {/* Total Results */}
         {hasInput && (
           <div className="space-y-4 pt-6 border-t mt-6">
-            <h3 className="font-semibold text-lg flex items-center gap-2">
-              <Leaf className="h-5 w-5 text-primary" />
-              Your Business Carbon Footprint
-            </h3>
+            <div className="flex items-center justify-between">
+              <h3 className="font-semibold text-lg flex items-center gap-2">
+                <Leaf className="h-5 w-5 text-primary" />
+                Your Business Carbon Footprint
+              </h3>
+              <ShareReport 
+                totalTonnes={totalTonnes} 
+                treesNeeded={treesNeeded} 
+                calculatorType="business" 
+              />
+            </div>
 
             {/* Scope Breakdown */}
             <div className="grid grid-cols-3 gap-2">
