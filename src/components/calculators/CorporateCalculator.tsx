@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -633,6 +634,22 @@ export function CorporateCalculator({ trigger }: CorporateCalculatorProps) {
                 </div>
               </Card>
             </div>
+
+            {/* Offset CTA */}
+            <Card className="p-4 bg-gradient-to-r from-primary to-emerald-600 border-0">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-white">
+                <div>
+                  <p className="font-semibold">Start your Net Zero journey</p>
+                  <p className="text-sm text-white/80">Browse premium carbon credits & RECs for enterprise</p>
+                </div>
+                <Link to="/marketplace" onClick={() => setOpen(false)}>
+                  <Button variant="secondary" size="sm" className="gap-2">
+                    <Leaf className="h-4 w-4" />
+                    Explore Offsets
+                  </Button>
+                </Link>
+              </div>
+            </Card>
           </div>
         )}
 

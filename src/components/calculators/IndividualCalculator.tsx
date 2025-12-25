@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -545,6 +546,22 @@ export function IndividualCalculator({ trigger }: IndividualCalculatorProps) {
                   <span>Target for 2°C</span>
                   <span className="font-medium text-green-600">2.0 t</span>
                 </div>
+              </div>
+            </Card>
+
+            {/* Offset CTA */}
+            <Card className="p-4 bg-gradient-to-r from-primary to-emerald-600 border-0">
+              <div className="flex items-center justify-between text-white">
+                <div>
+                  <p className="font-semibold">Ready to offset your footprint?</p>
+                  <p className="text-sm text-white/80">Browse verified carbon projects in India</p>
+                </div>
+                <Link to="/marketplace" onClick={() => setOpen(false)}>
+                  <Button variant="secondary" size="sm" className="gap-2">
+                    <Leaf className="h-4 w-4" />
+                    Offset Now
+                  </Button>
+                </Link>
               </div>
             </Card>
           </div>
