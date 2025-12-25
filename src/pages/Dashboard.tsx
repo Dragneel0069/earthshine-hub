@@ -28,38 +28,39 @@ import { motion } from "framer-motion";
 const Dashboard = () => {
   const { summary, isLoading } = useEmissionsSummary();
 
+  // Placeholder stats - replace with authentic data from your database
   const statsCards = [
     {
       title: "BRSR Status",
-      value: "Compliant",
+      value: "—",
       badge: "FY 24-25",
       icon: FileCheck,
       gradient: "from-emerald-500 to-teal-600",
-      trend: "+12%",
+      trend: "—",
     },
     {
       title: "Reduction Target",
-      value: "30%",
-      badge: summary && summary.totalEmissions < 1500 ? "On Track" : "Behind",
+      value: "—",
+      badge: "—",
       icon: Target,
       gradient: "from-blue-500 to-indigo-600",
-      trend: "-8%",
+      trend: "—",
     },
     {
       title: "Carbon Credits",
-      value: "850",
-      badge: "Available",
+      value: "—",
+      badge: "—",
       icon: Leaf,
       gradient: "from-amber-500 to-orange-600",
-      trend: "+24%",
+      trend: "—",
     },
     {
       title: "Monthly Savings",
-      value: "₹12.5L",
-      badge: "+18%",
+      value: "—",
+      badge: "—",
       icon: IndianRupee,
       gradient: "from-purple-500 to-pink-600",
-      trend: "+18%",
+      trend: "—",
     },
   ];
 
@@ -132,26 +133,26 @@ const Dashboard = () => {
                   </div>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <Dashboard3DScene 
-                    scope1={summary?.byScope.scope1 || 450}
-                    scope2={summary?.byScope.scope2 || 380}
-                    scope3={summary?.byScope.scope3 || 720}
-                  />
+              <Dashboard3DScene 
+                scope1={summary?.byScope.scope1 || 0}
+                scope2={summary?.byScope.scope2 || 0}
+                scope3={summary?.byScope.scope3 || 0}
+              />
                   {/* Legend */}
-                  <div className="flex flex-wrap items-center justify-center gap-6 p-4 border-t border-border/50">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full bg-emerald-500" />
-                      <span className="text-sm text-muted-foreground">Scope 1: {summary?.byScope.scope1?.toFixed(0) || 450} tCO₂e</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full bg-blue-500" />
-                      <span className="text-sm text-muted-foreground">Scope 2: {summary?.byScope.scope2?.toFixed(0) || 380} tCO₂e</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full bg-amber-500" />
-                      <span className="text-sm text-muted-foreground">Scope 3: {summary?.byScope.scope3?.toFixed(0) || 720} tCO₂e</span>
-                    </div>
-                  </div>
+              <div className="flex flex-wrap items-center justify-center gap-6 p-4 border-t border-border/50">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-emerald-500" />
+                  <span className="text-sm text-muted-foreground">Scope 1: {summary?.byScope.scope1?.toFixed(0) || "—"} tCO₂e</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-blue-500" />
+                  <span className="text-sm text-muted-foreground">Scope 2: {summary?.byScope.scope2?.toFixed(0) || "—"} tCO₂e</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-amber-500" />
+                  <span className="text-sm text-muted-foreground">Scope 3: {summary?.byScope.scope3?.toFixed(0) || "—"} tCO₂e</span>
+                </div>
+              </div>
                 </CardContent>
               </Card>
             </ScrollReveal>
@@ -161,8 +162,8 @@ const Dashboard = () => {
               <div className="space-y-6">
                 <TotalEmissionsCounter 
                   totalEmissions={summary?.totalEmissions || 0}
-                  previousEmissions={1852.3}
-                  costSavings={summary ? Math.round(summary.totalEmissions * 850) : 0}
+                  previousEmissions={0}
+                  costSavings={0}
                   isLoading={isLoading}
                 />
                 
@@ -178,12 +179,12 @@ const Dashboard = () => {
                         <div className="p-2 rounded-lg bg-primary/20">
                           <TrendingDown className="h-5 w-5 text-primary" />
                         </div>
-                        <div>
-                          <p className="font-medium text-sm">AI Insight</p>
-                          <p className="text-xs text-muted-foreground mt-1">
-                            Your emissions are 12% lower than the industry average. Consider investing in renewable energy to further reduce Scope 2.
-                          </p>
-                        </div>
+                      <div>
+                        <p className="font-medium text-sm">AI Insight</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Add emissions data to receive AI-powered insights and recommendations for reducing your carbon footprint.
+                        </p>
+                      </div>
                       </div>
                     </CardContent>
                   </Card>

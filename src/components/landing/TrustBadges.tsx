@@ -1,34 +1,36 @@
 import { Shield, Award, BadgeCheck, Building2 } from "lucide-react";
 
+// Placeholder badges - replace with your actual certifications
 const badges = [
   {
     icon: Shield,
-    title: "ISO 14001",
-    subtitle: "Certified",
+    title: "Certification",
+    subtitle: "Add your certification",
   },
   {
     icon: Award,
-    title: "ISO 9001",
-    subtitle: "Quality Management",
+    title: "Certification",
+    subtitle: "Add your certification",
   },
   {
     icon: BadgeCheck,
-    title: "SEBI BRSR",
-    subtitle: "Compliant",
+    title: "Compliance",
+    subtitle: "Add your compliance",
   },
   {
     icon: Building2,
-    title: "CII Member",
-    subtitle: "Industry Partner",
+    title: "Partnership",
+    subtitle: "Add your partnership",
   },
 ];
 
+// Placeholder partners - replace with your actual partners
 const partners = [
-  "Bureau of Energy Efficiency",
-  "TERI",
-  "Indian Green Building Council",
-  "CDP India",
-  "GRI South Asia",
+  "Partner 1",
+  "Partner 2",
+  "Partner 3",
+  "Partner 4",
+  "Partner 5",
 ];
 
 export function TrustBadges() {
@@ -40,7 +42,7 @@ export function TrustBadges() {
             Our Commitment to Quality & Standards
           </h3>
           <p className="text-sm text-muted-foreground">
-            Backed by the highest industry standards and active partnerships in India's sustainability ecosystem
+            Backed by industry standards and partnerships in the sustainability ecosystem
           </p>
         </div>
 
