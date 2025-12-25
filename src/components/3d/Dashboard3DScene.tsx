@@ -2,10 +2,7 @@ import { useRef, useMemo, Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { 
   Float, 
-  Text3D, 
-  Center, 
   Environment,
-  MeshTransmissionMaterial,
   RoundedBox
 } from "@react-three/drei";
 import * as THREE from "three";
@@ -65,13 +62,12 @@ function FloatingOrb({ position, color, size = 0.15 }: { position: [number, numb
   return (
     <mesh ref={meshRef} position={position}>
       <sphereGeometry args={[size, 32, 32]} />
-      <MeshTransmissionMaterial
+      <meshStandardMaterial
         color={color}
-        thickness={0.5}
-        roughness={0}
-        transmission={0.9}
-        ior={1.5}
-        chromaticAberration={0.03}
+        transparent
+        opacity={0.8}
+        metalness={0.5}
+        roughness={0.1}
       />
     </mesh>
   );
