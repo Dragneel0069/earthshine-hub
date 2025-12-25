@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      blog_posts: {
+        Row: {
+          author_name: string
+          category: string
+          content: string
+          cover_image_url: string | null
+          created_at: string
+          excerpt: string | null
+          id: string
+          is_published: boolean
+          published_at: string | null
+          slug: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_name?: string
+          category?: string
+          content: string
+          cover_image_url?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          is_published?: boolean
+          published_at?: string | null
+          slug: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_name?: string
+          category?: string
+          content?: string
+          cover_image_url?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          is_published?: boolean
+          published_at?: string | null
+          slug?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       carbon_projects: {
         Row: {
           available_credits: number
@@ -58,6 +106,88 @@ export type Database = {
           verification_status?: string
         }
         Relationships: []
+      }
+      certification_milestones: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_completed: boolean
+          order_index: number
+          title: string
+          user_certification_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_completed?: boolean
+          order_index?: number
+          title: string
+          user_certification_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_completed?: boolean
+          order_index?: number
+          title?: string
+          user_certification_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "certification_milestones_user_certification_id_fkey"
+            columns: ["user_certification_id"]
+            isOneToOne: false
+            referencedRelation: "user_certifications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      compliance_reports: {
+        Row: {
+          file_url: string | null
+          generated_at: string
+          id: string
+          report_data: Json
+          report_type: Database["public"]["Enums"]["certification_type"]
+          reporting_year: number
+          status: string
+          user_id: string
+        }
+        Insert: {
+          file_url?: string | null
+          generated_at?: string
+          id?: string
+          report_data: Json
+          report_type: Database["public"]["Enums"]["certification_type"]
+          reporting_year: number
+          status?: string
+          user_id: string
+        }
+        Update: {
+          file_url?: string | null
+          generated_at?: string
+          id?: string
+          report_data?: Json
+          report_type?: Database["public"]["Enums"]["certification_type"]
+          reporting_year?: number
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_reports_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       emissions: {
         Row: {
@@ -109,6 +239,138 @@ export type Database = {
           },
         ]
       }
+      offset_preferences: {
+        Row: {
+          budget_range: string | null
+          created_at: string
+          id: string
+          preferred_locations: string[] | null
+          preferred_project_types: string[] | null
+          priority_factors: Json | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          budget_range?: string | null
+          created_at?: string
+          id?: string
+          preferred_locations?: string[] | null
+          preferred_project_types?: string[] | null
+          priority_factors?: Json | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          budget_range?: string | null
+          created_at?: string
+          id?: string
+          preferred_locations?: string[] | null
+          preferred_project_types?: string[] | null
+          priority_factors?: Json | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "offset_preferences_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quiz_responses: {
+        Row: {
+          completed_at: string
+          id: string
+          quiz_type: string
+          recommendations: Json | null
+          responses: Json
+          score: number | null
+          session_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          completed_at?: string
+          id?: string
+          quiz_type?: string
+          recommendations?: Json | null
+          responses: Json
+          score?: number | null
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          completed_at?: string
+          id?: string
+          quiz_type?: string
+          recommendations?: Json | null
+          responses?: Json
+          score?: number | null
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_responses_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recs: {
+        Row: {
+          certificate_id: string | null
+          created_at: string
+          energy_source: string
+          id: string
+          project_name: string
+          purchase_date: string
+          purchase_price: number | null
+          quantity_mwh: number
+          registry: string | null
+          user_id: string
+          vintage_year: number
+        }
+        Insert: {
+          certificate_id?: string | null
+          created_at?: string
+          energy_source: string
+          id?: string
+          project_name: string
+          purchase_date?: string
+          purchase_price?: number | null
+          quantity_mwh: number
+          registry?: string | null
+          user_id: string
+          vintage_year: number
+        }
+        Update: {
+          certificate_id?: string | null
+          created_at?: string
+          energy_source?: string
+          id?: string
+          project_name?: string
+          purchase_date?: string
+          purchase_price?: number | null
+          quantity_mwh?: number
+          registry?: string | null
+          user_id?: string
+          vintage_year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recs_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subscriptions: {
         Row: {
           created_at: string
@@ -151,6 +413,53 @@ export type Database = {
             foreignKeyName: "subscriptions_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_certifications: {
+        Row: {
+          achieved_date: string | null
+          certification_type: Database["public"]["Enums"]["certification_type"]
+          created_at: string
+          id: string
+          notes: string | null
+          progress_percentage: number
+          status: string
+          target_date: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          achieved_date?: string | null
+          certification_type: Database["public"]["Enums"]["certification_type"]
+          created_at?: string
+          id?: string
+          notes?: string | null
+          progress_percentage?: number
+          status?: string
+          target_date?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          achieved_date?: string | null
+          certification_type?: Database["public"]["Enums"]["certification_type"]
+          created_at?: string
+          id?: string
+          notes?: string | null
+          progress_percentage?: number
+          status?: string
+          target_date?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_certifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -232,6 +541,17 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
+      certification_type:
+        | "bcorp"
+        | "cdp"
+        | "gri"
+        | "csrd"
+        | "tcfd"
+        | "sasb"
+        | "sec"
+        | "ecovadis"
+        | "sbti"
+        | "issb"
       subscription_plan: "free" | "pro" | "enterprise"
     }
     CompositeTypes: {
@@ -361,6 +681,18 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
+      certification_type: [
+        "bcorp",
+        "cdp",
+        "gri",
+        "csrd",
+        "tcfd",
+        "sasb",
+        "sec",
+        "ecovadis",
+        "sbti",
+        "issb",
+      ],
       subscription_plan: ["free", "pro", "enterprise"],
     },
   },
