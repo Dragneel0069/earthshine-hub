@@ -11,11 +11,12 @@ import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { StaggerContainer, StaggerItem } from "@/components/animations/StaggerContainer";
 import { motion } from "framer-motion";
 
+// Placeholder stats - replace with authentic data
 const stats = [
-  { value: "500+", label: "Indian Companies", icon: Globe2 },
-  { value: "₹50Cr+", label: "Cost Savings", icon: Zap },
-  { value: "1M+", label: "Tons CO₂ Tracked", icon: BarChart3 },
-  { value: "100%", label: "BRSR Compliant", icon: Shield },
+  { value: "—", label: "Companies", icon: Globe2 },
+  { value: "—", label: "Cost Savings", icon: Zap },
+  { value: "—", label: "Tons CO₂ Tracked", icon: BarChart3 },
+  { value: "—", label: "Compliance Rate", icon: Shield },
 ];
 
 const features = [
@@ -310,7 +311,7 @@ const Index = () => {
                 <span className="block">Green Revolution?</span>
               </h2>
               <p className="text-xl text-white/80 mb-10 max-w-2xl mx-auto">
-                Join 500+ forward-thinking Indian companies already transforming their sustainability journey.
+                Join forward-thinking companies already transforming their sustainability journey.
               </p>
               <motion.div 
                 className="flex flex-col sm:flex-row gap-4 justify-center"
