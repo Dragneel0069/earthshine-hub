@@ -8,7 +8,6 @@ import {
   Menu, 
   X, 
   Calculator,
-  ChevronDown,
   Building2,
   Users,
   Factory,
@@ -17,7 +16,8 @@ import {
   Shield,
   Phone,
   Mail,
-  Info
+  Info,
+  Activity
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -29,6 +29,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import { motion } from "framer-motion";
 
 const solutions = [
   {
@@ -125,13 +126,25 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-lg">
+    <motion.nav 
+      className="sticky top-0 z-50 w-full border-b border-border/50 glass"
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-80">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary">
             <Leaf className="h-5 w-5 text-primary-foreground" />
           </div>
           <span className="font-display text-xl font-bold text-foreground">Zero Graph</span>
+          <div className="hidden sm:flex items-center gap-1 ml-2">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
+            </span>
+            <span className="text-xs text-secondary font-medium">LIVE</span>
+          </div>
         </Link>
 
         {/* Desktop Navigation */}
@@ -139,21 +152,23 @@ export function Navbar() {
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="bg-transparent">Solutions</NavigationMenuTrigger>
+                <NavigationMenuTrigger className="bg-transparent text-muted-foreground hover:text-foreground">
+                  Solutions
+                </NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4">
+                  <ul className="grid w-[400px] gap-2 p-4 bg-popover/95 backdrop-blur-xl border border-border/50 rounded-xl">
                     {solutions.map((item) => (
                       <li key={item.title}>
                         <NavigationMenuLink asChild>
                           <Link
                             to={item.href}
-                            className="flex items-start gap-3 rounded-lg p-3 hover:bg-muted transition-colors"
+                            className="flex items-start gap-3 rounded-lg p-3 hover:bg-muted/50 transition-colors group"
                           >
-                            <div className="rounded-lg bg-primary/10 p-2">
+                            <div className="rounded-lg bg-primary/10 p-2 group-hover:bg-primary/20 transition-colors">
                               <item.icon className="h-5 w-5 text-primary" />
                             </div>
                             <div>
-                              <div className="font-medium">{item.title}</div>
+                              <div className="font-medium text-foreground">{item.title}</div>
                               <p className="text-sm text-muted-foreground">{item.description}</p>
                             </div>
                           </Link>
@@ -165,21 +180,23 @@ export function Navbar() {
               </NavigationMenuItem>
               
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="bg-transparent">Our Platforms</NavigationMenuTrigger>
+                <NavigationMenuTrigger className="bg-transparent text-muted-foreground hover:text-foreground">
+                  Our Platforms
+                </NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4">
+                  <ul className="grid w-[400px] gap-2 p-4 bg-popover/95 backdrop-blur-xl border border-border/50 rounded-xl">
                     {platforms.map((item) => (
                       <li key={item.title}>
                         <NavigationMenuLink asChild>
                           <Link
                             to={item.href}
-                            className="flex items-start gap-3 rounded-lg p-3 hover:bg-muted transition-colors"
+                            className="flex items-start gap-3 rounded-lg p-3 hover:bg-muted/50 transition-colors group"
                           >
-                            <div className="rounded-lg bg-primary/10 p-2">
+                            <div className="rounded-lg bg-primary/10 p-2 group-hover:bg-primary/20 transition-colors">
                               <item.icon className="h-5 w-5 text-primary" />
                             </div>
                             <div>
-                              <div className="font-medium">{item.title}</div>
+                              <div className="font-medium text-foreground">{item.title}</div>
                               <p className="text-sm text-muted-foreground">{item.description}</p>
                             </div>
                           </Link>
@@ -191,21 +208,23 @@ export function Navbar() {
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="bg-transparent">Calculators</NavigationMenuTrigger>
+                <NavigationMenuTrigger className="bg-transparent text-muted-foreground hover:text-foreground">
+                  Calculators
+                </NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4">
+                  <ul className="grid w-[400px] gap-2 p-4 bg-popover/95 backdrop-blur-xl border border-border/50 rounded-xl">
                     {calculators.map((item) => (
                       <li key={item.title}>
                         <NavigationMenuLink asChild>
                           <Link
                             to={item.href}
-                            className="flex items-start gap-3 rounded-lg p-3 hover:bg-muted transition-colors"
+                            className="flex items-start gap-3 rounded-lg p-3 hover:bg-muted/50 transition-colors group"
                           >
-                            <div className="rounded-lg bg-primary/10 p-2">
+                            <div className="rounded-lg bg-primary/10 p-2 group-hover:bg-primary/20 transition-colors">
                               <item.icon className="h-5 w-5 text-primary" />
                             </div>
                             <div>
-                              <div className="font-medium">{item.title}</div>
+                              <div className="font-medium text-foreground">{item.title}</div>
                               <p className="text-sm text-muted-foreground">{item.description}</p>
                             </div>
                           </Link>
@@ -217,21 +236,23 @@ export function Navbar() {
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="bg-transparent">Information</NavigationMenuTrigger>
+                <NavigationMenuTrigger className="bg-transparent text-muted-foreground hover:text-foreground">
+                  Information
+                </NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4">
+                  <ul className="grid w-[400px] gap-2 p-4 bg-popover/95 backdrop-blur-xl border border-border/50 rounded-xl">
                     {information.map((item) => (
                       <li key={item.title}>
                         <NavigationMenuLink asChild>
                           <Link
                             to={item.href}
-                            className="flex items-start gap-3 rounded-lg p-3 hover:bg-muted transition-colors"
+                            className="flex items-start gap-3 rounded-lg p-3 hover:bg-muted/50 transition-colors group"
                           >
-                            <div className="rounded-lg bg-primary/10 p-2">
+                            <div className="rounded-lg bg-primary/10 p-2 group-hover:bg-primary/20 transition-colors">
                               <item.icon className="h-5 w-5 text-primary" />
                             </div>
                             <div>
-                              <div className="font-medium">{item.title}</div>
+                              <div className="font-medium text-foreground">{item.title}</div>
                               <p className="text-sm text-muted-foreground">{item.description}</p>
                             </div>
                           </Link>
@@ -248,7 +269,7 @@ export function Navbar() {
         {/* Contact info and CTA */}
         <div className="hidden lg:flex items-center gap-4">
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
-          <a href="mailto:info@zerograph.in" className="flex items-center gap-1 hover:text-foreground transition-colors">
+            <a href="mailto:info@zerograph.in" className="flex items-center gap-1 hover:text-foreground transition-colors">
               <Mail className="h-4 w-4" />
               <span className="hidden xl:inline">info@zerograph.in</span>
             </a>
@@ -259,12 +280,14 @@ export function Navbar() {
           </div>
           <div className="h-6 w-px bg-border" />
           <Link to="/login">
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
               Login
             </Button>
           </Link>
           <Link to="/signup">
-            <Button size="sm">Sign Up</Button>
+            <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-glow">
+              Sign Up
+            </Button>
           </Link>
         </div>
 
@@ -272,7 +295,7 @@ export function Navbar() {
         <Button
           variant="ghost"
           size="icon"
-          className="lg:hidden"
+          className="lg:hidden text-foreground"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -281,7 +304,12 @@ export function Navbar() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="border-t bg-background lg:hidden animate-fade-in">
+        <motion.div 
+          className="border-t border-border/50 bg-background/95 backdrop-blur-xl lg:hidden"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+        >
           <div className="container py-4 space-y-4">
             <div className="space-y-2">
               <p className="text-xs font-semibold text-muted-foreground uppercase px-4">Solutions</p>
@@ -290,10 +318,10 @@ export function Navbar() {
                   key={item.title}
                   to={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-muted"
+                  className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-muted/50"
                 >
                   <item.icon className="h-5 w-5 text-primary" />
-                  {item.title}
+                  <span className="text-foreground">{item.title}</span>
                 </Link>
               ))}
             </div>
@@ -304,10 +332,10 @@ export function Navbar() {
                   key={item.title}
                   to={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-muted"
+                  className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-muted/50"
                 >
                   <item.icon className="h-5 w-5 text-primary" />
-                  {item.title}
+                  <span className="text-foreground">{item.title}</span>
                 </Link>
               ))}
             </div>
@@ -316,23 +344,23 @@ export function Navbar() {
               <Link
                 to="/calculators"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-muted"
+                className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-muted/50"
               >
                 <Calculator className="h-5 w-5 text-primary" />
-                All Calculators
+                <span className="text-foreground">All Calculators</span>
               </Link>
             </div>
-            <div className="flex flex-col gap-2 pt-4 border-t">
+            <div className="flex flex-col gap-2 pt-4 border-t border-border/50">
               <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
-                <Button variant="outline" className="w-full">Login</Button>
+                <Button variant="outline" className="w-full border-border/50">Login</Button>
               </Link>
               <Link to="/signup" onClick={() => setMobileMenuOpen(false)}>
-                <Button className="w-full">Sign Up</Button>
+                <Button className="w-full bg-primary text-primary-foreground">Sign Up</Button>
               </Link>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
-    </nav>
+    </motion.nav>
   );
 }
