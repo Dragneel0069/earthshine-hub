@@ -69,7 +69,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     toast({
       title: "Account created!",
-      description: "Welcome to Bharat Carbon.",
+      description: "Welcome to Zero Graph.",
     });
     return { error: null };
   };

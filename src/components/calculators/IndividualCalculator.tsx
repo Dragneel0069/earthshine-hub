@@ -181,7 +181,7 @@ export function IndividualCalculator({ trigger }: IndividualCalculatorProps) {
               <User className="h-5 w-5 text-info" />
             </div>
             <div>
-              <SheetTitle className="text-2xl">Bharat Carbon Vita</SheetTitle>
+              <SheetTitle className="text-2xl">Zero Graph Vita</SheetTitle>
               <SheetDescription>
                 Personal Carbon Footprint Calculator (Annual)
               </SheetDescription>

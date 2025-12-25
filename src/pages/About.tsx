@@ -78,7 +78,7 @@ const About = () => {
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-6">
               <Leaf className="h-4 w-4" />
-              <span>About Bharat Carbon</span>
+              <span>About Zero Graph</span>
             </div>
             <h1 className="text-4xl lg:text-5xl font-bold font-display mb-6">
               India's Partner for Credible Climate Action
@@ -98,7 +98,7 @@ const About = () => {
             <div>
               <h2 className="text-3xl font-bold font-display mb-6">Our Mission</h2>
               <p className="text-muted-foreground mb-4">
-                Founded in 2020, Bharat Carbon was born from a simple observation: Indian businesses 
+                Founded in 2020, Zero Graph was born from a simple observation: Indian businesses 
                 needed better tools to understand and reduce their carbon footprint. While global 
                 solutions existed, they often lacked the India-specific data, regulatory knowledge, 
                 and local support that companies here truly needed.
@@ -213,7 +213,7 @@ const About = () => {
             Ready to Start Your Sustainability Journey?
           </h2>
           <p className="text-primary-foreground/80 mb-8 max-w-xl mx-auto">
-            Join 500+ Indian companies already taking credible climate action with Bharat Carbon.
+            Join 500+ Indian companies already taking credible climate action with Zero Graph.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/consultation">
@@ -241,7 +241,7 @@ const About = () => {
       {/* Footer */}
       <footer className="border-t py-8 bg-card">
         <div className="container text-center text-sm text-muted-foreground">
-          © 2024 Bharat Carbon. All rights reserved.
+          © 2024 Zero Graph. All rights reserved.
         </div>
       </footer>
     </div>

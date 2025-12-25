@@ -26,7 +26,7 @@ const calculatorTypes = [
   {
     icon: User,
     title: "Individuals / Households",
-    subtitle: "Bharat Carbon Vita",
+    subtitle: "Zero Graph Vita",
     description: "Free online carbon footprint calculator for individuals and families.",
     features: ["Home energy consumption", "Personal transport", "Diet & lifestyle", "Travel emissions"],
     color: "bg-info",
@@ -36,7 +36,7 @@ const calculatorTypes = [
   {
     icon: Briefcase,
     title: "Small Companies",
-    subtitle: "Bharat Carbon Lite",
+    subtitle: "Zero Graph Lite",
     description: "Affordable carbon tracking for SMEs with Scope 1, 2, and 3 calculations.",
     features: ["Scope 1 & 2 emissions", "Basic Scope 3", "BRSR Lite reports", "GST integration"],
     color: "bg-secondary",
@@ -46,7 +46,7 @@ const calculatorTypes = [
   {
     icon: Building2,
     title: "Larger Corporates",
-    subtitle: "Bharat Carbon Pro",
+    subtitle: "Zero Graph Pro",
     description: "Enterprise-grade GHG accounting platform for comprehensive tracking.",
     features: ["Full Scope 1, 2 & 3", "Multi-site tracking", "BRSR compliance", "Supply chain"],
     color: "bg-primary",
@@ -188,7 +188,7 @@ const Calculators = () => {
       </section>
 
       <footer className="border-t py-8 bg-card">
-        <div className="container text-center text-sm text-muted-foreground">© 2024 Bharat Carbon. All rights reserved.</div>
+        <div className="container text-center text-sm text-muted-foreground">© 2024 Zero Graph. All rights reserved.</div>
       </footer>
     </div>
   );
