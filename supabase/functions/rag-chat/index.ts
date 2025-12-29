@@ -26,65 +26,62 @@ serve(async (req) => {
 
     console.log("RAG chat query:", query);
 
-    // Step 1: Generate embedding for the query
-    const embeddingResponse = await fetch("https://ai.gateway.lovable.dev/v1/embeddings", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "text-embedding-3-small",
-        input: query,
-        dimensions: 768,
-      }),
-    });
-
-    if (!embeddingResponse.ok) {
-      const errorText = await embeddingResponse.text();
-      console.error("Embedding API error:", errorText);
-      throw new Error(`Embedding API error: ${embeddingResponse.status}`);
-    }
-
-    const embeddingData = await embeddingResponse.json();
-    const queryEmbedding = embeddingData.data?.[0]?.embedding;
-
-    if (!queryEmbedding) {
-      throw new Error("Failed to generate query embedding");
-    }
-
-    // Step 2: Search for similar chunks
-    const { data: similarChunks, error: searchError } = await supabase.rpc(
-      "search_similar_chunks",
+    // Step 1: Search for relevant chunks using full-text search
+    const { data: searchResults, error: searchError } = await supabase.rpc(
+      "search_chunks_fulltext",
       {
-        query_embedding: `[${queryEmbedding.join(",")}]`,
-        match_threshold: 0.3,
+        search_query: query,
         match_count: 5,
       }
     );
 
     if (searchError) {
       console.error("Search error:", searchError);
-      throw searchError;
+      // Don't throw - continue with no context if search fails
     }
 
-    console.log(`Found ${similarChunks?.length || 0} relevant chunks`);
+    console.log(`Found ${searchResults?.length || 0} relevant chunks`);
 
-    // Step 3: Build context from retrieved chunks
-    const context = similarChunks && similarChunks.length > 0
-      ? similarChunks
-          .map((chunk: any) => `[Source: ${chunk.document_title}]\n${chunk.content}`)
-          .join("\n\n---\n\n")
-      : "No relevant documents found in the knowledge base.";
+    // Step 2: Build context from retrieved chunks
+    let context = "";
+    let sources: any[] = [];
 
-    const sources = similarChunks?.map((chunk: any) => ({
-      documentId: chunk.document_id,
-      title: chunk.document_title,
-      similarity: chunk.similarity,
-      excerpt: chunk.content.substring(0, 200) + "...",
-    })) || [];
+    if (searchResults && searchResults.length > 0) {
+      context = searchResults
+        .map((chunk: any) => `[Source: ${chunk.document_title}]\n${chunk.content}`)
+        .join("\n\n---\n\n");
+      
+      sources = searchResults.map((chunk: any) => ({
+        documentId: chunk.document_id,
+        title: chunk.document_title,
+        rank: chunk.rank,
+        excerpt: chunk.content.substring(0, 200) + "...",
+      }));
+    } else {
+      // If no chunks found, try searching documents directly
+      const { data: docResults } = await supabase
+        .from("rag_documents")
+        .select("id, title, content")
+        .textSearch("search_vector", query, { type: "websearch" })
+        .limit(3);
 
-    // Step 4: Generate response using Lovable AI with context
+      if (docResults && docResults.length > 0) {
+        context = docResults
+          .map((doc: any) => `[Source: ${doc.title}]\n${doc.content.substring(0, 1000)}`)
+          .join("\n\n---\n\n");
+        
+        sources = docResults.map((doc: any) => ({
+          documentId: doc.id,
+          title: doc.title,
+          rank: 1,
+          excerpt: doc.content.substring(0, 200) + "...",
+        }));
+      } else {
+        context = "No relevant documents found in the knowledge base. Please answer based on your general knowledge about carbon markets and sustainability.";
+      }
+    }
+
+    // Step 3: Generate response using Lovable AI with context
     const systemPrompt = `You are a knowledgeable assistant specializing in carbon markets, carbon crediting mechanisms, audit & assurance guidance, and sustainability reporting. You help users understand complex sustainability and carbon market topics.
 
 IMPORTANT INSTRUCTIONS:
