@@ -5,6 +5,7 @@ import { ArrowRight, Zap, Shield, BarChart3, Globe2, ChevronDown, TrendingUp, Ta
 import { EarthGlobe } from "@/components/3d/EarthGlobe";
 import { TestimonialsSection } from "@/components/landing/TestimonialsSection";
 import { TrustBadges } from "@/components/landing/TrustBadges";
+import { KnowledgeAgentSection } from "@/components/landing/KnowledgeAgentSection";
 import { PageTransition } from "@/components/animations/PageTransition";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { StaggerContainer, StaggerItem } from "@/components/animations/StaggerContainer";
@@ -454,6 +455,9 @@ const Index = () => {
             </StaggerContainer>
           </div>
         </section>
+
+        {/* Knowledge Agent Section */}
+        <KnowledgeAgentSection />
 
         {/* Testimonials */}
         <TestimonialsSection />
