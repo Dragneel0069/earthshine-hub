@@ -15,7 +15,8 @@ import {
   Shield,
   Phone,
   Mail,
-  Info
+  Info,
+  Brain
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -94,6 +95,12 @@ const calculators = [
 ];
 
 const information = [
+  {
+    title: "Knowledge Agent",
+    description: "AI-powered carbon market Q&A",
+    icon: Brain,
+    href: "/knowledge",
+  },
   {
     title: "Climate Education",
     description: "Learn about carbon accounting and sustainability",
