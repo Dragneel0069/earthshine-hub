@@ -1,4 +1,4 @@
-import { useRef, useMemo, Suspense } from "react";
+import { useRef, useMemo, Suspense, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { 
   Float, 
@@ -6,6 +6,7 @@ import {
   RoundedBox
 } from "@react-three/drei";
 import * as THREE from "three";
+import { WebGLFallback, isWebGLAvailable } from "./WebGLFallback";
 
 interface EmissionBarProps {
   position: [number, number, number];
@@ -124,6 +125,20 @@ interface Dashboard3DSceneProps {
 }
 
 export function Dashboard3DScene({ scope1 = 450, scope2 = 380, scope3 = 720 }: Dashboard3DSceneProps) {
+  const [webglAvailable, setWebglAvailable] = useState(true);
+
+  useEffect(() => {
+    setWebglAvailable(isWebGLAvailable());
+  }, []);
+
+  if (!webglAvailable) {
+    return (
+      <div className="w-full h-[350px] rounded-xl overflow-hidden bg-gradient-to-b from-card to-background flex items-center justify-center">
+        <WebGLFallback variant="dashboard" className="w-full h-full" />
+      </div>
+    );
+  }
+
   return (
     <div className="w-full h-[350px] rounded-xl overflow-hidden bg-gradient-to-b from-card to-background">
       <Canvas camera={{ position: [0, 2, 5], fov: 45 }}>
