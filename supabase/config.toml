@@ -1,1 +1,7 @@
 project_id = "huaacgoksqogppqvxtol"
+
+[functions.rag-embed]
+verify_jwt = false
+
+[functions.rag-chat]
+verify_jwt = false
