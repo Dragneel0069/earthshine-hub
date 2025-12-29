@@ -1,0 +1,15 @@
+{
+  "status": "commited",
+  "type": "frontend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:8080",
+  "executionArgs": {
+    "projectName": "earthshine-hub-1",
+    "projectPath": "F:\\gitC\\earthshine-hub-1",
+    "testIds": [],
+    "additionalInstruction": "",
+    "envs": {
+      "API_KEY": "sk-user-22z5uoCZJfMB9GtaGqf7gyp8ql7d4H9jBjuVbNe8oJgKF-XLvKYoI-ZRovZf1vWM9KO-o-wJh-c72aFG0_wLIxAipeSDxSM5VP7h594JLM0sFbVRSmyps-nbeJnVeBYbE88"
+    }
+  }
+}

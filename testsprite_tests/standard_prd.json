@@ -1,0 +1,262 @@
+{
+  "meta": {
+    "project": "earthshine-hub-1",
+    "date": "2025-12-22",
+    "prepared_by": "Software Development Manager"
+  },
+  "product_overview": "Zero Graph is India's leading carbon emissions tracking and management platform for businesses. It offers a comprehensive web application for tracking, reducing, and offsetting carbon footprints with real-time analytics, BRSR compliance automation, and a verified carbon credits marketplace.",
+  "core_goals": [
+    "Enable businesses to accurately track their carbon emissions across Scope 1, 2, and 3.",
+    "Automate BRSR (Business Responsibility and Sustainability Reporting) compliance reporting.",
+    "Provide tools for businesses to calculate, manage, and offset their carbon footprints.",
+    "Offer real-time analytics and 3D data visualizations to improve understanding and decision-making.",
+    "Facilitate access to verified carbon credits through a secure marketplace.",
+    "Deliver AI-powered insights and recommendations to promote sustainability actions.",
+    "Support Indian regulatory compliance including GST validation and state-wise emission factors."
+  ],
+  "key_features": [
+    "User Authentication with Email/Password and Google OAuth integration.",
+    "An interactive Carbon Emissions Dashboard featuring 3D visualizations like Carbon Molecule and EarthGlobe.",
+    "BRSR report generation and management tools for regulatory compliance.",
+    "Carbon Calculators tailored for individuals, businesses, and corporate use.",
+    "Real-time emissions monitoring including monthly trend charts and recent activity tracking.",
+    "Carbon Credit Marketplace for purchasing verified offsets with certification badge displays.",
+    "PDF Reports generation using jsPDF and AutoTable libraries.",
+    "Sustainability Quiz to engage users and promote awareness.",
+    "Consultation booking system integrated into the platform.",
+    "Compliance Hub providing regulatory details and support.",
+    "State-wise emission factor selection and GST number validation specific to Indian businesses.",
+    "Quick action buttons for common user tasks and AI-driven insights."
+  ],
+  "user_flow_summary": [
+    "User visits the landing page (Index) to learn about the product benefits, features, testimonials, and calls to action.",
+    "New users register via Signup page using email/password or Google OAuth.",
+    "Registered users log in and access the Dashboard displaying real-time emissions data with 3D visualizations and actionable insights.",
+    "Users navigate to different modules including Emissions Calculators, Reports generation (BRSR), Carbon Credit Marketplace, Compliance Hub, and Consultation Booking.",
+    "Users input and track their emissions data categorized by Scope 1, 2, and 3.",
+    "Users generate and download detailed compliance reports in PDF format.",
+    "Users participate in the Sustainability Quiz to assess awareness and receive recommendations.",
+    "Users can access informational content like blogs, certification details, and about pages to deepen understanding.",
+    "Quick access features such as recent activity feed and quick actions streamline user interactions."
+  ],
+  "validation_criteria": [
+    "User authentication must securely support email/password and Google OAuth sign-in methods with session persistence.",
+    "Carbon emissions data visualizations render accurately in real-time with smooth 3D graphics and responsive charts.",
+    "BRSR reports generated comply with regulatory requirements and produce correctly formatted PDFs.",
+    "Carbon footprint calculators provide accurate calculations for individual, business, and corporate profiles.",
+    "Marketplace transactions for carbon credits proceed securely and reflect up-to-date certifications and offsets.",
+    "GST validation and state-wise emission factor selection function correctly per Indian regulatory standards.",
+    "All interactive components including quizzes, consultations booking, and compliance hubs operate without errors.",
+    "System performance maintains responsiveness across devices including mobile with proper UI adaptation.",
+    "AI-powered insights generate relevant, actionable sustainability recommendations based on user data.",
+    "Automated testing and user acceptance testing confirm seamless flow from login through dashboard to reporting."
+  ],
+  "code_summary": {
+    "project_name": "earthshine-hub-1",
+    "project_type": "frontend",
+    "description": "Zero Graph - India's leading carbon emissions tracking and management platform for businesses. A comprehensive web application for tracking, reducing, and offsetting carbon footprint with real-time analytics, BRSR compliance, and verified carbon credits marketplace.",
+    "tech_stack": {
+      "framework": "React 18.3.1",
+      "language": "TypeScript 5.8.3",
+      "build_tool": "Vite 5.4.19",
+      "styling": "Tailwind CSS 3.4.17",
+      "ui_library": "shadcn-ui (Radix UI components)",
+      "routing": "React Router DOM 6.30.1",
+      "state_management": "React Query (TanStack Query) 5.83.0",
+      "animations": "Framer Motion 11.0.0",
+      "3d_graphics": "Three.js 0.160.0, React Three Fiber 8.15.19, React Three Drei 9.88.0",
+      "backend": "Supabase (PostgreSQL database, authentication)",
+      "form_handling": "React Hook Form 7.61.1, Zod 3.25.76",
+      "charts": "Recharts 2.15.4",
+      "pdf_generation": "jsPDF 3.0.4, jsPDF AutoTable 5.0.2",
+      "date_handling": "date-fns 3.6.0"
+    },
+    "features": [
+      "User Authentication (Email/Password, Google OAuth)",
+      "Carbon Emissions Dashboard with 3D visualizations",
+      "BRSR (Business Responsibility and Sustainability Reporting) compliance automation",
+      "Carbon Calculators (Individual, Business, Corporate)",
+      "Emissions Tracking (Scope 1, 2, 3)",
+      "Carbon Credit Marketplace",
+      "Reports Generation (PDF)",
+      "Sustainability Quiz",
+      "Compliance Hub",
+      "Consultation Booking",
+      "Blog",
+      "Certifications",
+      "Real-time emissions monitoring",
+      "AI-powered insights and recommendations",
+      "Monthly trend charts",
+      "Recent activity tracking",
+      "Quick actions",
+      "GST validation",
+      "State-wise emission factor selection"
+    ],
+    "pages": [
+      {
+        "path": "/",
+        "name": "Index",
+        "description": "Landing page with hero section, features, testimonials, and CTA"
+      },
+      {
+        "path": "/dashboard",
+        "name": "Dashboard",
+        "description": "Main emissions dashboard with 3D visualization, charts, stats, and quick actions",
+        "requires_auth": true
+      },
+      {
+        "path": "/login",
+        "name": "Login",
+        "description": "User login page with email/password and Google OAuth"
+      },
+      {
+        "path": "/signup",
+        "name": "Signup",
+        "description": "User registration page"
+      },
+      {
+        "path": "/reports",
+        "name": "Reports",
+        "description": "BRSR report generation and management"
+      },
+      {
+        "path": "/marketplace",
+        "name": "Marketplace",
+        "description": "Carbon credit marketplace for purchasing offsets"
+      },
+      {
+        "path": "/calculators",
+        "name": "Calculators",
+        "description": "Carbon footprint calculators for individuals, businesses, and corporates"
+      },
+      {
+        "path": "/consultation",
+        "name": "Consultation",
+        "description": "Book consultation sessions"
+      },
+      {
+        "path": "/about",
+        "name": "About",
+        "description": "About page"
+      },
+      {
+        "path": "/certifications",
+        "name": "Certifications",
+        "description": "Certification information"
+      },
+      {
+        "path": "/compliance",
+        "name": "ComplianceHub",
+        "description": "Compliance hub for regulatory information"
+      },
+      {
+        "path": "/blog",
+        "name": "Blog",
+        "description": "Blog listing and individual blog posts"
+      },
+      {
+        "path": "/quiz",
+        "name": "SustainabilityQuiz",
+        "description": "Sustainability quiz for users"
+      }
+    ],
+    "components": {
+      "layout": [
+        "Navbar"
+      ],
+      "dashboard": [
+        "CarbonCalculator",
+        "EmissionsByCategory",
+        "EmissionsByScope",
+        "EmissionsChart",
+        "EmissionsInputForm",
+        "MonthlyTrendChart",
+        "QuickActions",
+        "RecentActivity",
+        "StatsCard",
+        "TotalEmissionsCounter"
+      ],
+      "calculators": [
+        "BusinessCalculator",
+        "CorporateCalculator",
+        "IndividualCalculator",
+        "QuickCalculators",
+        "ShareReport"
+      ],
+      "3d": [
+        "CarbonMolecule",
+        "Dashboard3DScene",
+        "EarthGlobe"
+      ],
+      "animations": [
+        "PageTransition",
+        "ScrollReveal",
+        "StaggerContainer"
+      ],
+      "auth": [
+        "ProtectedRoute"
+      ],
+      "landing": [
+        "ConsultationCTA",
+        "ImpactProjects",
+        "OffsetSection",
+        "PathwaySection",
+        "ProductCards",
+        "TestimonialsSection",
+        "TrustBadges"
+      ],
+      "marketplace": [
+        "CertificationBadges",
+        "OffsetQuiz",
+        "RECsSection"
+      ],
+      "reports": [
+        "BRSRReportGenerator"
+      ],
+      "shared": [
+        "GSTValidator",
+        "StateEmissionSelector"
+      ],
+      "ui": "Extensive shadcn-ui component library (50+ components)"
+    },
+    "hooks": [
+      "useAuth - Authentication context and methods",
+      "useEmissions - Emissions data fetching and management",
+      "useToast - Toast notifications",
+      "useMobile - Mobile device detection"
+    ],
+    "database": {
+      "provider": "Supabase (PostgreSQL)",
+      "migrations": "7 migration files in supabase/migrations/"
+    },
+    "development_server": {
+      "port": 8080,
+      "host": "::",
+      "command": "npm run dev"
+    },
+    "authentication": {
+      "provider": "Supabase Auth",
+      "methods": [
+        "Email/Password",
+        "Google OAuth"
+      ],
+      "session_management": "localStorage with auto-refresh"
+    },
+    "key_functionality": [
+      "Real-time carbon emissions tracking",
+      "Multi-scope emissions calculation (Scope 1, 2, 3)",
+      "BRSR report generation",
+      "Carbon credit marketplace",
+      "3D visualizations of emissions data",
+      "AI-powered insights and recommendations",
+      "State-wise emission factor selection for India",
+      "GST number validation",
+      "PDF report generation",
+      "Monthly trend analysis",
+      "Quick action buttons for common tasks",
+      "Recent activity feed"
+    ],
+    "target_audience": "Indian businesses and enterprises seeking carbon footprint tracking, BRSR compliance, and carbon offset solutions",
+    "deployment": "Vite build for production deployment"
+  }
+}

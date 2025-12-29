@@ -1,0 +1,526 @@
+[
+  {
+    "id": "TC001",
+    "title": "User Registration with Email/Password",
+    "description": "Verify that a new user can successfully register using a valid email and password.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the Signup page."
+      },
+      {
+        "type": "action",
+        "description": "Input valid email address."
+      },
+      {
+        "type": "action",
+        "description": "Input valid password meeting complexity requirements."
+      },
+      {
+        "type": "action",
+        "description": "Submit the signup form."
+      },
+      {
+        "type": "assertion",
+        "description": "Check that user receives a confirmation and is redirected to next step or logged in."
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "User Registration with Invalid Email",
+    "description": "Verify that the signup form validates and rejects invalid email formats.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the Signup page."
+      },
+      {
+        "type": "action",
+        "description": "Input invalid email format (e.g., 'user@com')."
+      },
+      {
+        "type": "action",
+        "description": "Input valid password."
+      },
+      {
+        "type": "action",
+        "description": "Submit the signup form."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that an appropriate validation error message is displayed preventing submission."
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "User Login with Email/Password",
+    "description": "Validate that registered users can successfully log in using email and password.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Login page."
+      },
+      {
+        "type": "action",
+        "description": "Input registered email and correct password."
+      },
+      {
+        "type": "action",
+        "description": "Click login button."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm user is successfully authenticated and redirected to Dashboard."
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "Login Failure with Incorrect Password",
+    "description": "Ensure login fails gracefully when incorrect password is provided.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Login page."
+      },
+      {
+        "type": "action",
+        "description": "Input valid email and incorrect password."
+      },
+      {
+        "type": "action",
+        "description": "Click login button."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an error message is shown indicating invalid credentials."
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "User Login with Google OAuth",
+    "description": "Verify users can authenticate using Google OAuth and be redirected to Dashboard.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Login page."
+      },
+      {
+        "type": "action",
+        "description": "Click on Google OAuth login button."
+      },
+      {
+        "type": "action",
+        "description": "Complete Google authentication flow with valid Google account."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm successful login and redirection to Dashboard."
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "Session Persistence after Login",
+    "description": "Validate that user session persists across page reloads and browser tabs.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in as a registered user."
+      },
+      {
+        "type": "action",
+        "description": "Reload the Dashboard page."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm user remains logged in and Dashboard data is accessible."
+      },
+      {
+        "type": "action",
+        "description": "Open a new browser tab and navigate to Dashboard."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify user session is active with no need to log in again."
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "Access Protected Routes without Authentication",
+    "description": "Ensure users are redirected to Login page when accessing protected routes without valid authentication.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate directly to /dashboard URL without logging in."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify redirection to Login page."
+      },
+      {
+        "type": "action",
+        "description": "Navigate directly to /reports URL without logging in."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify redirection to Login page."
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "Dashboard 3D Visualizations Rendering",
+    "description": "Verify that Carbon Molecule and EarthGlobe 3D visualizations render correctly with smooth animations.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in and navigate to the Dashboard page."
+      },
+      {
+        "type": "assertion",
+        "description": "Check that 3D components Carbon Molecule and EarthGlobe appear and animate smoothly without errors."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that 3D visualizations update in real-time with emitted data changes."
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "Real-Time Emissions Data Display",
+    "description": "Validate the real-time monitoring module updates monthly trend charts and recent activity feed accurately.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in and access Dashboard."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify monthly trend charts display correct emissions data for the current and previous months."
+      },
+      {
+        "type": "assertion",
+        "description": "Check recent activity feed lists latest user actions and emissions updates."
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "Carbon Footprint Calculation for Individual",
+    "description": "Confirm the Individual Carbon Calculator provides accurate output for various input scenarios including edge cases.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Calculators page and select Individual Calculator."
+      },
+      {
+        "type": "action",
+        "description": "Input valid individual emission data for all required fields."
+      },
+      {
+        "type": "action",
+        "description": "Submit and calculate footprint."
+      },
+      {
+        "type": "assertion",
+        "description": "Check calculation result matches expected values."
+      },
+      {
+        "type": "action",
+        "description": "Input zero or minimal values to test edge cases."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify calculator handles edge inputs without errors and returns valid output."
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "Carbon Footprint Calculation for Business and Corporate",
+    "description": "Verify Business and Corporate calculators compute emissions correctly based on provided inputs and Indian emission factors.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Calculators page and select Business Calculator."
+      },
+      {
+        "type": "action",
+        "description": "Input sample business emission data including Indian state for emission factors."
+      },
+      {
+        "type": "action",
+        "description": "Calculate and verify results are correct."
+      },
+      {
+        "type": "action",
+        "description": "Repeat process for Corporate Calculator."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm outputs respect state-wise emission factor selection and GST validation."
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "BRSR Report PDF Generation and Download",
+    "description": "Verify that users can generate BRSR compliance reports and download them as correctly formatted PDFs.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in and navigate to Reports page."
+      },
+      {
+        "type": "action",
+        "description": "Input necessary data or use emissions data."
+      },
+      {
+        "type": "action",
+        "description": "Trigger report generation."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm a PDF document is generated with correct structure, tables, and data."
+      },
+      {
+        "type": "action",
+        "description": "Download the generated PDF."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify PDF opens correctly and formatting matches BRSR regulatory requirements."
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "Marketplace Carbon Credits Purchase Flow",
+    "description": "Ensure users can browse, select, and purchase verified carbon credits with accurate certification badges.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Marketplace page."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify list of carbon credit offers show certification badges."
+      },
+      {
+        "type": "action",
+        "description": "Select a carbon credit product and proceed to purchase."
+      },
+      {
+        "type": "action",
+        "description": "Complete purchase with valid payment information."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm transaction succeeds and purchase details are updated in user account."
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "title": "GST Number Validation and State-Wise Emission Factor Selection",
+    "description": "Validate GST number input field and ensure state-wise emission factor selection is accurate and conforms to Indian standards.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to any form requiring GST validation."
+      },
+      {
+        "type": "action",
+        "description": "Enter various valid and invalid GST numbers."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify validation messages appear appropriately for incorrect GST formats."
+      },
+      {
+        "type": "action",
+        "description": "Select different Indian states from emission factor dropdown."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm emitted calculations reflect selected state emission factors correctly."
+      }
+    ]
+  },
+  {
+    "id": "TC015",
+    "title": "Sustainability Quiz Participation and Scoring",
+    "description": "Verify users can complete the Sustainability Quiz, receive scores, and get relevant recommendations.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Sustainability Quiz page."
+      },
+      {
+        "type": "action",
+        "description": "Answer all quiz questions."
+      },
+      {
+        "type": "action",
+        "description": "Submit quiz responses."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm final score is calculated and displayed."
+      },
+      {
+        "type": "assertion",
+        "description": "Check AI-based sustainability recommendations are shown based on user answers."
+      }
+    ]
+  },
+  {
+    "id": "TC016",
+    "title": "Consultation Booking Workflow",
+    "description": "Ensure users can book consultation sessions through the integrated booking system without errors.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Consultation page."
+      },
+      {
+        "type": "action",
+        "description": "Select date, time, and consultation type."
+      },
+      {
+        "type": "action",
+        "description": "Submit booking request."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify booking confirmation message and recorded appointment details."
+      }
+    ]
+  },
+  {
+    "id": "TC017",
+    "title": "AI-Powered Insights Generation",
+    "description": "Validate AI recommendations are relevant, actionable, and tailored to user emissions data.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in and access Dashboard."
+      },
+      {
+        "type": "assertion",
+        "description": "Check AI-powered insights are displayed."
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure recommendations correspond to current emissions data and suggest feasible sustainability actions."
+      }
+    ]
+  },
+  {
+    "id": "TC018",
+    "title": "Reports Page Input Validation",
+    "description": "Verify that inputs on the Reports page are properly validated, and errors are handled gracefully.",
+    "category": "error handling",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Reports page."
+      },
+      {
+        "type": "action",
+        "description": "Enter incomplete or invalid data for report parameters."
+      },
+      {
+        "type": "action",
+        "description": "Attempt to generate report."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm validation errors are shown and report generation is blocked."
+      }
+    ]
+  },
+  {
+    "id": "TC019",
+    "title": "UI Responsiveness on Mobile Devices",
+    "description": "Test that UI components, including 3D visualizations and dashboards, adapt and remain usable on mobile screen sizes.",
+    "category": "ui",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Open the application on various mobile devices or emulator."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that menus, buttons, charts, and 3D visualizations scale correctly with no clipping or overflow."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm touch interactions work as expected and system remains responsive."
+      }
+    ]
+  },
+  {
+    "id": "TC020",
+    "title": "Quick Actions Buttons Functionality",
+    "description": "Validate that quick action buttons on Dashboard trigger intended workflows without error.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in and navigate to Dashboard."
+      },
+      {
+        "type": "action",
+        "description": "Click on each quick action button available."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm each button initiates the correct process or navigation without error."
+      }
+    ]
+  }
+]
