@@ -1,8 +1,8 @@
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Sphere, MeshDistortMaterial, Float, Stars } from "@react-three/drei";
 import * as THREE from "three";
-
+import { WebGLFallback, isWebGLAvailable } from "./WebGLFallback";
 function AnimatedSphere() {
   const meshRef = useRef<THREE.Mesh>(null);
 
@@ -127,6 +127,20 @@ function GlowRings() {
 }
 
 export function EarthGlobe() {
+  const [webglAvailable, setWebglAvailable] = useState(true);
+
+  useEffect(() => {
+    setWebglAvailable(isWebGLAvailable());
+  }, []);
+
+  if (!webglAvailable) {
+    return (
+      <div className="w-full h-full min-h-[400px] lg:min-h-[600px] flex items-center justify-center">
+        <WebGLFallback variant="globe" className="w-full h-full" />
+      </div>
+    );
+  }
+
   return (
     <div className="w-full h-full min-h-[400px] lg:min-h-[600px]">
       <Canvas camera={{ position: [0, 0, 6], fov: 45 }}>

@@ -1,8 +1,8 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Sphere, Float, Trail } from "@react-three/drei";
 import * as THREE from "three";
-
+import { WebGLFallback, isWebGLAvailable } from "./WebGLFallback";
 function Atom({ position, color, size = 0.3 }: { position: [number, number, number]; color: string; size?: number }) {
   return (
     <Float speed={3} rotationIntensity={0.2} floatIntensity={0.3}>
@@ -75,6 +75,20 @@ function CO2Molecule() {
 }
 
 export function CarbonMolecule() {
+  const [webglAvailable, setWebglAvailable] = useState(true);
+
+  useEffect(() => {
+    setWebglAvailable(isWebGLAvailable());
+  }, []);
+
+  if (!webglAvailable) {
+    return (
+      <div className="w-full h-[200px] flex items-center justify-center">
+        <WebGLFallback variant="molecule" className="w-full h-full" />
+      </div>
+    );
+  }
+
   return (
     <div className="w-full h-[200px]">
       <Canvas camera={{ position: [0, 0, 4], fov: 45 }}>
