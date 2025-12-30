@@ -1,73 +1,107 @@
-# TestSprite Configuration Guide
+# TestSprite Testing Configuration
 
-## Setting Up TestSprite API Key
+TestSprite is an AI-powered testing platform that integrates with your IDE via MCP (Model Context Protocol).
 
-TestSprite uses MCP (Model Context Protocol) for integration with Cursor. The API key needs to be configured in your **Cursor MCP server settings**, not in the project files.
+## Quick Start
 
 ### Step 1: Get Your API Key
 
-1. Visit [https://www.testsprite.com/dashboard/settings/apikey](https://www.testsprite.com/dashboard/settings/apikey)
-2. Log in to your TestSprite account
-3. Generate a new API key if you don't have one
+1. Visit [TestSprite Dashboard](https://www.testsprite.com/dashboard/settings/apikey)
+2. Sign in or create a free account
+3. Generate a new API key
 
-### Step 2: Configure in Cursor MCP Settings
+### Step 2: Configure Your IDE
 
-The API key should be configured in Cursor's MCP server configuration. The exact location depends on your Cursor version:
+TestSprite runs as an MCP server in your IDE. Add the following configuration:
 
-**Option A: Cursor Settings UI**
-1. Open Cursor Settings (Ctrl+, or Cmd+,)
-2. Search for "MCP" or "Model Context Protocol"
-3. Find the TestSprite server configuration
-4. Add your API key in the configuration
+#### For Cursor
 
-**Option B: Cursor Configuration File**
-The MCP server configuration is typically in:
-- Windows: `%APPDATA%\Cursor\User\globalStorage\mcp.json` or similar
-- macOS: `~/Library/Application Support/Cursor/User/globalStorage/mcp.json`
-- Linux: `~/.config/Cursor/User/globalStorage/mcp.json`
+1. Open Cursor Settings (`⌘⇧J` or `Ctrl+Shift+J`)
+2. Navigate to **Tools & Integration**
+3. Click **Add custom MCP**
+4. Add this configuration:
 
-Look for a configuration like:
 ```json
 {
   "mcpServers": {
-    "testsprite": {
-      "apiKey": "your_api_key_here"
+    "TestSprite": {
+      "command": "npx",
+      "args": ["@testsprite/testsprite-mcp@latest"],
+      "env": {
+        "API_KEY": "your-api-key-here"
+      }
     }
   }
 }
 ```
 
-### Step 3: Verify Configuration
+5. Verify the green dot appears on the TestSprite MCP server icon
 
-After setting up the API key, you can verify it by running TestSprite commands through Cursor.
+**Important:** Disable Cursor's "Run in Sandbox" mode for full functionality:
+- Go to `Cursor Settings` → `Chat` → `Auto-Run Mode`
+- Set to **"Ask Every Time"** or **"Run Everything"**
 
-## Project Configuration
+#### For VS Code
 
-The project is configured to run on:
-- **Port**: 8080
-- **Type**: Frontend (React + Vite)
-- **Test Scope**: Codebase (full project testing)
+1. Install the MCP extension if not already installed
+2. Add the same configuration to your MCP settings
 
-## Running Tests
+### Step 3: Start Testing
 
-Once the API key is configured:
-
-1. Start the development server:
+1. Start your development server:
    ```bash
    npm run dev
    ```
 
-2. The server should be running on http://localhost:8080
+2. Server should be running on http://localhost:8080
 
-3. Use Cursor's AI assistant to run TestSprite commands:
-   - Generate test plans
-   - Execute tests
-   - View test results
+3. In your IDE chat, simply say:
+   ```
+   Help me test this project with TestSprite
+   ```
+
+## Project Configuration
+
+This project is configured with:
+
+| Setting | Value |
+|---------|-------|
+| Port | 8080 |
+| Type | Frontend (React + Vite) |
+| Test Scope | Codebase |
+| Framework | React |
+| Build Tool | Vite |
+
+## TestSprite Features
+
+- **One-Command Testing**: Just say "Help me test this project with TestSprite"
+- **AI-Driven**: Automatically generates PRDs, test plans, and test code
+- **Cloud Execution**: Tests run in secure TestSprite cloud environments
+- **Auto-Fix**: Get detailed results and fix suggestions
 
 ## Files Generated
 
-- `testsprite_tests/tmp/code_summary.json` - Project code summary
-- `testsprite_tests/tmp/config.json` - TestSprite configuration
-- `testsprite_tests/tmp/prd_files/` - PRD files (if generated)
+- `testsprite_tests/tmp/code_summary.json` - Project code analysis
+- `testsprite_tests/tmp/config.json` - Runtime configuration
+- `testsprite_tests/standard_prd.json` - Generated PRD
+- `testsprite_tests/testsprite_frontend_test_plan.json` - Test plan
 
+## Useful Commands
 
+Once TestSprite MCP is configured, you can ask your AI assistant:
+
+- "Help me test this project with TestSprite"
+- "Run tests for the Dashboard component"
+- "Generate a test plan for authentication"
+- "Fix failing tests"
+
+## Documentation
+
+- [TestSprite Docs](https://docs.testsprite.com/)
+- [MCP Installation Guide](https://docs.testsprite.com/mcp/getting-started/installation)
+- [Troubleshooting](https://docs.testsprite.com/mcp/troubleshooting/installation-issues)
+
+## Support
+
+- Website: [testsprite.com](https://www.testsprite.com)
+- Docs: [docs.testsprite.com](https://docs.testsprite.com)
