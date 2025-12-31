@@ -384,6 +384,9 @@ const Index = () => {
           </div>
         </section>
 
+        {/* Knowledge Agent Section */}
+        <KnowledgeAgentSection />
+
         {/* Section 3: The Method - Interactive Graph */}
         <section className="relative py-32 overflow-hidden">
           <div className="absolute inset-0 dot-background opacity-30" />
@@ -455,9 +458,6 @@ const Index = () => {
             </StaggerContainer>
           </div>
         </section>
-
-        {/* Knowledge Agent Section */}
-        <KnowledgeAgentSection />
 
         {/* Testimonials */}
         <TestimonialsSection />
