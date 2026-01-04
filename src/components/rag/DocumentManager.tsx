@@ -1,13 +1,11 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { 
   Upload, 
   FileText, 
-  Link, 
   Trash2, 
   Loader2, 
   CheckCircle2,
-  AlertCircle,
   Plus
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -26,6 +24,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { addTextDocumentSchema, addUrlDocumentSchema } from "@/lib/validation";
 
 interface Document {
   id: string;
@@ -84,14 +83,18 @@ export function DocumentManager({ documents, onDocumentsChange, isLoading }: Doc
   };
 
   const handleAddText = async () => {
-    if (!title.trim() || !content.trim()) {
-      toast.error("Please provide both title and content");
+    // Validate with schema
+    const result = addTextDocumentSchema.safeParse({ title, content });
+    
+    if (!result.success) {
+      const firstError = result.error.errors[0];
+      toast.error(firstError?.message || "Validation error");
       return;
     }
 
     setIsProcessing(true);
     try {
-      await processDocument(content, title, "text");
+      await processDocument(result.data.content, result.data.title, "text");
       toast.success("Document added and processed successfully");
       setTitle("");
       setContent("");
@@ -105,21 +108,24 @@ export function DocumentManager({ documents, onDocumentsChange, isLoading }: Doc
   };
 
   const handleAddUrl = async () => {
-    if (!title.trim() || !url.trim()) {
-      toast.error("Please provide both title and URL");
+    // Validate with schema
+    const result = addUrlDocumentSchema.safeParse({ title, url });
+    
+    if (!result.success) {
+      const firstError = result.error.errors[0];
+      toast.error(firstError?.message || "Validation error");
       return;
     }
 
     setIsProcessing(true);
     try {
       // For now, we'll just store the URL reference
-      // In a full implementation, you'd fetch and scrape the URL content
       toast.info("URL document added. Content scraping coming soon.");
       const { error } = await supabase.from("rag_documents").insert({
-        title,
+        title: result.data.title,
         source_type: "url",
-        source_url: url,
-        content: `Content from: ${url}`,
+        source_url: result.data.url,
+        content: `Content from: ${result.data.url}`,
       });
 
       if (error) throw error;
@@ -140,11 +146,33 @@ export function DocumentManager({ documents, onDocumentsChange, isLoading }: Doc
       toast.error("Please select a file");
       return;
     }
+    
+    // File size validation (100KB max)
+    const MAX_FILE_SIZE = 100 * 1024;
+    if (file.size > MAX_FILE_SIZE) {
+      toast.error("File is too large. Maximum size is 100KB.");
+      return;
+    }
+    
+    // File type validation
+    const allowedTypes = [".txt", ".md", ".json"];
+    const fileExtension = file.name.toLowerCase().slice(file.name.lastIndexOf("."));
+    if (!allowedTypes.includes(fileExtension)) {
+      toast.error("Invalid file type. Only .txt, .md, and .json files are allowed.");
+      return;
+    }
 
     setIsProcessing(true);
     try {
       const text = await file.text();
-      const docTitle = title.trim() || file.name;
+      
+      // Validate content length
+      if (text.length > 100000) {
+        toast.error("File content is too large. Maximum 100KB of text.");
+        return;
+      }
+      
+      const docTitle = (title.trim() || file.name).replace(/[<>]/g, "").substring(0, 255);
       await processDocument(text, docTitle, "file");
       toast.success("File uploaded and processed successfully");
       setFile(null);
@@ -232,17 +260,25 @@ export function DocumentManager({ documents, onDocumentsChange, isLoading }: Doc
               </TabsList>
 
               <TabsContent value="text" className="space-y-4 mt-4">
-                <Input
-                  placeholder="Document title"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-                <Textarea
-                  placeholder="Paste your document content here..."
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  className="min-h-[200px]"
-                />
+                <div className="space-y-1">
+                  <Input
+                    placeholder="Document title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    maxLength={255}
+                  />
+                  <p className="text-xs text-muted-foreground text-right">{title.length}/255</p>
+                </div>
+                <div className="space-y-1">
+                  <Textarea
+                    placeholder="Paste your document content here..."
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    className="min-h-[200px]"
+                    maxLength={100000}
+                  />
+                  <p className="text-xs text-muted-foreground text-right">{content.length}/100000</p>
+                </div>
                 <Button 
                   onClick={handleAddText} 
                   disabled={isProcessing}
@@ -301,11 +337,13 @@ export function DocumentManager({ documents, onDocumentsChange, isLoading }: Doc
                   placeholder="Document title"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
+                  maxLength={255}
                 />
                 <Input
                   placeholder="https://example.com/document"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
+                  maxLength={2048}
                 />
                 <Button 
                   onClick={handleAddUrl} 

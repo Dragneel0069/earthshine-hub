@@ -22,8 +22,10 @@ import {
   Building2,
   Users,
   TreePine,
-  FileCheck
+  FileCheck,
+  Loader2
 } from "lucide-react";
+import { consultationSchema } from "@/lib/validation";
 
 const services = [
   {
@@ -51,9 +53,48 @@ const services = [
 const Consultation = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  
+  // Form state
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [company, setCompany] = useState("");
+  const [companySize, setCompanySize] = useState("");
+  const [service, setService] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({});
+    
+    // Validate with schema
+    const result = consultationSchema.safeParse({
+      firstName,
+      lastName,
+      email,
+      phone,
+      company,
+      companySize,
+      service,
+      message: message || undefined,
+    });
+    
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {};
+      result.error.errors.forEach((err) => {
+        if (err.path[0]) fieldErrors[err.path[0] as string] = err.message;
+      });
+      setErrors(fieldErrors);
+      toast({
+        title: "Validation Error",
+        description: "Please check the form for errors.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setIsSubmitting(true);
     
     // Simulate form submission
@@ -63,6 +104,16 @@ const Consultation = () => {
       title: "Consultation Request Sent!",
       description: "Our team will contact you within 24 hours.",
     });
+    
+    // Reset form
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setPhone("");
+    setCompany("");
+    setCompanySize("");
+    setService("");
+    setMessage("");
     
     setIsSubmitting(false);
   };
@@ -104,32 +155,79 @@ const Consultation = () => {
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div className="space-y-2">
                         <Label htmlFor="firstName">First Name *</Label>
-                        <Input id="firstName" placeholder="Rahul" required />
+                        <Input 
+                          id="firstName" 
+                          placeholder="Rahul" 
+                          value={firstName}
+                          onChange={(e) => setFirstName(e.target.value)}
+                          maxLength={100}
+                        />
+                        {errors.firstName && (
+                          <p className="text-sm text-destructive">{errors.firstName}</p>
+                        )}
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="lastName">Last Name *</Label>
-                        <Input id="lastName" placeholder="Sharma" required />
+                        <Input 
+                          id="lastName" 
+                          placeholder="Sharma" 
+                          value={lastName}
+                          onChange={(e) => setLastName(e.target.value)}
+                          maxLength={100}
+                        />
+                        {errors.lastName && (
+                          <p className="text-sm text-destructive">{errors.lastName}</p>
+                        )}
                       </div>
                     </div>
                     
                     <div className="space-y-2">
                       <Label htmlFor="email">Work Email *</Label>
-                      <Input id="email" type="email" placeholder="rahul@company.com" required />
+                      <Input 
+                        id="email" 
+                        type="email" 
+                        placeholder="rahul@company.com" 
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        maxLength={255}
+                      />
+                      {errors.email && (
+                        <p className="text-sm text-destructive">{errors.email}</p>
+                      )}
                     </div>
                     
                     <div className="space-y-2">
                       <Label htmlFor="phone">Phone Number *</Label>
-                      <Input id="phone" type="tel" placeholder="+91 98765 43210" required />
+                      <Input 
+                        id="phone" 
+                        type="tel" 
+                        placeholder="+91 98765 43210" 
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        maxLength={20}
+                      />
+                      {errors.phone && (
+                        <p className="text-sm text-destructive">{errors.phone}</p>
+                      )}
                     </div>
                     
                     <div className="space-y-2">
                       <Label htmlFor="company">Company Name *</Label>
-                      <Input id="company" placeholder="Your Company Pvt Ltd" required />
+                      <Input 
+                        id="company" 
+                        placeholder="Your Company Pvt Ltd" 
+                        value={company}
+                        onChange={(e) => setCompany(e.target.value)}
+                        maxLength={200}
+                      />
+                      {errors.company && (
+                        <p className="text-sm text-destructive">{errors.company}</p>
+                      )}
                     </div>
                     
                     <div className="space-y-2">
                       <Label htmlFor="size">Company Size *</Label>
-                      <Select required>
+                      <Select value={companySize} onValueChange={setCompanySize}>
                         <SelectTrigger>
                           <SelectValue placeholder="Select company size" />
                         </SelectTrigger>
@@ -141,11 +239,14 @@ const Consultation = () => {
                           <SelectItem value="1000+">1000+ employees</SelectItem>
                         </SelectContent>
                       </Select>
+                      {errors.companySize && (
+                        <p className="text-sm text-destructive">{errors.companySize}</p>
+                      )}
                     </div>
                     
                     <div className="space-y-2">
                       <Label htmlFor="service">What are you interested in? *</Label>
-                      <Select required>
+                      <Select value={service} onValueChange={setService}>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a service" />
                         </SelectTrigger>
@@ -158,6 +259,9 @@ const Consultation = () => {
                           <SelectItem value="other">Other</SelectItem>
                         </SelectContent>
                       </Select>
+                      {errors.service && (
+                        <p className="text-sm text-destructive">{errors.service}</p>
+                      )}
                     </div>
                     
                     <div className="space-y-2">
@@ -166,11 +270,24 @@ const Consultation = () => {
                         id="message" 
                         placeholder="Tell us about your sustainability goals and any specific challenges you're facing..."
                         rows={4}
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        maxLength={5000}
                       />
+                      {errors.message && (
+                        <p className="text-sm text-destructive">{errors.message}</p>
+                      )}
                     </div>
                     
                     <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
-                      {isSubmitting ? "Submitting..." : "Request Consultation"}
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                          Submitting...
+                        </>
+                      ) : (
+                        "Request Consultation"
+                      )}
                     </Button>
                     
                     <p className="text-xs text-muted-foreground text-center">

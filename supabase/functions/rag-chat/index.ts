@@ -6,52 +6,253 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// ============================================
+// SECURITY: Rate Limiting Configuration
+// ============================================
+const RATE_LIMIT_WINDOW_MS = 60000; // 1 minute
+const MAX_REQUESTS_PER_WINDOW = 20; // 20 requests per minute per IP
+const MAX_REQUESTS_PER_USER = 30; // 30 requests per minute per authenticated user
+
+// In-memory rate limit store (resets on function cold start)
+const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
+
+function checkRateLimit(identifier: string, maxRequests: number): { allowed: boolean; remaining: number; resetIn: number } {
+  const now = Date.now();
+  const record = rateLimitStore.get(identifier);
+  
+  if (!record || now > record.resetTime) {
+    rateLimitStore.set(identifier, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
+    return { allowed: true, remaining: maxRequests - 1, resetIn: RATE_LIMIT_WINDOW_MS };
+  }
+  
+  if (record.count >= maxRequests) {
+    return { allowed: false, remaining: 0, resetIn: record.resetTime - now };
+  }
+  
+  record.count++;
+  return { allowed: true, remaining: maxRequests - record.count, resetIn: record.resetTime - now };
+}
+
+function getClientIP(req: Request): string {
+  return req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || 
+         req.headers.get("x-real-ip") || 
+         "unknown";
+}
+
+// ============================================
+// SECURITY: Input Validation
+// ============================================
+const MAX_QUERY_LENGTH = 1000;
+const MAX_MESSAGE_LENGTH = 5000;
+const MAX_MESSAGES = 50;
+
+interface Message {
+  role: "user" | "assistant" | "system";
+  content: string;
+}
+
+function validateInput(body: unknown): { valid: true; data: { query: string; conversationId?: string; messages: Message[] } } | { valid: false; error: string } {
+  if (!body || typeof body !== "object") {
+    return { valid: false, error: "Invalid request body" };
+  }
+  
+  const { query, conversationId, messages = [] } = body as Record<string, unknown>;
+  
+  // Validate query
+  if (typeof query !== "string") {
+    return { valid: false, error: "Query must be a string" };
+  }
+  
+  const trimmedQuery = query.trim();
+  if (trimmedQuery.length === 0) {
+    return { valid: false, error: "Query cannot be empty" };
+  }
+  
+  if (trimmedQuery.length > MAX_QUERY_LENGTH) {
+    return { valid: false, error: `Query must be less than ${MAX_QUERY_LENGTH} characters` };
+  }
+  
+  // Validate conversationId (optional UUID)
+  if (conversationId !== undefined && conversationId !== null) {
+    if (typeof conversationId !== "string") {
+      return { valid: false, error: "ConversationId must be a string" };
+    }
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(conversationId)) {
+      return { valid: false, error: "Invalid conversationId format" };
+    }
+  }
+  
+  // Validate messages array
+  if (!Array.isArray(messages)) {
+    return { valid: false, error: "Messages must be an array" };
+  }
+  
+  if (messages.length > MAX_MESSAGES) {
+    return { valid: false, error: `Too many messages (max ${MAX_MESSAGES})` };
+  }
+  
+  const validatedMessages: Message[] = [];
+  for (let i = 0; i < messages.length; i++) {
+    const msg = messages[i] as unknown;
+    if (!msg || typeof msg !== "object") {
+      return { valid: false, error: `Message at index ${i} is invalid` };
+    }
+    
+    const { role, content } = msg as Record<string, unknown>;
+    
+    if (!["user", "assistant", "system"].includes(role as string)) {
+      return { valid: false, error: `Invalid role at message ${i}` };
+    }
+    
+    if (typeof content !== "string") {
+      return { valid: false, error: `Message content at index ${i} must be a string` };
+    }
+    
+    if (content.length > MAX_MESSAGE_LENGTH) {
+      return { valid: false, error: `Message at index ${i} exceeds max length` };
+    }
+    
+    validatedMessages.push({ role: role as Message["role"], content });
+  }
+  
+  return { 
+    valid: true, 
+    data: { 
+      query: trimmedQuery, 
+      conversationId: conversationId as string | undefined,
+      messages: validatedMessages 
+    } 
+  };
+}
+
+// Sanitize string to prevent injection
+function sanitize(str: string): string {
+  return str.replace(/[<>]/g, "").trim();
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { query, conversationId, messages = [] } = await req.json();
+    // ============================================
+    // SECURITY: Rate Limiting Check
+    // ============================================
+    const clientIP = getClientIP(req);
+    const authHeader = req.headers.get("authorization");
+    const userId = authHeader ? authHeader.replace("Bearer ", "").substring(0, 36) : null;
+    
+    // Check IP-based rate limit
+    const ipRateLimit = checkRateLimit(`ip:${clientIP}`, MAX_REQUESTS_PER_WINDOW);
+    if (!ipRateLimit.allowed) {
+      console.warn(`Rate limit exceeded for IP: ${clientIP}`);
+      return new Response(
+        JSON.stringify({ 
+          error: "Too many requests. Please try again later.",
+          retryAfter: Math.ceil(ipRateLimit.resetIn / 1000)
+        }),
+        { 
+          status: 429, 
+          headers: { 
+            ...corsHeaders, 
+            "Content-Type": "application/json",
+            "Retry-After": String(Math.ceil(ipRateLimit.resetIn / 1000)),
+            "X-RateLimit-Remaining": "0",
+            "X-RateLimit-Reset": String(Math.ceil(ipRateLimit.resetIn / 1000))
+          } 
+        }
+      );
+    }
+    
+    // Check user-based rate limit (more generous for authenticated users)
+    if (userId) {
+      const userRateLimit = checkRateLimit(`user:${userId}`, MAX_REQUESTS_PER_USER);
+      if (!userRateLimit.allowed) {
+        console.warn(`Rate limit exceeded for user: ${userId}`);
+        return new Response(
+          JSON.stringify({ 
+            error: "Too many requests. Please try again later.",
+            retryAfter: Math.ceil(userRateLimit.resetIn / 1000)
+          }),
+          { 
+            status: 429, 
+            headers: { 
+              ...corsHeaders, 
+              "Content-Type": "application/json",
+              "Retry-After": String(Math.ceil(userRateLimit.resetIn / 1000)),
+              "X-RateLimit-Remaining": "0"
+            } 
+          }
+        );
+      }
+    }
+
+    // ============================================
+    // SECURITY: Input Validation
+    // ============================================
+    let body: unknown;
+    try {
+      body = await req.json();
+    } catch {
+      return new Response(
+        JSON.stringify({ error: "Invalid JSON body" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    
+    const validation = validateInput(body);
+    if (!validation.valid) {
+      return new Response(
+        JSON.stringify({ error: validation.error }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    
+    const { query, conversationId, messages } = validation.data;
+    const sanitizedQuery = sanitize(query);
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
     const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
     if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY is not configured");
+      console.error("LOVABLE_API_KEY is not configured");
+      throw new Error("Service configuration error");
     }
 
     const supabase = createClient(SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!);
 
-    console.log("RAG chat query:", query);
+    console.log("RAG chat query received, length:", sanitizedQuery.length);
 
     // Step 1: Search for relevant chunks using full-text search
     const { data: searchResults, error: searchError } = await supabase.rpc(
       "search_chunks_fulltext",
       {
-        search_query: query,
+        search_query: sanitizedQuery,
         match_count: 5,
       }
     );
 
     if (searchError) {
       console.error("Search error:", searchError);
-      // Don't throw - continue with no context if search fails
     }
 
     console.log(`Found ${searchResults?.length || 0} relevant chunks`);
 
     // Step 2: Build context from retrieved chunks
     let context = "";
-    let sources: any[] = [];
+    let sources: { documentId: string; title: string; rank: number; excerpt: string }[] = [];
 
     if (searchResults && searchResults.length > 0) {
       context = searchResults
-        .map((chunk: any) => `[Source: ${chunk.document_title}]\n${chunk.content}`)
+        .map((chunk: { document_title: string; content: string }) => 
+          `[Source: ${chunk.document_title}]\n${chunk.content}`
+        )
         .join("\n\n---\n\n");
       
-      sources = searchResults.map((chunk: any) => ({
+      sources = searchResults.map((chunk: { document_id: string; document_title: string; rank: number; content: string }) => ({
         documentId: chunk.document_id,
         title: chunk.document_title,
         rank: chunk.rank,
@@ -62,15 +263,17 @@ serve(async (req) => {
       const { data: docResults } = await supabase
         .from("rag_documents")
         .select("id, title, content")
-        .textSearch("search_vector", query, { type: "websearch" })
+        .textSearch("search_vector", sanitizedQuery, { type: "websearch" })
         .limit(3);
 
       if (docResults && docResults.length > 0) {
         context = docResults
-          .map((doc: any) => `[Source: ${doc.title}]\n${doc.content.substring(0, 1000)}`)
+          .map((doc: { title: string; content: string }) => 
+            `[Source: ${doc.title}]\n${doc.content.substring(0, 1000)}`
+          )
           .join("\n\n---\n\n");
         
-        sources = docResults.map((doc: any) => ({
+        sources = docResults.map((doc: { id: string; title: string; content: string }) => ({
           documentId: doc.id,
           title: doc.title,
           rank: 1,
@@ -97,8 +300,8 @@ ${context}`;
 
     const chatMessages = [
       { role: "system", content: systemPrompt },
-      ...messages.map((m: any) => ({ role: m.role, content: m.content })),
-      { role: "user", content: query },
+      ...messages.map((m) => ({ role: m.role, content: m.content })),
+      { role: "user", content: sanitizedQuery },
     ];
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -137,13 +340,14 @@ ${context}`;
       ...corsHeaders,
       "Content-Type": "text/event-stream",
       "X-RAG-Sources": JSON.stringify(sources),
+      "X-RateLimit-Remaining": String(ipRateLimit.remaining),
     };
 
     return new Response(response.body, { headers: responseHeaders });
   } catch (error) {
     console.error("Error in rag-chat function:", error);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
+      JSON.stringify({ error: "An unexpected error occurred. Please try again." }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
