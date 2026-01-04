@@ -42,12 +42,23 @@ export function RAGChat({ conversationId }: RAGChatProps) {
 
   const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
-    if (!input.trim() || isLoading) return;
+    
+    const trimmedInput = input.trim();
+    
+    // Input validation
+    if (!trimmedInput || isLoading) return;
+    if (trimmedInput.length > 1000) {
+      toast.error("Query is too long. Please limit to 1000 characters.");
+      return;
+    }
+    
+    // Sanitize input
+    const sanitizedInput = trimmedInput.replace(/[<>]/g, "");
 
     const userMessage: Message = {
       id: Date.now().toString(),
       role: "user",
-      content: input.trim(),
+      content: sanitizedInput,
     };
 
     setMessages((prev) => [...prev, userMessage]);
@@ -265,7 +276,11 @@ export function RAGChat({ conversationId }: RAGChatProps) {
               placeholder="Ask about carbon markets, credits, or sustainability..."
               className="min-h-[60px] max-h-[200px] pr-12 resize-none bg-background/50"
               disabled={isLoading}
+              maxLength={1000}
             />
+            <div className="absolute right-14 bottom-3 text-xs text-muted-foreground">
+              {input.length}/1000
+            </div>
             <Button
               type="submit"
               size="icon"

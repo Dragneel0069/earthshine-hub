@@ -7,12 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Link, useNavigate } from "react-router-dom";
 import { Leaf, Loader2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { z } from "zod";
-
-const loginSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-});
+import { loginSchema } from "@/lib/validation";
 
 const Login = () => {
   const [email, setEmail] = useState("");

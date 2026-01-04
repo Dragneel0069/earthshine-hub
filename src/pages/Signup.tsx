@@ -7,15 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Link, useNavigate } from "react-router-dom";
 import { Leaf, CheckCircle2, Loader2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { z } from "zod";
-
-const signupSchema = z.object({
-  firstName: z.string().min(1, "First name is required").max(50),
-  lastName: z.string().min(1, "Last name is required").max(50),
-  company: z.string().min(1, "Company name is required").max(100),
-  email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-});
+import { signupSchema } from "@/lib/validation";
 
 const benefits = [
   "Track emissions across all operations",
