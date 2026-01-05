@@ -21,6 +21,7 @@ import SustainabilityQuiz from "./pages/SustainabilityQuiz";
 import ComplianceHub from "./pages/ComplianceHub";
 import KnowledgeAgent from "./pages/KnowledgeAgent";
 import Pricing from "./pages/Pricing";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,7 @@ const App = () => (
             <Route path="/quiz" element={<SustainabilityQuiz />} />
             <Route path="/knowledge" element={<KnowledgeAgent />} />
             <Route path="/pricing" element={<Pricing />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
