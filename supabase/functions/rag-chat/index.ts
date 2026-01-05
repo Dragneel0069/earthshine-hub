@@ -3,8 +3,93 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-request-timestamp, x-request-nonce, x-request-signature",
 };
+
+// ============================================
+// SECURITY: Request Signing - Replay Attack Prevention
+// ============================================
+const REQUEST_TIMESTAMP_TOLERANCE_MS = 30000; // 30 seconds
+const usedNonces = new Map<string, number>(); // nonce -> expiry timestamp
+
+// Clean up expired nonces periodically
+function cleanupNonces() {
+  const now = Date.now();
+  for (const [nonce, expiry] of usedNonces.entries()) {
+    if (now > expiry) {
+      usedNonces.delete(nonce);
+    }
+  }
+}
+
+// Verify request signature
+async function verifyRequestSignature(
+  req: Request,
+  body: string
+): Promise<{ valid: boolean; error?: string }> {
+  const timestamp = req.headers.get("x-request-timestamp");
+  const nonce = req.headers.get("x-request-nonce");
+  const signature = req.headers.get("x-request-signature");
+
+  // If no signing headers, allow request (backwards compatibility)
+  // In production, you might want to require signing
+  if (!timestamp && !nonce && !signature) {
+    return { valid: true };
+  }
+
+  // If some headers present but not all, reject
+  if (!timestamp || !nonce || !signature) {
+    return { valid: false, error: "Missing request signing headers" };
+  }
+
+  // Validate timestamp format
+  const timestampNum = parseInt(timestamp, 10);
+  if (isNaN(timestampNum)) {
+    return { valid: false, error: "Invalid timestamp format" };
+  }
+
+  // Check timestamp is within tolerance window
+  const now = Date.now();
+  const timeDiff = Math.abs(now - timestampNum);
+  if (timeDiff > REQUEST_TIMESTAMP_TOLERANCE_MS) {
+    console.warn(`Request timestamp too old: ${timeDiff}ms diff`);
+    return { valid: false, error: "Request expired. Please try again." };
+  }
+
+  // Check nonce hasn't been used
+  if (usedNonces.has(nonce)) {
+    console.warn(`Nonce reuse detected: ${nonce}`);
+    return { valid: false, error: "Duplicate request detected" };
+  }
+
+  // Validate nonce format (32 hex chars)
+  if (!/^[a-f0-9]{32}$/i.test(nonce)) {
+    return { valid: false, error: "Invalid nonce format" };
+  }
+
+  // Verify signature
+  const message = `${timestamp}.${nonce}.${body}`;
+  const encoder = new TextEncoder();
+  const data = encoder.encode(message);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const expectedSignature = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+
+  if (signature !== expectedSignature) {
+    console.warn("Invalid request signature");
+    return { valid: false, error: "Invalid request signature" };
+  }
+
+  // Store nonce with expiry (cleanup window + tolerance)
+  usedNonces.set(nonce, now + REQUEST_TIMESTAMP_TOLERANCE_MS * 2);
+  
+  // Periodic cleanup
+  if (usedNonces.size > 1000) {
+    cleanupNonces();
+  }
+
+  return { valid: true };
+}
 
 // ============================================
 // SECURITY: Rate Limiting Configuration
@@ -190,15 +275,27 @@ serve(async (req) => {
     }
 
     // ============================================
-    // SECURITY: Input Validation
+    // SECURITY: Input Validation & Request Signing
     // ============================================
+    let bodyText: string;
     let body: unknown;
     try {
-      body = await req.json();
+      bodyText = await req.text();
+      body = JSON.parse(bodyText);
     } catch {
       return new Response(
         JSON.stringify({ error: "Invalid JSON body" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Verify request signature to prevent replay attacks
+    const signatureResult = await verifyRequestSignature(req, bodyText);
+    if (!signatureResult.valid) {
+      console.warn(`Request signature verification failed: ${signatureResult.error}`);
+      return new Response(
+        JSON.stringify({ error: signatureResult.error }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
     

@@ -25,6 +25,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { addTextDocumentSchema, addUrlDocumentSchema } from "@/lib/validation";
+import { signRequest, getSignedHeaders } from "@/lib/requestSigning";
 
 interface Document {
   id: string;
@@ -53,6 +54,16 @@ export function DocumentManager({ documents, onDocumentsChange, isLoading }: Doc
 
   const processDocument = async (docContent: string, docTitle: string, sourceType: string, sourceUrl?: string) => {
     try {
+      const payload = {
+        content: docContent,
+        title: docTitle,
+        sourceType,
+        sourceUrl,
+      };
+      
+      // Sign the request to prevent replay attacks
+      const signedRequest = await signRequest(payload);
+      
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/rag-embed`,
         {
@@ -60,18 +71,15 @@ export function DocumentManager({ documents, onDocumentsChange, isLoading }: Doc
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            ...getSignedHeaders(signedRequest),
           },
-          body: JSON.stringify({
-            content: docContent,
-            title: docTitle,
-            sourceType,
-            sourceUrl,
-          }),
+          body: JSON.stringify(payload),
         }
       );
 
       if (!response.ok) {
-        throw new Error(`Processing failed: ${response.status}`);
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Processing failed: ${response.status}`);
       }
 
       const result = await response.json();
@@ -205,6 +213,16 @@ export function DocumentManager({ documents, onDocumentsChange, isLoading }: Doc
   const handleReprocess = async (doc: Document) => {
     setProcessingId(doc.id);
     try {
+      const payload = {
+        documentId: doc.id,
+        content: doc.content,
+        title: doc.title,
+        sourceType: doc.source_type,
+      };
+      
+      // Sign the request to prevent replay attacks
+      const signedRequest = await signRequest(payload);
+      
       await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/rag-embed`,
         {
@@ -212,13 +230,9 @@ export function DocumentManager({ documents, onDocumentsChange, isLoading }: Doc
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            ...getSignedHeaders(signedRequest),
           },
-          body: JSON.stringify({
-            documentId: doc.id,
-            content: doc.content,
-            title: doc.title,
-            sourceType: doc.source_type,
-          }),
+          body: JSON.stringify(payload),
         }
       );
       toast.success("Document reprocessed successfully");

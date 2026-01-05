@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { signRequest, getSignedHeaders } from "@/lib/requestSigning";
 
 interface Message {
   id: string;
@@ -69,6 +70,15 @@ export function RAGChat({ conversationId }: RAGChatProps) {
     const assistantId = (Date.now() + 1).toString();
 
     try {
+      const payload = {
+        query: userMessage.content,
+        conversationId,
+        messages: messages.map((m) => ({ role: m.role, content: m.content })),
+      };
+      
+      // Sign the request to prevent replay attacks
+      const signedRequest = await signRequest(payload);
+      
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/rag-chat`,
         {
@@ -76,12 +86,9 @@ export function RAGChat({ conversationId }: RAGChatProps) {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            ...getSignedHeaders(signedRequest),
           },
-          body: JSON.stringify({
-            query: userMessage.content,
-            conversationId,
-            messages: messages.map((m) => ({ role: m.role, content: m.content })),
-          }),
+          body: JSON.stringify(payload),
         }
       );
 
