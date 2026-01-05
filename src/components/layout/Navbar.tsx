@@ -16,7 +16,8 @@ import {
   Phone,
   Mail,
   Info,
-  Brain
+  Brain,
+  CreditCard
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -124,6 +125,12 @@ const information = [
     description: "Assess your sustainability maturity",
     icon: TreePine,
     href: "/quiz",
+  },
+  {
+    title: "Pricing",
+    description: "Plans for every stage of your journey",
+    icon: CreditCard,
+    href: "/pricing",
   },
 ];
 
