@@ -36,9 +36,13 @@ import {
   Users,
   Flame,
   Beaker,
-  Hammer
+  Hammer,
+  TrendingDown,
+  ArrowRight,
+  Sparkles
 } from "lucide-react";
 import { ShareReport } from "./ShareReport";
+import { Progress } from "@/components/ui/progress";
 
 // Comprehensive emission factors for enterprise
 const EMISSION_FACTORS = {
@@ -368,7 +372,7 @@ export function CorporateCalculator({ trigger }: CorporateCalculatorProps) {
         </SheetHeader>
 
         <Tabs defaultValue="scope1" className="w-full">
-          <TabsList className="grid w-full grid-cols-5 mb-6">
+          <TabsList className="grid w-full grid-cols-6 mb-6">
             <TabsTrigger value="scope1" className="text-xs">
               <Factory className="h-3 w-3 mr-1" />
               Scope 1
@@ -388,6 +392,10 @@ export function CorporateCalculator({ trigger }: CorporateCalculatorProps) {
             <TabsTrigger value="scope3b" className="text-xs">
               <Package className="h-3 w-3 mr-1" />
               Scope 3↓
+            </TabsTrigger>
+            <TabsTrigger value="scenarios" className="text-xs">
+              <TrendingDown className="h-3 w-3 mr-1" />
+              Scenarios
             </TabsTrigger>
           </TabsList>
 
@@ -1094,6 +1102,359 @@ export function CorporateCalculator({ trigger }: CorporateCalculatorProps) {
               <p className="text-sm text-muted-foreground">Total Scope 3 Emissions</p>
               <p className="text-2xl font-bold text-blue-600">{(scope3Total / 1000).toFixed(2)} tCO₂e</p>
             </Card>
+          </TabsContent>
+
+          {/* Emission Reduction Scenarios */}
+          <TabsContent value="scenarios" className="space-y-6">
+            <div className="p-3 bg-emerald-500/10 rounded-lg">
+              <p className="text-sm font-medium flex items-center gap-2">
+                <TrendingDown className="h-4 w-4 text-emerald-600" />
+                Emission Reduction Scenarios
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                See potential savings by switching to cleaner technologies
+              </p>
+            </div>
+
+            {/* Steel Industry Scenarios */}
+            {(parseFloat(steelBOFTonnes || "0") > 0 || parseFloat(driTonnes || "0") > 0 || parseFloat(cokeTonnes || "0") > 0) && (
+              <Card className="p-4 border-primary/20">
+                <h4 className="font-semibold flex items-center gap-2 mb-4">
+                  <Hammer className="h-4 w-4" />
+                  Steel Industry Decarbonization
+                </h4>
+                
+                {/* BOF to EAF Switch */}
+                {parseFloat(steelBOFTonnes || "0") > 0 && (() => {
+                  const bofTonnes = parseFloat(steelBOFTonnes || "0");
+                  const currentEmissions = bofTonnes * EMISSION_FACTORS.steelBOF;
+                  const eafEmissions = bofTonnes * EMISSION_FACTORS.steelEAF;
+                  const savings = currentEmissions - eafEmissions;
+                  const savingsPercent = (savings / currentEmissions) * 100;
+                  return (
+                    <div className="p-3 bg-muted/50 rounded-lg mb-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm font-medium flex items-center gap-2">
+                          BOF → EAF (Electric Arc Furnace)
+                          <Sparkles className="h-3 w-3 text-amber-500" />
+                        </span>
+                        <span className="text-xs px-2 py-1 bg-emerald-500/20 text-emerald-600 rounded-full">
+                          -{savingsPercent.toFixed(0)}% emissions
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2 text-xs mb-2">
+                        <div>
+                          <p className="text-muted-foreground">Current (BOF)</p>
+                          <p className="font-semibold text-destructive">{(currentEmissions / 1000).toFixed(1)} tCO₂e</p>
+                        </div>
+                        <div className="flex items-center justify-center">
+                          <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                        </div>
+                        <div>
+                          <p className="text-muted-foreground">With EAF</p>
+                          <p className="font-semibold text-emerald-600">{(eafEmissions / 1000).toFixed(1)} tCO₂e</p>
+                        </div>
+                      </div>
+                      <Progress value={100 - savingsPercent} className="h-2 mb-1" />
+                      <p className="text-xs text-emerald-600 font-medium">
+                        Potential savings: {(savings / 1000).toFixed(1)} tCO₂e/year
+                      </p>
+                    </div>
+                  );
+                })()}
+
+                {/* DRI with Green Hydrogen */}
+                {parseFloat(driTonnes || "0") > 0 && (() => {
+                  const dri = parseFloat(driTonnes || "0");
+                  const currentEmissions = dri * EMISSION_FACTORS.steelDRI;
+                  // Green hydrogen DRI: ~95% reduction
+                  const greenH2Emissions = dri * 60; // ~60 kg CO₂e/t with green H2
+                  const savings = currentEmissions - greenH2Emissions;
+                  const savingsPercent = (savings / currentEmissions) * 100;
+                  return (
+                    <div className="p-3 bg-muted/50 rounded-lg mb-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm font-medium flex items-center gap-2">
+                          DRI → Green Hydrogen DRI
+                          <Sparkles className="h-3 w-3 text-emerald-500" />
+                        </span>
+                        <span className="text-xs px-2 py-1 bg-emerald-500/20 text-emerald-600 rounded-full">
+                          -{savingsPercent.toFixed(0)}% emissions
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2 text-xs mb-2">
+                        <div>
+                          <p className="text-muted-foreground">Current (NG-DRI)</p>
+                          <p className="font-semibold text-destructive">{(currentEmissions / 1000).toFixed(1)} tCO₂e</p>
+                        </div>
+                        <div className="flex items-center justify-center">
+                          <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                        </div>
+                        <div>
+                          <p className="text-muted-foreground">Green H₂ DRI</p>
+                          <p className="font-semibold text-emerald-600">{(greenH2Emissions / 1000).toFixed(1)} tCO₂e</p>
+                        </div>
+                      </div>
+                      <Progress value={100 - savingsPercent} className="h-2 mb-1" />
+                      <p className="text-xs text-emerald-600 font-medium">
+                        Potential savings: {(savings / 1000).toFixed(1)} tCO₂e/year
+                      </p>
+                    </div>
+                  );
+                })()}
+              </Card>
+            )}
+
+            {/* Chemical Industry Scenarios */}
+            {(parseFloat(hydrogenTonnes || "0") > 0 || parseFloat(ammoniaTonnes || "0") > 0) && (
+              <Card className="p-4 border-primary/20">
+                <h4 className="font-semibold flex items-center gap-2 mb-4">
+                  <Beaker className="h-4 w-4" />
+                  Chemical Industry Decarbonization
+                </h4>
+                
+                {/* Grey to Green Hydrogen */}
+                {parseFloat(hydrogenTonnes || "0") > 0 && (() => {
+                  const h2Tonnes = parseFloat(hydrogenTonnes || "0");
+                  const currentEmissions = h2Tonnes * EMISSION_FACTORS.hydrogenProduction;
+                  // Green hydrogen via electrolysis: ~0.5 kg CO₂e/kg with renewable energy
+                  const greenH2Emissions = h2Tonnes * 500;
+                  const savings = currentEmissions - greenH2Emissions;
+                  const savingsPercent = (savings / currentEmissions) * 100;
+                  return (
+                    <div className="p-3 bg-muted/50 rounded-lg mb-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm font-medium flex items-center gap-2">
+                          Grey H₂ (SMR) → Green H₂ (Electrolysis)
+                          <Sparkles className="h-3 w-3 text-emerald-500" />
+                        </span>
+                        <span className="text-xs px-2 py-1 bg-emerald-500/20 text-emerald-600 rounded-full">
+                          -{savingsPercent.toFixed(0)}% emissions
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2 text-xs mb-2">
+                        <div>
+                          <p className="text-muted-foreground">Grey H₂ (SMR)</p>
+                          <p className="font-semibold text-destructive">{(currentEmissions / 1000).toFixed(1)} tCO₂e</p>
+                        </div>
+                        <div className="flex items-center justify-center">
+                          <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                        </div>
+                        <div>
+                          <p className="text-muted-foreground">Green H₂</p>
+                          <p className="font-semibold text-emerald-600">{(greenH2Emissions / 1000).toFixed(1)} tCO₂e</p>
+                        </div>
+                      </div>
+                      <Progress value={100 - savingsPercent} className="h-2 mb-1" />
+                      <p className="text-xs text-emerald-600 font-medium">
+                        Potential savings: {(savings / 1000).toFixed(1)} tCO₂e/year
+                      </p>
+                    </div>
+                  );
+                })()}
+
+                {/* Grey to Green Ammonia */}
+                {parseFloat(ammoniaTonnes || "0") > 0 && (() => {
+                  const nh3Tonnes = parseFloat(ammoniaTonnes || "0");
+                  const currentEmissions = nh3Tonnes * EMISSION_FACTORS.ammoniaProduction;
+                  // Green ammonia: ~0.2 tCO₂e/t with green H2 + renewable
+                  const greenNH3Emissions = nh3Tonnes * 200;
+                  const savings = currentEmissions - greenNH3Emissions;
+                  const savingsPercent = (savings / currentEmissions) * 100;
+                  return (
+                    <div className="p-3 bg-muted/50 rounded-lg mb-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm font-medium flex items-center gap-2">
+                          Grey → Green Ammonia
+                          <Sparkles className="h-3 w-3 text-emerald-500" />
+                        </span>
+                        <span className="text-xs px-2 py-1 bg-emerald-500/20 text-emerald-600 rounded-full">
+                          -{savingsPercent.toFixed(0)}% emissions
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2 text-xs mb-2">
+                        <div>
+                          <p className="text-muted-foreground">Conventional NH₃</p>
+                          <p className="font-semibold text-destructive">{(currentEmissions / 1000).toFixed(1)} tCO₂e</p>
+                        </div>
+                        <div className="flex items-center justify-center">
+                          <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                        </div>
+                        <div>
+                          <p className="text-muted-foreground">Green NH₃</p>
+                          <p className="font-semibold text-emerald-600">{(greenNH3Emissions / 1000).toFixed(1)} tCO₂e</p>
+                        </div>
+                      </div>
+                      <Progress value={100 - savingsPercent} className="h-2 mb-1" />
+                      <p className="text-xs text-emerald-600 font-medium">
+                        Potential savings: {(savings / 1000).toFixed(1)} tCO₂e/year
+                      </p>
+                    </div>
+                  );
+                })()}
+              </Card>
+            )}
+
+            {/* Cement Industry Scenarios */}
+            {parseFloat(clinkerTonnes || "0") > 0 && (
+              <Card className="p-4 border-primary/20">
+                <h4 className="font-semibold flex items-center gap-2 mb-4">
+                  <Factory className="h-4 w-4" />
+                  Cement Industry Decarbonization
+                </h4>
+                
+                {(() => {
+                  const clinker = parseFloat(clinkerTonnes || "0");
+                  const currentEmissions = clinker * EMISSION_FACTORS.cementClinker;
+                  // CCUS can capture ~90% of emissions
+                  const ccusEmissions = clinker * 85; // ~90% capture
+                  const savings = currentEmissions - ccusEmissions;
+                  const savingsPercent = (savings / currentEmissions) * 100;
+                  
+                  // Alternative: Blended cement with 40% SCM
+                  const blendedEmissions = currentEmissions * 0.6;
+                  const blendedSavings = currentEmissions - blendedEmissions;
+                  
+                  return (
+                    <>
+                      <div className="p-3 bg-muted/50 rounded-lg mb-3">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium flex items-center gap-2">
+                            Add Carbon Capture (CCUS)
+                            <Sparkles className="h-3 w-3 text-blue-500" />
+                          </span>
+                          <span className="text-xs px-2 py-1 bg-emerald-500/20 text-emerald-600 rounded-full">
+                            -{savingsPercent.toFixed(0)}% emissions
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-3 gap-2 text-xs mb-2">
+                          <div>
+                            <p className="text-muted-foreground">Current</p>
+                            <p className="font-semibold text-destructive">{(currentEmissions / 1000).toFixed(1)} tCO₂e</p>
+                          </div>
+                          <div className="flex items-center justify-center">
+                            <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground">With CCUS</p>
+                            <p className="font-semibold text-emerald-600">{(ccusEmissions / 1000).toFixed(1)} tCO₂e</p>
+                          </div>
+                        </div>
+                        <Progress value={100 - savingsPercent} className="h-2 mb-1" />
+                        <p className="text-xs text-emerald-600 font-medium">
+                          Potential savings: {(savings / 1000).toFixed(1)} tCO₂e/year
+                        </p>
+                      </div>
+
+                      <div className="p-3 bg-muted/50 rounded-lg">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium flex items-center gap-2">
+                            Blended Cement (40% SCM)
+                            <Sparkles className="h-3 w-3 text-amber-500" />
+                          </span>
+                          <span className="text-xs px-2 py-1 bg-emerald-500/20 text-emerald-600 rounded-full">
+                            -40% emissions
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-3 gap-2 text-xs mb-2">
+                          <div>
+                            <p className="text-muted-foreground">OPC Cement</p>
+                            <p className="font-semibold text-destructive">{(currentEmissions / 1000).toFixed(1)} tCO₂e</p>
+                          </div>
+                          <div className="flex items-center justify-center">
+                            <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground">Blended</p>
+                            <p className="font-semibold text-emerald-600">{(blendedEmissions / 1000).toFixed(1)} tCO₂e</p>
+                          </div>
+                        </div>
+                        <Progress value={60} className="h-2 mb-1" />
+                        <p className="text-xs text-emerald-600 font-medium">
+                          Potential savings: {(blendedSavings / 1000).toFixed(1)} tCO₂e/year
+                        </p>
+                      </div>
+                    </>
+                  );
+                })()}
+              </Card>
+            )}
+
+            {/* Energy Scenarios (Scope 2) */}
+            {parseFloat(electricityKwh || "0") > 0 && parseFloat(renewablePercent || "0") < 100 && (
+              <Card className="p-4 border-primary/20">
+                <h4 className="font-semibold flex items-center gap-2 mb-4">
+                  <Zap className="h-4 w-4" />
+                  Energy Transition
+                </h4>
+                
+                {(() => {
+                  const kwh = parseFloat(electricityKwh || "0");
+                  const currentRenewable = parseFloat(renewablePercent || "0") / 100;
+                  const currentEmissions = kwh * EMISSION_FACTORS.electricityGrid * (1 - currentRenewable) * 12;
+                  const fullRenewableEmissions = 0;
+                  const savings = currentEmissions - fullRenewableEmissions;
+                  
+                  return (
+                    <div className="p-3 bg-muted/50 rounded-lg">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm font-medium flex items-center gap-2">
+                          100% Renewable Energy (RE100)
+                          <Sparkles className="h-3 w-3 text-amber-500" />
+                        </span>
+                        <span className="text-xs px-2 py-1 bg-emerald-500/20 text-emerald-600 rounded-full">
+                          -100% Scope 2
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2 text-xs mb-2">
+                        <div>
+                          <p className="text-muted-foreground">Current ({((1 - currentRenewable) * 100).toFixed(0)}% grid)</p>
+                          <p className="font-semibold text-destructive">{(currentEmissions / 1000).toFixed(1)} tCO₂e</p>
+                        </div>
+                        <div className="flex items-center justify-center">
+                          <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                        </div>
+                        <div>
+                          <p className="text-muted-foreground">100% RE</p>
+                          <p className="font-semibold text-emerald-600">0 tCO₂e</p>
+                        </div>
+                      </div>
+                      <Progress value={0} className="h-2 mb-1" />
+                      <p className="text-xs text-emerald-600 font-medium">
+                        Potential savings: {(savings / 1000).toFixed(1)} tCO₂e/year via PPAs or RECs
+                      </p>
+                    </div>
+                  );
+                })()}
+              </Card>
+            )}
+
+            {/* No data message */}
+            {!hasInput && (
+              <Card className="p-6 text-center border-dashed">
+                <TrendingDown className="h-12 w-12 text-muted-foreground/50 mx-auto mb-3" />
+                <p className="text-muted-foreground">
+                  Enter your emissions data in other tabs to see reduction scenarios
+                </p>
+              </Card>
+            )}
+
+            {hasInput && (
+              <Card className="p-4 bg-gradient-to-r from-emerald-500/10 to-primary/10 border-emerald-500/20">
+                <div className="flex items-start gap-3">
+                  <Sparkles className="h-5 w-5 text-emerald-600 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-sm">Need Implementation Support?</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Contact our advisory team for detailed feasibility studies, vendor connections, and project financing options for these decarbonization pathways.
+                    </p>
+                    <Link to="/consultation" className="text-xs text-primary font-medium mt-2 inline-block hover:underline">
+                      Book a Consultation →
+                    </Link>
+                  </div>
+                </div>
+              </Card>
+            )}
           </TabsContent>
         </Tabs>
 
