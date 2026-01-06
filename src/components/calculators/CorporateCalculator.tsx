@@ -33,7 +33,10 @@ import {
   Factory,
   Droplets,
   Recycle,
-  Users
+  Users,
+  Flame,
+  Beaker,
+  Hammer
 } from "lucide-react";
 import { ShareReport } from "./ShareReport";
 
@@ -72,6 +75,52 @@ const EMISSION_FACTORS = {
   downstreamTransport: 0.1, // kg per tonne-km
   endOfLife: 0.3, // kg per kg product
   investments: 0.1, // per ₹1000 invested
+  
+  // Heavy Industry Process Emissions (kg CO₂e per tonne unless specified)
+  // Steel Industry
+  steelBOF: 1850, // Basic Oxygen Furnace - kg CO₂e per tonne crude steel
+  steelEAF: 580, // Electric Arc Furnace - kg CO₂e per tonne crude steel
+  steelDRI: 1200, // Direct Reduced Iron - kg CO₂e per tonne DRI
+  cokeProduction: 770, // kg CO₂e per tonne coke
+  sinteringProcess: 200, // kg CO₂e per tonne sinter
+  ironOreReduction: 1500, // kg CO₂e per tonne pig iron
+  
+  // Cement Industry
+  cementClinker: 850, // kg CO₂e per tonne clinite (process + fuel)
+  cementGrinding: 50, // kg CO₂e per tonne cement grinding
+  limestoneCalcination: 520, // kg CO₂e per tonne limestone (pure process)
+  
+  // Aluminum Industry
+  aluminumSmelting: 12000, // kg CO₂e per tonne primary aluminum
+  aluminaRefining: 1500, // kg CO₂e per tonne alumina
+  anodeProduction: 450, // kg CO₂e per tonne anode
+  
+  // Chemical Industry
+  ammoniaProduction: 1800, // kg CO₂e per tonne ammonia
+  nitricAcidProduction: 2850, // kg CO₂e per tonne (includes N2O)
+  adipicAcidProduction: 10200, // kg CO₂e per tonne (high N2O)
+  hydrogenProduction: 9500, // kg CO₂e per tonne H2 (SMR)
+  methanolProduction: 670, // kg CO₂e per tonne methanol
+  ethyleneProduction: 1000, // kg CO₂e per tonne ethylene
+  
+  // Refinery & Petrochemicals
+  refineryProcessing: 25, // kg CO₂e per barrel processed
+  flareEmissions: 2.5, // kg CO₂e per m³ flared
+  catalyticCracking: 180, // kg CO₂e per tonne feed
+  hydrogenUnit: 9, // kg CO₂e per kg H2 produced
+  
+  // Glass & Ceramics
+  glassProduction: 580, // kg CO₂e per tonne glass
+  brickProduction: 200, // kg CO₂e per tonne brick
+  
+  // Paper & Pulp
+  pulpProduction: 450, // kg CO₂e per tonne pulp
+  paperProduction: 380, // kg CO₂e per tonne paper
+  
+  // Mining
+  ironOreMining: 15, // kg CO₂e per tonne ore
+  coalMining: 25, // kg CO₂e per tonne coal
+  limestoneMining: 8, // kg CO₂e per tonne limestone
 };
 
 const TREE_ABSORPTION = 21;
@@ -82,6 +131,7 @@ interface CorporateCalculatorProps {
 
 export function CorporateCalculator({ trigger }: CorporateCalculatorProps) {
   const [open, setOpen] = useState(false);
+  const [industryType, setIndustryType] = useState("steel");
   
   // Scope 1 - Stationary
   const [naturalGas, setNaturalGas] = useState("");
@@ -113,6 +163,42 @@ export function CorporateCalculator({ trigger }: CorporateCalculatorProps) {
   const [upstreamTransportTonneKm, setUpstreamTransportTonneKm] = useState("");
   const [downstreamTransportTonneKm, setDownstreamTransportTonneKm] = useState("");
 
+  // Heavy Industry - Steel
+  const [steelBOFTonnes, setSteelBOFTonnes] = useState("");
+  const [steelEAFTonnes, setSteelEAFTonnes] = useState("");
+  const [driTonnes, setDriTonnes] = useState("");
+  const [cokeTonnes, setCokeTonnes] = useState("");
+  const [sinterTonnes, setSinterTonnes] = useState("");
+  const [pigIronTonnes, setPigIronTonnes] = useState("");
+  
+  // Heavy Industry - Cement
+  const [clinkerTonnes, setClinkerTonnes] = useState("");
+  const [cementGrindingTonnes, setCementGrindingTonnes] = useState("");
+  const [limestoneCalcinationTonnes, setLimestoneCalcinationTonnes] = useState("");
+  
+  // Heavy Industry - Aluminum
+  const [primaryAluminumTonnes, setPrimaryAluminumTonnes] = useState("");
+  const [aluminaTonnes, setAluminaTonnes] = useState("");
+  const [anodeTonnes, setAnodeTonnes] = useState("");
+  
+  // Heavy Industry - Chemicals
+  const [ammoniaTonnes, setAmmoniaTonnes] = useState("");
+  const [nitricAcidTonnes, setNitricAcidTonnes] = useState("");
+  const [hydrogenTonnes, setHydrogenTonnes] = useState("");
+  const [methanolTonnes, setMethanolTonnes] = useState("");
+  const [ethyleneTonnes, setEthyleneTonnes] = useState("");
+  
+  // Heavy Industry - Refinery
+  const [barrelProcessed, setBarrelProcessed] = useState("");
+  const [flareVolumeM3, setFlareVolumeM3] = useState("");
+  const [catalyticCrackingTonnes, setCatalyticCrackingTonnes] = useState("");
+  
+  // Heavy Industry - Other
+  const [glassTonnes, setGlassTonnes] = useState("");
+  const [pulpTonnes, setPulpTonnes] = useState("");
+  const [ironOreTonnes, setIronOreTonnes] = useState("");
+  const [coalMiningTonnes, setCoalMiningTonnes] = useState("");
+
   // Scope 1 Calculations
   const stationaryEmissions = 
     (parseFloat(naturalGas || "0") * EMISSION_FACTORS.naturalGas * 12) +
@@ -128,7 +214,47 @@ export function CorporateCalculator({ trigger }: CorporateCalculatorProps) {
     refrigerantType === "R22" ? EMISSION_FACTORS.refrigerantR22 : EMISSION_FACTORS.refrigerantR134a;
   const fugitiveEmissions = parseFloat(refrigerantKg || "0") * refrigerantGWP;
 
-  const scope1Total = stationaryEmissions + mobileEmissions + fugitiveEmissions;
+  // Process Emissions Calculation
+  const steelProcessEmissions = 
+    (parseFloat(steelBOFTonnes || "0") * EMISSION_FACTORS.steelBOF) +
+    (parseFloat(steelEAFTonnes || "0") * EMISSION_FACTORS.steelEAF) +
+    (parseFloat(driTonnes || "0") * EMISSION_FACTORS.steelDRI) +
+    (parseFloat(cokeTonnes || "0") * EMISSION_FACTORS.cokeProduction) +
+    (parseFloat(sinterTonnes || "0") * EMISSION_FACTORS.sinteringProcess) +
+    (parseFloat(pigIronTonnes || "0") * EMISSION_FACTORS.ironOreReduction);
+
+  const cementProcessEmissions = 
+    (parseFloat(clinkerTonnes || "0") * EMISSION_FACTORS.cementClinker) +
+    (parseFloat(cementGrindingTonnes || "0") * EMISSION_FACTORS.cementGrinding) +
+    (parseFloat(limestoneCalcinationTonnes || "0") * EMISSION_FACTORS.limestoneCalcination);
+
+  const aluminumProcessEmissions = 
+    (parseFloat(primaryAluminumTonnes || "0") * EMISSION_FACTORS.aluminumSmelting) +
+    (parseFloat(aluminaTonnes || "0") * EMISSION_FACTORS.aluminaRefining) +
+    (parseFloat(anodeTonnes || "0") * EMISSION_FACTORS.anodeProduction);
+
+  const chemicalProcessEmissions = 
+    (parseFloat(ammoniaTonnes || "0") * EMISSION_FACTORS.ammoniaProduction) +
+    (parseFloat(nitricAcidTonnes || "0") * EMISSION_FACTORS.nitricAcidProduction) +
+    (parseFloat(hydrogenTonnes || "0") * EMISSION_FACTORS.hydrogenProduction) +
+    (parseFloat(methanolTonnes || "0") * EMISSION_FACTORS.methanolProduction) +
+    (parseFloat(ethyleneTonnes || "0") * EMISSION_FACTORS.ethyleneProduction);
+
+  const refineryProcessEmissions = 
+    (parseFloat(barrelProcessed || "0") * EMISSION_FACTORS.refineryProcessing) +
+    (parseFloat(flareVolumeM3 || "0") * EMISSION_FACTORS.flareEmissions) +
+    (parseFloat(catalyticCrackingTonnes || "0") * EMISSION_FACTORS.catalyticCracking);
+
+  const otherProcessEmissions = 
+    (parseFloat(glassTonnes || "0") * EMISSION_FACTORS.glassProduction) +
+    (parseFloat(pulpTonnes || "0") * EMISSION_FACTORS.pulpProduction) +
+    (parseFloat(ironOreTonnes || "0") * EMISSION_FACTORS.ironOreMining) +
+    (parseFloat(coalMiningTonnes || "0") * EMISSION_FACTORS.coalMining);
+
+  const totalProcessEmissions = steelProcessEmissions + cementProcessEmissions + 
+    aluminumProcessEmissions + chemicalProcessEmissions + refineryProcessEmissions + otherProcessEmissions;
+
+  const scope1Total = stationaryEmissions + mobileEmissions + fugitiveEmissions + totalProcessEmissions;
 
   // Scope 2 Calculations
   const renewableFactor = 1 - (parseFloat(renewablePercent || "0") / 100);
@@ -178,12 +304,43 @@ export function CorporateCalculator({ trigger }: CorporateCalculatorProps) {
     setAvgCommute("");
     setUpstreamTransportTonneKm("");
     setDownstreamTransportTonneKm("");
+    // Reset heavy industry fields
+    setSteelBOFTonnes("");
+    setSteelEAFTonnes("");
+    setDriTonnes("");
+    setCokeTonnes("");
+    setSinterTonnes("");
+    setPigIronTonnes("");
+    setClinkerTonnes("");
+    setCementGrindingTonnes("");
+    setLimestoneCalcinationTonnes("");
+    setPrimaryAluminumTonnes("");
+    setAluminaTonnes("");
+    setAnodeTonnes("");
+    setAmmoniaTonnes("");
+    setNitricAcidTonnes("");
+    setHydrogenTonnes("");
+    setMethanolTonnes("");
+    setEthyleneTonnes("");
+    setBarrelProcessed("");
+    setFlareVolumeM3("");
+    setCatalyticCrackingTonnes("");
+    setGlassTonnes("");
+    setPulpTonnes("");
+    setIronOreTonnes("");
+    setCoalMiningTonnes("");
   };
 
   const hasInput = naturalGas || dieselStationary || furnaceOil || coalTonnes ||
     fleetDiesel || fleetPetrol || refrigerantKg || electricityKwh || dgDiesel ||
     purchasedGoodsLakhs || capitalGoodsLakhs || wasteKg || businessTravelKm ||
-    employeeCount || upstreamTransportTonneKm || downstreamTransportTonneKm;
+    employeeCount || upstreamTransportTonneKm || downstreamTransportTonneKm ||
+    steelBOFTonnes || steelEAFTonnes || driTonnes || cokeTonnes || sinterTonnes || pigIronTonnes ||
+    clinkerTonnes || cementGrindingTonnes || limestoneCalcinationTonnes ||
+    primaryAluminumTonnes || aluminaTonnes || anodeTonnes ||
+    ammoniaTonnes || nitricAcidTonnes || hydrogenTonnes || methanolTonnes || ethyleneTonnes ||
+    barrelProcessed || flareVolumeM3 || catalyticCrackingTonnes ||
+    glassTonnes || pulpTonnes || ironOreTonnes || coalMiningTonnes;
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -211,10 +368,14 @@ export function CorporateCalculator({ trigger }: CorporateCalculatorProps) {
         </SheetHeader>
 
         <Tabs defaultValue="scope1" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-6">
+          <TabsList className="grid w-full grid-cols-5 mb-6">
             <TabsTrigger value="scope1" className="text-xs">
               <Factory className="h-3 w-3 mr-1" />
               Scope 1
+            </TabsTrigger>
+            <TabsTrigger value="process" className="text-xs">
+              <Hammer className="h-3 w-3 mr-1" />
+              Process
             </TabsTrigger>
             <TabsTrigger value="scope2" className="text-xs">
               <Zap className="h-3 w-3 mr-1" />
@@ -222,11 +383,11 @@ export function CorporateCalculator({ trigger }: CorporateCalculatorProps) {
             </TabsTrigger>
             <TabsTrigger value="scope3a" className="text-xs">
               <Truck className="h-3 w-3 mr-1" />
-              Scope 3 (Up)
+              Scope 3↑
             </TabsTrigger>
             <TabsTrigger value="scope3b" className="text-xs">
               <Package className="h-3 w-3 mr-1" />
-              Scope 3 (Down)
+              Scope 3↓
             </TabsTrigger>
           </TabsList>
 
@@ -357,6 +518,378 @@ export function CorporateCalculator({ trigger }: CorporateCalculatorProps) {
             <Card className="p-4 bg-orange-500/10 border-orange-500/20">
               <p className="text-sm text-muted-foreground">Total Scope 1 Emissions</p>
               <p className="text-2xl font-bold text-orange-600">{(scope1Total / 1000).toFixed(2)} tCO₂e</p>
+            </Card>
+          </TabsContent>
+
+          {/* Industry Process Emissions */}
+          <TabsContent value="process" className="space-y-6">
+            <div className="p-3 bg-red-500/10 rounded-lg mb-4">
+              <p className="text-sm font-medium flex items-center gap-2">
+                <Hammer className="h-4 w-4" />
+                Heavy Industry Process Emissions
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                Direct emissions from industrial chemical/physical processes
+              </p>
+            </div>
+
+            <div className="space-y-2 mb-4">
+              <Label>Select Your Industry</Label>
+              <Select value={industryType} onValueChange={setIndustryType}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="steel">🏭 Steel & Iron</SelectItem>
+                  <SelectItem value="cement">🧱 Cement</SelectItem>
+                  <SelectItem value="aluminum">⚡ Aluminum</SelectItem>
+                  <SelectItem value="chemicals">🧪 Chemicals</SelectItem>
+                  <SelectItem value="refinery">🛢️ Refinery & Petrochemicals</SelectItem>
+                  <SelectItem value="other">📦 Other Industries</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Steel Industry */}
+            {industryType === "steel" && (
+              <div className="space-y-4">
+                <div className="p-3 bg-muted/50 rounded-lg">
+                  <p className="text-sm font-medium">Steel Production (tonnes/year)</p>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-sm">BOF Steel (Blast Furnace)</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={steelBOFTonnes}
+                      onChange={(e) => setSteelBOFTonnes(e.target.value)}
+                      min="0"
+                    />
+                    <p className="text-xs text-muted-foreground">EF: 1,850 kg CO₂e/t</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm">EAF Steel (Electric Arc)</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={steelEAFTonnes}
+                      onChange={(e) => setSteelEAFTonnes(e.target.value)}
+                      min="0"
+                    />
+                    <p className="text-xs text-muted-foreground">EF: 580 kg CO₂e/t</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm">DRI Production</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={driTonnes}
+                      onChange={(e) => setDriTonnes(e.target.value)}
+                      min="0"
+                    />
+                    <p className="text-xs text-muted-foreground">EF: 1,200 kg CO₂e/t</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm">Coke Production</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={cokeTonnes}
+                      onChange={(e) => setCokeTonnes(e.target.value)}
+                      min="0"
+                    />
+                    <p className="text-xs text-muted-foreground">EF: 770 kg CO₂e/t</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm">Sintering Process</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={sinterTonnes}
+                      onChange={(e) => setSinterTonnes(e.target.value)}
+                      min="0"
+                    />
+                    <p className="text-xs text-muted-foreground">EF: 200 kg CO₂e/t</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm">Pig Iron (BF Route)</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={pigIronTonnes}
+                      onChange={(e) => setPigIronTonnes(e.target.value)}
+                      min="0"
+                    />
+                    <p className="text-xs text-muted-foreground">EF: 1,500 kg CO₂e/t</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Cement Industry */}
+            {industryType === "cement" && (
+              <div className="space-y-4">
+                <div className="p-3 bg-muted/50 rounded-lg">
+                  <p className="text-sm font-medium">Cement Production (tonnes/year)</p>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-sm">Clinker Production</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={clinkerTonnes}
+                      onChange={(e) => setClinkerTonnes(e.target.value)}
+                      min="0"
+                    />
+                    <p className="text-xs text-muted-foreground">EF: 850 kg CO₂e/t (process + fuel)</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm">Cement Grinding</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={cementGrindingTonnes}
+                      onChange={(e) => setCementGrindingTonnes(e.target.value)}
+                      min="0"
+                    />
+                    <p className="text-xs text-muted-foreground">EF: 50 kg CO₂e/t</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm">Limestone Calcination</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={limestoneCalcinationTonnes}
+                      onChange={(e) => setLimestoneCalcinationTonnes(e.target.value)}
+                      min="0"
+                    />
+                    <p className="text-xs text-muted-foreground">EF: 520 kg CO₂e/t (pure process)</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Aluminum Industry */}
+            {industryType === "aluminum" && (
+              <div className="space-y-4">
+                <div className="p-3 bg-muted/50 rounded-lg">
+                  <p className="text-sm font-medium">Aluminum Production (tonnes/year)</p>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-sm">Primary Aluminum Smelting</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={primaryAluminumTonnes}
+                      onChange={(e) => setPrimaryAluminumTonnes(e.target.value)}
+                      min="0"
+                    />
+                    <p className="text-xs text-muted-foreground">EF: 12,000 kg CO₂e/t</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm">Alumina Refining</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={aluminaTonnes}
+                      onChange={(e) => setAluminaTonnes(e.target.value)}
+                      min="0"
+                    />
+                    <p className="text-xs text-muted-foreground">EF: 1,500 kg CO₂e/t</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm">Anode Production</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={anodeTonnes}
+                      onChange={(e) => setAnodeTonnes(e.target.value)}
+                      min="0"
+                    />
+                    <p className="text-xs text-muted-foreground">EF: 450 kg CO₂e/t</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Chemicals Industry */}
+            {industryType === "chemicals" && (
+              <div className="space-y-4">
+                <div className="p-3 bg-muted/50 rounded-lg">
+                  <p className="text-sm font-medium flex items-center gap-2">
+                    <Beaker className="h-4 w-4" />
+                    Chemical Production (tonnes/year)
+                  </p>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-sm">Ammonia (NH₃)</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={ammoniaTonnes}
+                      onChange={(e) => setAmmoniaTonnes(e.target.value)}
+                      min="0"
+                    />
+                    <p className="text-xs text-muted-foreground">EF: 1,800 kg CO₂e/t</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm">Nitric Acid (HNO₃)</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={nitricAcidTonnes}
+                      onChange={(e) => setNitricAcidTonnes(e.target.value)}
+                      min="0"
+                    />
+                    <p className="text-xs text-muted-foreground">EF: 2,850 kg CO₂e/t (incl. N₂O)</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm">Hydrogen (H₂ - SMR)</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={hydrogenTonnes}
+                      onChange={(e) => setHydrogenTonnes(e.target.value)}
+                      min="0"
+                    />
+                    <p className="text-xs text-muted-foreground">EF: 9,500 kg CO₂e/t</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm">Methanol</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={methanolTonnes}
+                      onChange={(e) => setMethanolTonnes(e.target.value)}
+                      min="0"
+                    />
+                    <p className="text-xs text-muted-foreground">EF: 670 kg CO₂e/t</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm">Ethylene</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={ethyleneTonnes}
+                      onChange={(e) => setEthyleneTonnes(e.target.value)}
+                      min="0"
+                    />
+                    <p className="text-xs text-muted-foreground">EF: 1,000 kg CO₂e/t</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Refinery Industry */}
+            {industryType === "refinery" && (
+              <div className="space-y-4">
+                <div className="p-3 bg-muted/50 rounded-lg">
+                  <p className="text-sm font-medium flex items-center gap-2">
+                    <Flame className="h-4 w-4" />
+                    Refinery Operations (annual)
+                  </p>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-sm">Crude Oil Processed (barrels)</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={barrelProcessed}
+                      onChange={(e) => setBarrelProcessed(e.target.value)}
+                      min="0"
+                    />
+                    <p className="text-xs text-muted-foreground">EF: 25 kg CO₂e/barrel</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm">Gas Flaring (m³)</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={flareVolumeM3}
+                      onChange={(e) => setFlareVolumeM3(e.target.value)}
+                      min="0"
+                    />
+                    <p className="text-xs text-muted-foreground">EF: 2.5 kg CO₂e/m³</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm">Catalytic Cracking (tonnes feed)</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={catalyticCrackingTonnes}
+                      onChange={(e) => setCatalyticCrackingTonnes(e.target.value)}
+                      min="0"
+                    />
+                    <p className="text-xs text-muted-foreground">EF: 180 kg CO₂e/t</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Other Industries */}
+            {industryType === "other" && (
+              <div className="space-y-4">
+                <div className="p-3 bg-muted/50 rounded-lg">
+                  <p className="text-sm font-medium">Other Industrial Processes (tonnes/year)</p>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-sm">Glass Production</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={glassTonnes}
+                      onChange={(e) => setGlassTonnes(e.target.value)}
+                      min="0"
+                    />
+                    <p className="text-xs text-muted-foreground">EF: 580 kg CO₂e/t</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm">Pulp Production</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={pulpTonnes}
+                      onChange={(e) => setPulpTonnes(e.target.value)}
+                      min="0"
+                    />
+                    <p className="text-xs text-muted-foreground">EF: 450 kg CO₂e/t</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm">Iron Ore Mining</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={ironOreTonnes}
+                      onChange={(e) => setIronOreTonnes(e.target.value)}
+                      min="0"
+                    />
+                    <p className="text-xs text-muted-foreground">EF: 15 kg CO₂e/t ore</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm">Coal Mining</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={coalMiningTonnes}
+                      onChange={(e) => setCoalMiningTonnes(e.target.value)}
+                      min="0"
+                    />
+                    <p className="text-xs text-muted-foreground">EF: 25 kg CO₂e/t coal</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <Card className="p-4 bg-red-500/10 border-red-500/20">
+              <p className="text-sm text-muted-foreground">Total Process Emissions</p>
+              <p className="text-2xl font-bold text-red-600">{(totalProcessEmissions / 1000).toFixed(2)} tCO₂e</p>
+              <p className="text-xs text-muted-foreground mt-1">Included in Scope 1</p>
             </Card>
           </TabsContent>
 
