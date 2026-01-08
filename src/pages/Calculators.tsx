@@ -14,7 +14,7 @@ import {
   Factory,
   Leaf
 } from "lucide-react";
-import { BentoCalculator } from "@/components/calculators/BentoCalculator";
+import { DashboardCalculator } from "@/components/calculators/DashboardCalculator";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { PageTransition } from "@/components/animations/PageTransition";
 
@@ -92,11 +92,11 @@ const Calculators = () => {
           </div>
         </section>
 
-        {/* Bento Calculator Section */}
+        {/* Dashboard Calculator Section */}
         <section className="py-8 relative">
           <div className="absolute inset-0 dot-background opacity-10" />
-          <div className="container relative z-10">
-            <BentoCalculator />
+          <div className="container relative z-10 max-w-[1600px]">
+            <DashboardCalculator />
           </div>
         </section>
 
