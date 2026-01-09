@@ -174,8 +174,66 @@
     box-shadow: var(--shadow-glow-green);
   }
 
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
+  }
+
   .text-balance {
     text-wrap: balance;
+  }
+
+  /* Interactive hover transitions */
+  .hover-lift {
+    @apply transition-all duration-300 ease-out;
+  }
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-elevated);
+  }
+
+  .hover-glow {
+    @apply transition-all duration-300 ease-out;
+  }
+  .hover-glow:hover {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .hover-scale-subtle {
+    @apply transition-transform duration-200 ease-out;
+  }
+  .hover-scale-subtle:hover {
+    transform: scale(1.02);
+  }
+
+  .btn-hover {
+    @apply transition-all duration-200 ease-out;
+  }
+  .btn-hover:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px hsl(var(--primary) / 0.25);
+  }
+  .btn-hover:active {
+    transform: translateY(0);
+  }
+
+  .card-interactive {
+    @apply transition-all duration-300 ease-out;
+    box-shadow: var(--shadow-card);
+  }
+  .card-interactive:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-elevated);
+  }
+
+  .link-hover {
+    @apply transition-colors duration-200 ease-out;
+  }
+  .link-hover:hover {
+    color: hsl(var(--primary));
   }
 
   /* Glass morphism effects */
