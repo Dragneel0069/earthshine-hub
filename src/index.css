@@ -6,7 +6,83 @@
 
 @layer base {
   :root {
-    /* ZeroGraph Dark Theme - Deep Green Forest */
+    /* ZeroGraph Light Theme - Clean & Professional */
+    --background: 0 0% 100%;
+    --foreground: 215 25% 17%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 215 25% 17%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 25% 17%;
+
+    /* Emerald Primary */
+    --primary: 158 64% 40%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Teal Secondary */
+    --secondary: 172 66% 40%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 210 20% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 158 40% 94%;
+    --accent-foreground: 158 64% 32%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 20% 90%;
+    --input: 214 20% 90%;
+    --ring: 158 64% 40%;
+
+    --radius: 0.75rem;
+
+    /* Custom tokens */
+    --success: 158 64% 40%;
+    --success-foreground: 0 0% 100%;
+    --warning: 45 100% 55%;
+    --warning-foreground: 215 25% 17%;
+    --info: 199 89% 48%;
+    --info-foreground: 0 0% 100%;
+
+    /* ZeroGraph Custom Colors - Light Mode */
+    --cyan: 186 80% 42%;
+    --cyan-glow: 186 80% 52%;
+    --neon-green: 158 64% 45%;
+    --neon-green-glow: 158 64% 55%;
+    --lime: 82 70% 45%;
+    --lime-glow: 82 70% 55%;
+    --space-dark: 210 20% 96%;
+    --space-mid: 210 20% 98%;
+    --grid-line: 214 20% 85%;
+
+    /* Gradients - Light */
+    --gradient-primary: linear-gradient(135deg, hsl(158 64% 40%) 0%, hsl(172 66% 40%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(210 20% 98%) 0%, hsl(0 0% 100%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(210 20% 98%) 100%);
+    --gradient-glow: radial-gradient(ellipse at center, hsl(158 64% 40% / 0.1) 0%, transparent 70%);
+
+    /* Shadows - Light */
+    --shadow-sm: 0 1px 2px 0 hsl(215 25% 17% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(215 25% 17% / 0.08), 0 2px 4px -2px hsl(215 25% 17% / 0.05);
+    --shadow-lg: 0 10px 15px -3px hsl(215 25% 17% / 0.1), 0 4px 6px -4px hsl(215 25% 17% / 0.05);
+    --shadow-glow: 0 4px 20px hsl(158 64% 40% / 0.15);
+    --shadow-glow-green: 0 4px 20px hsl(172 66% 40% / 0.15);
+
+    --sidebar-background: 210 20% 98%;
+    --sidebar-foreground: 215 25% 17%;
+    --sidebar-primary: 158 64% 40%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 158 40% 94%;
+    --sidebar-accent-foreground: 215 25% 17%;
+    --sidebar-border: 214 20% 90%;
+    --sidebar-ring: 158 64% 40%;
+  }
+
+  /* Dark mode override */
+  .dark {
     --background: 160 30% 6%;
     --foreground: 150 20% 95%;
 
@@ -16,11 +92,9 @@
     --popover: 160 25% 8%;
     --popover-foreground: 150 20% 95%;
 
-    /* Vibrant Emerald Primary */
     --primary: 152 76% 46%;
     --primary-foreground: 160 30% 6%;
 
-    /* Electric Lime Secondary */
     --secondary: 82 84% 55%;
     --secondary-foreground: 160 30% 6%;
 
@@ -30,85 +104,11 @@
     --accent: 152 50% 15%;
     --accent-foreground: 152 76% 70%;
 
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 100%;
-
     --border: 160 20% 18%;
     --input: 160 20% 18%;
-    --ring: 152 76% 46%;
-
-    --radius: 0.75rem;
-
-    /* Custom tokens */
-    --success: 152 76% 46%;
-    --success-foreground: 160 30% 6%;
-    --warning: 45 100% 55%;
-    --warning-foreground: 160 30% 6%;
-    --info: 186 80% 50%;
-    --info-foreground: 160 30% 6%;
-
-    /* ZeroGraph Custom Colors - Green Dominant */
-    --cyan: 186 80% 50%;
-    --cyan-glow: 186 80% 60%;
-    --neon-green: 152 76% 50%;
-    --neon-green-glow: 152 76% 60%;
-    --lime: 82 84% 55%;
-    --lime-glow: 82 84% 65%;
-    --space-dark: 160 30% 4%;
-    --space-mid: 160 25% 10%;
-    --grid-line: 152 50% 25%;
-
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(152 76% 46%) 0%, hsl(82 84% 55%) 100%);
-    --gradient-hero: linear-gradient(180deg, hsl(160 30% 4%) 0%, hsl(160 25% 10%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(160 25% 12%) 0%, hsl(160 25% 8%) 100%);
-    --gradient-glow: radial-gradient(ellipse at center, hsl(152 76% 46% / 0.2) 0%, transparent 70%);
-
-    /* Shadows */
-    --shadow-sm: 0 1px 2px 0 hsl(160 30% 3% / 0.5);
-    --shadow-md: 0 4px 6px -1px hsl(160 30% 3% / 0.5), 0 2px 4px -2px hsl(160 30% 3% / 0.5);
-    --shadow-lg: 0 10px 15px -3px hsl(160 30% 3% / 0.5), 0 4px 6px -4px hsl(160 30% 3% / 0.5);
-    --shadow-glow: 0 0 40px hsl(152 76% 46% / 0.4);
-    --shadow-glow-green: 0 0 40px hsl(82 84% 55% / 0.3);
 
     --sidebar-background: 160 25% 8%;
     --sidebar-foreground: 150 20% 95%;
-    --sidebar-primary: 152 76% 46%;
-    --sidebar-primary-foreground: 160 30% 6%;
-    --sidebar-accent: 160 20% 15%;
-    --sidebar-accent-foreground: 150 20% 95%;
-    --sidebar-border: 160 20% 18%;
-    --sidebar-ring: 152 76% 46%;
-  }
-
-  /* Light mode override */
-  .light {
-    --background: 150 30% 97%;
-    --foreground: 160 30% 10%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 160 30% 10%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 160 30% 10%;
-
-    --primary: 152 76% 40%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 82 70% 45%;
-    --secondary-foreground: 0 0% 100%;
-
-    --muted: 150 20% 94%;
-    --muted-foreground: 160 15% 40%;
-
-    --accent: 152 40% 92%;
-    --accent-foreground: 152 76% 35%;
-
-    --border: 150 20% 88%;
-    --input: 150 20% 88%;
-
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 160 30% 10%;
   }
 }
 
@@ -126,18 +126,18 @@
     @apply font-display font-bold tracking-tight;
   }
 
-  /* Custom scrollbar for dark theme */
+  /* Custom scrollbar */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
 
   ::-webkit-scrollbar-track {
-    background: hsl(var(--space-dark));
+    background: hsl(var(--muted));
   }
 
   ::-webkit-scrollbar-thumb {
-    background: hsl(var(--muted));
+    background: hsl(var(--border));
     border-radius: 4px;
   }
 
@@ -177,11 +177,11 @@
 
   /* Glass morphism effects */
   .glass {
-    @apply backdrop-blur-xl bg-card/30 border border-border/50;
+    @apply backdrop-blur-xl bg-white/80 border border-border shadow-sm;
   }
 
   .glass-strong {
-    @apply backdrop-blur-2xl bg-card/50 border border-primary/20;
+    @apply backdrop-blur-2xl bg-white/90 border border-border shadow-md;
   }
 
   /* Glow effects */
