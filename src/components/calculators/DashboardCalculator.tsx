@@ -237,7 +237,7 @@ export function DashboardCalculator() {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
       >
-        <Card className="glass-strong h-full border-primary/20">
+        <Card className="h-full bg-card border border-border shadow-sm">
           <CardHeader className="pb-4">
             <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
               Emission Scopes
@@ -255,7 +255,7 @@ export function DashboardCalculator() {
                   onClick={() => setActiveScope(item.id)}
                   className={`w-full p-3 rounded-xl text-left transition-all ${
                     isActive 
-                      ? "bg-primary/20 border border-primary/40 shadow-glow" 
+                      ? "bg-primary/10 border border-primary/30 shadow-sm" 
                       : "hover:bg-muted/50 border border-transparent"
                   }`}
                   initial={{ opacity: 0, x: -10 }}
@@ -316,9 +316,9 @@ export function DashboardCalculator() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <Card className="glass-strong h-full border-primary/20 overflow-hidden">
+        <Card className="h-full bg-card border border-border shadow-sm overflow-hidden">
           {/* Progress Stepper */}
-          <div className="px-6 py-4 border-b border-border/50 bg-muted/20">
+          <div className="px-6 py-4 border-b border-border bg-muted/30">
             <div className="flex items-center justify-between">
               {navItems.map((item, index) => {
                 const isActive = activeScope === item.id;
@@ -330,9 +330,9 @@ export function DashboardCalculator() {
                       onClick={() => setActiveScope(item.id)}
                       className={`flex items-center gap-2 px-3 py-1.5 rounded-full transition-all ${
                         isActive 
-                          ? "bg-primary text-primary-foreground" 
+                          ? "bg-primary text-primary-foreground shadow-sm" 
                           : isComplete 
-                            ? "bg-primary/20 text-primary" 
+                            ? "bg-primary/10 text-primary" 
                             : "bg-muted text-muted-foreground"
                       }`}
                     >
@@ -340,7 +340,7 @@ export function DashboardCalculator() {
                       {isComplete && !isActive && <CheckCircle2 className="h-3.5 w-3.5" />}
                     </button>
                     {index < navItems.length - 1 && (
-                      <div className={`w-8 h-0.5 mx-2 ${isComplete ? "bg-primary/50" : "bg-muted"}`} />
+                      <div className={`w-8 h-0.5 mx-2 ${isComplete ? "bg-primary/40" : "bg-border"}`} />
                     )}
                   </div>
                 );
@@ -409,9 +409,9 @@ export function DashboardCalculator() {
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.3 }}
       >
-        <Card className="glass-strong h-full border-primary/20 overflow-hidden">
-          <CardHeader className="border-b border-border/50 bg-gradient-to-r from-primary/10 to-secondary/10">
-            <CardTitle className="flex items-center gap-2">
+        <Card className="h-full bg-card border border-border shadow-sm overflow-hidden">
+          <CardHeader className="border-b border-border bg-muted/30">
+            <CardTitle className="flex items-center gap-2 text-foreground">
               <TrendingDown className="h-5 w-5 text-primary" />
               Real-time Results
             </CardTitle>
@@ -419,7 +419,7 @@ export function DashboardCalculator() {
           <ScrollArea className="h-[calc(100%-64px)]">
             <CardContent className="p-4 space-y-6">
               {/* Total Emissions */}
-              <div className="text-center p-4 rounded-xl bg-gradient-to-br from-primary/20 to-secondary/10 border border-primary/20">
+              <div className="text-center p-4 rounded-xl bg-primary/5 border border-primary/20">
                 <p className="text-sm text-muted-foreground mb-1">Total Emissions</p>
                 <motion.p 
                   className="text-4xl font-bold text-primary"
@@ -468,7 +468,7 @@ export function DashboardCalculator() {
                       <div className={`w-3 h-3 rounded-full ${item.color}`} />
                       <span className="text-muted-foreground">{item.label}</span>
                     </div>
-                    <span className="font-medium">{(item.value / 1000).toFixed(1)} t</span>
+                    <span className="font-medium text-foreground">{(item.value / 1000).toFixed(1)} t</span>
                   </div>
                 ))}
               </div>
@@ -477,14 +477,14 @@ export function DashboardCalculator() {
               <div className="h-32 mt-4">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={barData}>
-                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 11 }} />
+                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
                     <YAxis hide />
                     <Tooltip 
                       content={({ active, payload }) => {
                         if (active && payload && payload.length) {
                           const val = payload[0].value;
                           return (
-                            <div className="bg-card/95 backdrop-blur border border-border rounded-lg px-3 py-2 text-sm">
+                            <div className="bg-card border border-border rounded-lg px-3 py-2 text-sm shadow-sm">
                               {typeof val === 'number' ? val.toFixed(1) : val} tCO₂e
                             </div>
                           );
@@ -502,9 +502,9 @@ export function DashboardCalculator() {
               </div>
 
               {/* Trees needed */}
-              <div className="p-4 rounded-xl bg-muted/30 border border-border/50">
+              <div className="p-4 rounded-xl bg-muted/50 border border-border">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-primary/20">
+                  <div className="p-2 rounded-lg bg-primary/10">
                     <TreePine className="h-5 w-5 text-primary" />
                   </div>
                   <div>
@@ -517,14 +517,14 @@ export function DashboardCalculator() {
               {/* CTA */}
               <div className="space-y-2">
                 <Link to="/marketplace" className="block">
-                  <Button className="w-full gap-2 bg-primary hover:bg-primary/90">
+                  <Button className="w-full gap-2 bg-primary hover:bg-primary/90 text-primary-foreground">
                     <Leaf className="h-4 w-4" />
                     Offset Now
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 </Link>
                 <Link to="/reports" className="block">
-                  <Button variant="outline" className="w-full gap-2">
+                  <Button variant="outline" className="w-full gap-2 border-border">
                     Generate BRSR Report
                   </Button>
                 </Link>
@@ -769,7 +769,7 @@ function InputField({ label, value, onChange, placeholder = "0" }: { label: stri
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="bg-background/50 border-border/50 focus:border-primary"
+        className="bg-background border-border focus:border-primary"
       />
     </div>
   );
