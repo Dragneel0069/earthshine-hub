@@ -139,13 +139,21 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <motion.nav 
-      className="sticky top-0 z-50 w-full border-b border-border/50 glass"
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <div className="container flex h-16 items-center justify-between">
+    <>
+      {/* Skip to content link for keyboard accessibility */}
+      <a href="#main-content" className="skip-to-content">
+        Skip to main content
+      </a>
+      
+      <motion.nav 
+        className="sticky top-0 z-50 w-full border-b border-border/50 glass"
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5 }}
+        role="navigation"
+        aria-label="Main navigation"
+      >
+        <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-80">
           <img 
             src={zeroGraphLogo} 
@@ -376,6 +384,7 @@ export function Navbar() {
           </div>
         </motion.div>
       )}
-    </motion.nav>
+      </motion.nav>
+    </>
   );
 }
