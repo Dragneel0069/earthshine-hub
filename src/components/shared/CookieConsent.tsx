@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Cookie, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
+import { initializeGA } from "@/hooks/useAnalytics";
 
 const COOKIE_CONSENT_KEY = "zerograph-cookie-consent";
 
@@ -15,12 +16,17 @@ export function CookieConsent() {
       // Delay showing the banner for better UX
       const timer = setTimeout(() => setShowBanner(true), 1500);
       return () => clearTimeout(timer);
+    } else if (consent === "accepted") {
+      // Initialize analytics if previously accepted
+      initializeGA();
     }
   }, []);
 
   const handleAccept = () => {
     localStorage.setItem(COOKIE_CONSENT_KEY, "accepted");
     setShowBanner(false);
+    // Initialize analytics after consent
+    initializeGA();
   };
 
   const handleDecline = () => {
