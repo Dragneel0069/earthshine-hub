@@ -21,6 +21,7 @@ import {
   Users,
   TrendingUp,
 } from "lucide-react";
+import { SEO } from "@/components/shared/SEO";
 
 interface Question {
   id: string;
@@ -364,6 +365,7 @@ export default function SustainabilityQuiz() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO title="Sustainability Quiz" url="/quiz" description="Take our sustainability quiz to assess your organization's climate maturity and get personalized recommendations." />
       <Navbar />
       <main className="container py-8 max-w-2xl">
         <div className="mb-8">

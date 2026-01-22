@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { FileText, Download, Calendar, TrendingDown, Building2, Truck, Zap, Factory } from "lucide-react";
 import { BRSRReportGenerator } from "@/components/reports/BRSRReportGenerator";
+import { SEO } from "@/components/shared/SEO";
 
 const reports = [
   {
@@ -50,6 +51,12 @@ const quickStats = [
 const Reports = () => {
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Emissions Reports"
+        url="/reports"
+        description="Generate and download BRSR-compliant sustainability reports, quarterly emissions summaries, and carbon offset certificates."
+        noIndex={true}
+      />
       <Navbar />
       <main className="container py-8">
         {/* Header */}

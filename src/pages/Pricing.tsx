@@ -6,6 +6,7 @@ import { Check, X, Sparkles, Building2, Rocket, HelpCircle } from "lucide-react"
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { SEO } from "@/components/shared/SEO";
 
 const plans = [
   {
@@ -108,6 +109,12 @@ const comparisonFeatures = [
 export default function Pricing() {
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Pricing"
+        url="/pricing"
+        description="Choose the right Zero Graph plan for your business. Free, Pro, and Enterprise options for carbon tracking, BRSR reporting, and carbon credit marketplace access."
+        keywords="Zero Graph pricing, carbon tracking plans, BRSR reporting cost, carbon offset pricing India, sustainability software pricing"
+      />
       <Navbar />
       
       {/* Hero Section */}

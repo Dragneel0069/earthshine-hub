@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { SEO } from "@/components/shared/SEO";
 
 export default function Blog() {
   const { slug } = useParams();

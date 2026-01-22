@@ -26,6 +26,7 @@ import {
   Loader2,
   ExternalLink,
 } from "lucide-react";
+import { SEO } from "@/components/shared/SEO";
 
 const FRAMEWORKS = [
   {
@@ -273,6 +274,12 @@ export default function ComplianceHub() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Compliance Reporting Hub"
+        url="/compliance"
+        description="Generate BRSR, CSRD, CDP, TCFD, and other sustainability compliance reports. Download PDF reports aligned with global ESG frameworks."
+        keywords="BRSR report generator, CSRD compliance, CDP reporting, TCFD disclosure, ESG reporting India, sustainability frameworks"
+      />
       <Navbar />
       <main className="container py-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">

@@ -16,6 +16,7 @@ import {
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { PageTransition } from "@/components/animations/PageTransition";
+import { SEO } from "@/components/shared/SEO";
 
 const sections = [
   {
@@ -176,6 +177,7 @@ We aim to respond to all inquiries within 2 business days.`
 const TermsOfService = () => {
   return (
     <PageTransition>
+      <SEO title="Terms of Service" url="/terms" description="Read Zero Graph's terms of service. Understand your rights and responsibilities when using our carbon tracking platform." />
       <div className="min-h-screen bg-background">
         <Navbar />
         

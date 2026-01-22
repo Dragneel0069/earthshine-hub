@@ -26,6 +26,7 @@ import {
   Loader2
 } from "lucide-react";
 import { consultationSchema } from "@/lib/validation";
+import { SEO } from "@/components/shared/SEO";
 
 const services = [
   {
@@ -120,6 +121,12 @@ const Consultation = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Free Consultation"
+        url="/consultation"
+        description="Get a free consultation with our sustainability experts. We help with carbon assessments, BRSR compliance, Net Zero strategies, and offset planning."
+        keywords="sustainability consultation India, carbon assessment, BRSR compliance help, Net Zero strategy, carbon offset planning"
+      />
       <Navbar />
       
       {/* Hero */}

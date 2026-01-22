@@ -17,6 +17,7 @@ import {
 import { DashboardCalculator } from "@/components/calculators/DashboardCalculator";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { PageTransition } from "@/components/animations/PageTransition";
+import { SEO } from "@/components/shared/SEO";
 
 const nextSteps = [
   { icon: TrendingDown, title: "Create a Reduction Plan", description: "Identify hotspots and create actionable strategies." },
@@ -27,6 +28,12 @@ const nextSteps = [
 const Calculators = () => {
   return (
     <PageTransition>
+      <SEO 
+        title="Carbon Footprint Calculator"
+        url="/calculators"
+        description="Calculate your organization's carbon footprint with India-specific emission factors. Comprehensive Scope 1, 2 & 3 emissions tracking aligned with GHG Protocol."
+        keywords="carbon footprint calculator India, GHG emissions calculator, Scope 1 2 3 emissions, corporate carbon calculator, enterprise emissions tracking"
+      />
       <div className="min-h-screen bg-background overflow-hidden">
         <Navbar />
         

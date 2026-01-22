@@ -17,6 +17,7 @@ import {
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { StaggerContainer, StaggerItem } from "@/components/animations/StaggerContainer";
 import { PageTransition } from "@/components/animations/PageTransition";
+import { SEO } from "@/components/shared/SEO";
 
 const values = [
   {
@@ -74,6 +75,12 @@ const team = [
 const About = () => {
   return (
     <PageTransition>
+      <SEO 
+        title="About Us"
+        url="/about"
+        description="Learn about Zero Graph's mission to help Indian businesses achieve net-zero emissions through accurate carbon tracking and verified offset solutions."
+        keywords="about Zero Graph, carbon tracking company India, sustainability solutions, net zero mission, climate tech startup"
+      />
       <div className="min-h-screen bg-background overflow-hidden">
         <Navbar />
         
