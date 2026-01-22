@@ -11,6 +11,7 @@ import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { StaggerContainer, StaggerItem } from "@/components/animations/StaggerContainer";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { SEO } from "@/components/shared/SEO";
 
 const stats = [
   { value: "500+", label: "Indian Companies", icon: Globe2 },
@@ -123,6 +124,11 @@ const Index = () => {
 
   return (
     <PageTransition>
+      <SEO 
+        url="/"
+        description="India's leading carbon emissions tracking platform. Track, reduce, and offset your organization's carbon footprint with real-time analytics and verified carbon credits."
+        keywords="carbon footprint India, carbon credits, emissions tracking, sustainability platform, GHG protocol, BRSR compliance, carbon offset, net zero, climate action"
+      />
       <div ref={containerRef} className="min-h-screen bg-background overflow-hidden">
         <Navbar />
 

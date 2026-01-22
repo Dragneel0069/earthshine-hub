@@ -33,6 +33,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { SEO } from "@/components/shared/SEO";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -305,6 +306,11 @@ export default function Certifications() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Climate Certifications"
+        url="/certifications"
+        description="Track your progress toward B Corp, CDP, GRI, CSRD, and other sustainability certifications with milestone tracking."
+      />
       <Navbar />
       <main className="container py-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">

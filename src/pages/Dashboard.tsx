@@ -24,6 +24,7 @@ import { PageTransition } from "@/components/animations/PageTransition";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { StaggerContainer, StaggerItem } from "@/components/animations/StaggerContainer";
 import { motion } from "framer-motion";
+import { SEO } from "@/components/shared/SEO";
 
 const Dashboard = () => {
   const { summary, isLoading } = useEmissionsSummary();
@@ -65,6 +66,12 @@ const Dashboard = () => {
 
   return (
     <PageTransition>
+      <SEO 
+        title="Emissions Dashboard"
+        url="/dashboard"
+        description="Monitor and manage your organization's carbon emissions with real-time analytics, trend charts, and actionable insights."
+        noIndex={true}
+      />
       <div className="min-h-screen bg-gradient-to-b from-background to-card/50">
         <Navbar />
         <main className="container py-8">

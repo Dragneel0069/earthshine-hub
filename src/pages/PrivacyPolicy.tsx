@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { Shield, Database, Cookie, Globe, UserCheck, Mail, Clock, Lock } from "lucide-react";
 import { Link } from "react-router-dom";
+import { SEO } from "@/components/shared/SEO";
 
 const sections = [
   {
@@ -237,6 +238,7 @@ export default function PrivacyPolicy() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO title="Privacy Policy" url="/privacy" description="Learn how Zero Graph collects, uses, and protects your data. Our privacy policy covers GDPR compliance and Indian data protection laws." />
       <Navbar />
       
       {/* Hero Section */}

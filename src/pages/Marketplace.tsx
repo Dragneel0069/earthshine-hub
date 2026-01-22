@@ -35,6 +35,7 @@ import {
 } from "lucide-react";
 import { PageTransition } from "@/components/animations/PageTransition";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
+import { SEO } from "@/components/shared/SEO";
 
 // Indian states
 const indianStates = [
@@ -296,6 +297,12 @@ const Marketplace = () => {
 
   return (
     <PageTransition>
+      <SEO 
+        title="Carbon Credit Marketplace"
+        url="/marketplace"
+        description="Browse and purchase verified Indian carbon credits from renewable energy, forestry, and clean cookstove projects. VCS, Gold Standard, and ICER certified."
+        keywords="carbon credits India, buy carbon offsets, verified carbon credits, renewable energy certificates, VCS certified, Gold Standard, carbon marketplace"
+      />
       <div className="min-h-screen bg-background overflow-hidden">
         <Navbar />
         

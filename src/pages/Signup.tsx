@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Leaf, CheckCircle2, Loader2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { signupSchema } from "@/lib/validation";
+import { SEO } from "@/components/shared/SEO";
 
 const benefits = [
   "Track emissions across all operations",
@@ -78,6 +79,11 @@ const Signup = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Sign Up"
+        url="/signup"
+        description="Create your free Zero Graph account. Start tracking emissions, generating compliance reports, and accessing carbon credits today."
+      />
       <Navbar />
       <main className="container py-16 lg:py-24">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-24 items-center max-w-5xl mx-auto">

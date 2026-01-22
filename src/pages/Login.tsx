@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Leaf, Loader2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { loginSchema } from "@/lib/validation";
+import { SEO } from "@/components/shared/SEO";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -65,6 +66,11 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Login"
+        url="/login"
+        description="Sign in to your Zero Graph account to access your emissions dashboard, reports, and carbon offset marketplace."
+      />
       <Navbar />
       <main className="container flex items-center justify-center py-16 lg:py-24">
         <Card className="w-full max-w-md">
