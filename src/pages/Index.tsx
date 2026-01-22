@@ -133,6 +133,7 @@ const Index = () => {
         <Navbar />
 
         {/* Section 1: Hero with Parallax 3D Globe */}
+        <main id="main-content">
         <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden">
           {/* Animated Grid Background */}
           <div className="absolute inset-0 grid-background opacity-30" />
@@ -519,6 +520,7 @@ const Index = () => {
             </motion.div>
           </div>
         </section>
+        </main>
 
         {/* Footer */}
         <footer className="border-t border-border/50 py-16 bg-card/30">
@@ -563,12 +565,12 @@ const Index = () => {
             </div>
             <div className="border-t border-border/50 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
               <p className="text-sm text-muted-foreground">
-                © 2024 Zero Graph. All rights reserved.
+                © 2026 Zero Graph. All rights reserved.
               </p>
               <div className="flex gap-6 text-sm text-muted-foreground">
-                <a href="#" className="hover:text-foreground transition-colors">Terms</a>
-                <a href="#" className="hover:text-foreground transition-colors">Privacy</a>
-                <a href="#" className="hover:text-foreground transition-colors">Cookies</a>
+                <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
+                <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
+                <Link to="/privacy#cookies" className="hover:text-foreground transition-colors">Cookies</Link>
               </div>
             </div>
           </div>
