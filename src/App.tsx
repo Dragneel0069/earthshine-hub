@@ -32,6 +32,7 @@ import DataImport from "./pages/DataImport";
 import Suppliers from "./pages/Suppliers";
 import MarketplaceEnhanced from "./pages/MarketplaceEnhanced";
 import Integrations from "./pages/Integrations";
+import CBAMCompliance from "./pages/CBAMCompliance";
 
 const queryClient = new QueryClient();
 
@@ -68,6 +69,7 @@ const App = () => (
                 <Route path="/data-import" element={<DataImport />} />
                 <Route path="/suppliers" element={<Suppliers />} />
                 <Route path="/integrations" element={<Integrations />} />
+                <Route path="/cbam" element={<CBAMCompliance />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>

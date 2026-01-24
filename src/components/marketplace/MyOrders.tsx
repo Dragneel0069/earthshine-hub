@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Download, ExternalLink, Calendar, Award, CheckCircle, Clock, FileText, AlertCircle } from 'lucide-react';
+import { Download, ExternalLink, Calendar, Award, CheckCircle, Clock, FileText, AlertCircle, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import { BlockchainVerification } from './BlockchainVerification';
 
 interface Order {
   id: string;
@@ -257,6 +259,29 @@ export function MyOrders() {
                       <p className="text-muted-foreground text-sm">Retired on behalf of</p>
                       <p className="font-medium">{cert.beneficiary_name}</p>
                     </div>
+
+                    {/* Blockchain Verification */}
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="outline" className="w-full" size="sm">
+                          <Shield className="h-4 w-4 mr-2" />
+                          Blockchain Verification
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-lg">
+                        <DialogHeader>
+                          <DialogTitle>Certificate Verification</DialogTitle>
+                        </DialogHeader>
+                        <BlockchainVerification
+                          certificateNumber={cert.certificate_number}
+                          creditsRetired={cert.credits_retired}
+                          retirementDate={cert.retirement_date}
+                          projectName={cert.project_name}
+                          registry={cert.registry}
+                          beneficiaryName={cert.beneficiary_name}
+                        />
+                      </DialogContent>
+                    </Dialog>
 
                     <div className="flex gap-2">
                       <Button variant="outline" className="flex-1" size="sm">
