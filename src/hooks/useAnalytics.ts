@@ -87,6 +87,21 @@ export const AnalyticsEvents = {
   QUIZ_STARTED: 'quiz_started',
   QUIZ_COMPLETED: 'quiz_completed',
   KNOWLEDGE_QUERY: 'knowledge_query',
+  
+  // Form events
+  FORM_STARTED: 'form_started',
+  FORM_FIELD_ERROR: 'form_field_error',
+  FORM_SUBMITTED: 'form_submitted',
+  FORM_ABANDONED: 'form_abandoned',
+  
+  // Navigation events
+  CTA_CLICKED: 'cta_clicked',
+  OUTBOUND_LINK: 'outbound_link',
+  FILE_DOWNLOAD: 'file_download',
+  
+  // Error events
+  ERROR_DISPLAYED: 'error_displayed',
+  ERROR_BOUNDARY_TRIGGERED: 'error_boundary_triggered',
 } as const;
 
 // Custom hook for analytics

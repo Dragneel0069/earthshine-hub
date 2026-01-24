@@ -28,6 +28,52 @@ const sanitizeHtml = (str: string) =>
     .replace(/'/g, "&#x27;");
 
 // ============================================
+// Spam Detection Utilities
+// ============================================
+
+/**
+ * Check if a honeypot field was filled (indicates bot)
+ */
+export const isHoneypotFilled = (value: string | undefined): boolean => {
+  return value !== undefined && value !== '';
+};
+
+/**
+ * Check if form was submitted too quickly (indicates bot)
+ * @param startTime - Timestamp when form was loaded
+ * @param minSeconds - Minimum seconds a human would take (default 3)
+ */
+export const isSubmissionTooFast = (startTime: number, minSeconds = 3): boolean => {
+  const elapsed = (Date.now() - startTime) / 1000;
+  return elapsed < minSeconds;
+};
+
+/**
+ * Check for suspicious patterns in text
+ */
+export const hasSuspiciousContent = (text: string): boolean => {
+  const suspiciousPatterns = [
+    /\[url=/i,
+    /\[link=/i,
+    /<a\s+href/i,
+    /https?:\/\/.*https?:\/\//i, // Multiple URLs
+    /\b(viagra|casino|crypto|forex|investment)\b/i,
+  ];
+  
+  return suspiciousPatterns.some(pattern => pattern.test(text));
+};
+
+/**
+ * Validate Indian phone number format
+ */
+export const isValidIndianPhone = (phone: string): boolean => {
+  const cleaned = phone.replace(/[\s()-]/g, '');
+  // Indian mobile: 10 digits starting with 6-9, optionally with +91 or 0 prefix
+  const indianPhoneRegex = /^(?:\+91|91|0)?[6-9]\d{9}$/;
+  return indianPhoneRegex.test(cleaned);
+};
+
+// ============================================
 // Auth Schemas
 // ============================================
 

@@ -17,7 +17,8 @@ import {
   Mail,
   Info,
   Brain,
-  CreditCard
+  CreditCard,
+  BookOpen
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -101,6 +102,12 @@ const information = [
     description: "AI-powered carbon market Q&A",
     icon: Brain,
     href: "/knowledge",
+  },
+  {
+    title: "Methodology",
+    description: "How we calculate emissions & data sources",
+    icon: BookOpen,
+    href: "/methodology",
   },
   {
     title: "Climate Education",

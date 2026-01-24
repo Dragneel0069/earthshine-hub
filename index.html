@@ -26,25 +26,103 @@
     <meta name="twitter:description" content="Track, reduce, and offset your carbon footprint with verified Indian carbon projects." />
     <meta name="twitter:image" content="https://earthshine-hub.lovable.app/og-image.png" />
 
-    <!-- Structured Data -->
+    <!-- Structured Data - Organization -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "Zero Graph",
+      "alternateName": "ZeroGraph",
       "url": "https://earthshine-hub.lovable.app",
       "logo": "https://earthshine-hub.lovable.app/favicon.ico",
-      "description": "India's leading carbon emissions tracking platform for businesses",
+      "description": "India's leading carbon emissions tracking platform for businesses. Enterprise-grade carbon accounting, BRSR compliance, and decarbonization intelligence.",
+      "foundingDate": "2024",
+      "foundingLocation": {
+        "@type": "Place",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Jamshedpur",
+          "addressCountry": "IN"
+        }
+      },
       "sameAs": [
-        "https://twitter.com/ZeroGraph"
+        "https://twitter.com/ZeroGraph",
+        "https://linkedin.com/company/zerograph"
       ],
       "contactPoint": {
         "@type": "ContactPoint",
-        "telephone": "+91-9500040005",
+        "telephone": "+91-1800-XXX-XXXX",
         "contactType": "customer service",
-        "email": "contact@zerograph.in",
-        "areaServed": "IN"
+        "email": "info@zerograph.in",
+        "areaServed": "IN",
+        "availableLanguage": ["English", "Hindi"]
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Jamshedpur",
+        "addressRegion": "Jharkhand",
+        "addressCountry": "IN"
       }
+    }
+    </script>
+
+    <!-- Structured Data - SoftwareApplication -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Zero Graph Carbon Accounting Platform",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "description": "Enterprise carbon accounting platform with BRSR compliance, emissions tracking, and carbon credit marketplace for Indian businesses.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR",
+        "description": "Free trial available"
+      },
+      "featureList": [
+        "Real-time emissions monitoring",
+        "BRSR compliance reporting",
+        "Carbon credit marketplace",
+        "AI-powered insights",
+        "Scope 1, 2, 3 tracking"
+      ],
+      "screenshot": "https://earthshine-hub.lovable.app/og-image.png"
+    }
+    </script>
+
+    <!-- Structured Data - FAQPage -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is carbon accounting?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Carbon accounting is the process of measuring and tracking greenhouse gas emissions from an organization's operations, including direct emissions (Scope 1), energy-related emissions (Scope 2), and value chain emissions (Scope 3)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is BRSR compliance?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "BRSR (Business Responsibility and Sustainability Reporting) is a mandatory disclosure framework by SEBI for the top 1000 listed companies in India, requiring annual reporting on ESG parameters including carbon emissions."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does Zero Graph calculate emissions?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Zero Graph uses India-specific emission factors from authoritative sources like CEA, IPCC, and DEFRA. We follow the GHG Protocol methodology to calculate emissions across all three scopes with region-specific accuracy."
+          }
+        }
+      ]
     }
     </script>
 
