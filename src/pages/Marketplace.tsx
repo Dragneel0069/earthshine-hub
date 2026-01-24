@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
@@ -36,6 +36,7 @@ import {
 import { PageTransition } from "@/components/animations/PageTransition";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { SEO } from "@/components/shared/SEO";
+import { MarketplaceSkeleton, ProjectCardSkeleton, ProjectCardListSkeleton } from "@/components/skeletons/MarketplaceSkeleton";
 
 // Indian states
 const indianStates = [
@@ -212,6 +213,7 @@ const carbonCredits = [
 ];
 
 const Marketplace = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedState, setSelectedState] = useState("All States");
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
@@ -220,6 +222,14 @@ const Marketplace = () => {
   const [sortBy, setSortBy] = useState("newest");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [showFilters, setShowFilters] = useState(true);
+
+  // Simulate initial data loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const filteredCredits = useMemo(() => {
     let result = [...carbonCredits];
@@ -306,6 +316,22 @@ const Marketplace = () => {
       <div className="min-h-screen bg-background overflow-hidden">
         <Navbar />
         
+        {isLoading ? (
+          <>
+            {/* Hero Banner Skeleton */}
+            <section className="relative py-16 overflow-hidden">
+              <div className="container relative z-10">
+                <div className="max-w-3xl mx-auto text-center">
+                  <div className="h-8 w-48 bg-muted rounded-full mx-auto mb-6 animate-pulse" />
+                  <div className="h-12 w-96 bg-muted rounded-lg mx-auto mb-4 animate-pulse" />
+                  <div className="h-5 w-64 bg-muted rounded mx-auto animate-pulse" />
+                </div>
+              </div>
+            </section>
+            <MarketplaceSkeleton />
+          </>
+        ) : (
+          <>
         {/* Hero Banner */}
         <section className="relative py-16 overflow-hidden">
           <div className="absolute inset-0 grid-background opacity-20" />
@@ -668,6 +694,8 @@ const Marketplace = () => {
             © 2024 Zero Graph. All rights reserved.
           </div>
         </footer>
+          </>
+        )}
       </div>
     </PageTransition>
   );

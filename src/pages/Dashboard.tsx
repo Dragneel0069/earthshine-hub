@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { TotalEmissionsCounter } from "@/components/dashboard/TotalEmissionsCounter";
 import { MonthlyTrendChart } from "@/components/dashboard/MonthlyTrendChart";
@@ -30,6 +31,7 @@ import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { StaggerContainer, StaggerItem } from "@/components/animations/StaggerContainer";
 import { motion } from "framer-motion";
 import { SEO } from "@/components/shared/SEO";
+import { DashboardSkeleton } from "@/components/skeletons/DashboardSkeleton";
 
 // Import new dashboard components
 import { EmissionsOverview } from "@/components/dashboard/EmissionsOverview";
@@ -48,7 +50,18 @@ import {
 } from "@/data/mock-emissions";
 
 const Dashboard = () => {
-  const { summary, isLoading } = useEmissionsSummary();
+  const { summary, isLoading: isDataLoading } = useEmissionsSummary();
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+
+  // Simulate initial page load
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsInitialLoading(false);
+    }, 1200);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const isLoading = isInitialLoading || isDataLoading;
 
   const statsCards = [
     {
@@ -96,6 +109,10 @@ const Dashboard = () => {
       <div className="min-h-screen bg-gradient-to-b from-background to-card/50">
         <Navbar />
         <main className="container py-8">
+          {isLoading ? (
+            <DashboardSkeleton />
+          ) : (
+            <>
           {/* Header */}
           <ScrollReveal>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-2">
@@ -440,6 +457,8 @@ const Dashboard = () => {
               </CardContent>
             </Card>
           </ScrollReveal>
+            </>
+          )}
         </main>
       </div>
     </PageTransition>
