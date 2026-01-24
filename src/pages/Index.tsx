@@ -13,7 +13,8 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { SEO } from "@/components/shared/SEO";
 import ScrollExpandMedia from "@/components/blocks/scroll-expansion-hero";
-import heroVideo from "@/assets/hero-india-solar.jpg";
+import heroImage from "@/assets/hero-india-solar.jpg";
+import heroVideo from "@/assets/hero-renewable-energy.mp4";
 
 const stats = [
   { value: "500+", label: "Indian Companies", icon: Globe2 },
@@ -141,7 +142,8 @@ const Index = () => {
         <main id="main-content">
         <ScrollExpandMedia
           src={heroVideo}
-          background={heroVideo}
+          poster={heroImage}
+          background={heroImage}
           title="India's Path to Net Zero"
           date="Carbon Intelligence Platform"
           scrollToExpand="Scroll to explore"
