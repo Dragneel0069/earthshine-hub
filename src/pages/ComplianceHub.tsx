@@ -27,6 +27,8 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { SEO } from "@/components/shared/SEO";
+import { BRSRReportGenerator } from "@/components/reports/BRSRReportGenerator";
+import { mockCurrentFootprint } from "@/data/mock-emissions";
 
 const FRAMEWORKS = [
   {
@@ -315,6 +317,7 @@ export default function ComplianceHub() {
           <Tabs defaultValue="frameworks" className="space-y-6">
             <TabsList>
               <TabsTrigger value="frameworks">Reporting Frameworks</TabsTrigger>
+              <TabsTrigger value="brsr">BRSR Generator</TabsTrigger>
               <TabsTrigger value="history">Report History</TabsTrigger>
             </TabsList>
 
@@ -383,6 +386,88 @@ export default function ComplianceHub() {
                     </Card>
                   );
                 })}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="brsr">
+              <div className="grid gap-6 lg:grid-cols-2">
+                <BRSRReportGenerator 
+                  companyData={{
+                    name: userProfile?.company_name || 'Your Company',
+                    cin: userProfile?.gst_number || 'L12345MH2020PLC123456',
+                    year: '2024-25',
+                    emissions: {
+                      scope1: mockCurrentFootprint.scope1,
+                      scope2: mockCurrentFootprint.scope2,
+                      scope3: mockCurrentFootprint.scope3,
+                    }
+                  }}
+                />
+                
+                <Card>
+                  <CardHeader>
+                    <CardTitle>BRSR Framework Overview</CardTitle>
+                    <CardDescription>
+                      Understanding India's ESG reporting requirements
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <h4 className="font-medium text-sm">What is BRSR?</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Business Responsibility and Sustainability Reporting (BRSR) is a comprehensive ESG disclosure framework mandated by SEBI for the top 1000 listed companies in India.
+                      </p>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <h4 className="font-medium text-sm">9 Core Principles</h4>
+                      <div className="grid gap-2">
+                        <div className="flex items-start gap-2 text-xs">
+                          <Badge variant="outline" className="shrink-0">P1</Badge>
+                          <span className="text-muted-foreground">Ethics, transparency and accountability</span>
+                        </div>
+                        <div className="flex items-start gap-2 text-xs">
+                          <Badge variant="outline" className="shrink-0">P2</Badge>
+                          <span className="text-muted-foreground">Sustainable products and services</span>
+                        </div>
+                        <div className="flex items-start gap-2 text-xs">
+                          <Badge variant="outline" className="shrink-0">P3</Badge>
+                          <span className="text-muted-foreground">Employee well-being</span>
+                        </div>
+                        <div className="flex items-start gap-2 text-xs">
+                          <Badge variant="outline" className="shrink-0">P4</Badge>
+                          <span className="text-muted-foreground">Stakeholder engagement</span>
+                        </div>
+                        <div className="flex items-start gap-2 text-xs">
+                          <Badge variant="outline" className="shrink-0">P5</Badge>
+                          <span className="text-muted-foreground">Human rights</span>
+                        </div>
+                        <div className="flex items-start gap-2 text-xs">
+                          <Badge variant="outline" className="shrink-0">P6</Badge>
+                          <span className="text-muted-foreground">Environmental protection</span>
+                        </div>
+                        <div className="flex items-start gap-2 text-xs">
+                          <Badge variant="outline" className="shrink-0">P7</Badge>
+                          <span className="text-muted-foreground">Policy advocacy</span>
+                        </div>
+                        <div className="flex items-start gap-2 text-xs">
+                          <Badge variant="outline" className="shrink-0">P8</Badge>
+                          <span className="text-muted-foreground">Inclusive growth</span>
+                        </div>
+                        <div className="flex items-start gap-2 text-xs">
+                          <Badge variant="outline" className="shrink-0">P9</Badge>
+                          <span className="text-muted-foreground">Consumer value</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="p-3 rounded-lg bg-primary/10 border border-primary/20">
+                      <p className="text-xs text-muted-foreground">
+                        <strong>Deadline:</strong> BRSR reports must be submitted within 60 days of the Annual General Meeting (AGM).
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             </TabsContent>
 
