@@ -143,10 +143,7 @@ const Index = () => {
         <main id="main-content">
         <IndiaHeroSection />
         
-        {/* Section 1.5: Original Hero with Parallax 3D Globe (Alternative View) */}
-        <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden hidden">
-        {/* Section 1: Immersive Scroll Expansion Hero */}
-        <main id="main-content">
+        {/* Immersive Scroll Expansion Hero */}
         <ScrollExpandMedia
           src={heroVideo}
           poster={heroImage}
@@ -197,7 +194,7 @@ const Index = () => {
           </div>
         </ScrollExpandMedia>
 
-        {/* Traditional Hero Section (visible after scroll) */}
+        {/* Traditional Hero Section with 3D Globe */}
         <section ref={heroRef} className="relative py-32 flex items-center overflow-hidden bg-background">
           {/* Animated Grid Background */}
           <div className="absolute inset-0 grid-background opacity-30" />
