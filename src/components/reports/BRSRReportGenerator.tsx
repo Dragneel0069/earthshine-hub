@@ -1,14 +1,23 @@
-import { useState } from 'react';
+import { useState, ReactNode } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { FileText, Download, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import { BRSR_PRINCIPLES, BRSR_SECTION_A, BRSR_SECTION_B } from '@/data/brsr-framework';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-interface BRSRReportGeneratorProps {
+export interface BRSRReportGeneratorProps {
+  trigger?: ReactNode;
   companyData?: {
     name: string;
     cin: string;
@@ -21,9 +30,10 @@ interface BRSRReportGeneratorProps {
   };
 }
 
-export const BRSRReportGenerator = ({ companyData }: BRSRReportGeneratorProps) => {
+export const BRSRReportGenerator = ({ trigger, companyData }: BRSRReportGeneratorProps) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [completeness, setCompleteness] = useState(78);
+  const [open, setOpen] = useState(false);
 
   const generateBRSRReport = async () => {
     setIsGenerating(true);
@@ -180,6 +190,102 @@ export const BRSRReportGenerator = ({ companyData }: BRSRReportGeneratorProps) =
     }
   };
 
+  const reportContent = (
+    <div className="space-y-6">
+      {/* Completeness Status */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-medium">Report Completeness</span>
+          <Badge variant={completeness >= 80 ? 'default' : 'secondary'}>
+            {completeness}%
+          </Badge>
+        </div>
+        <Progress value={completeness} className="h-2" />
+        <p className="text-xs text-muted-foreground">
+          {completeness >= 80 
+            ? 'Your report meets the minimum requirements for BRSR compliance'
+            : 'Complete remaining sections to meet BRSR requirements'}
+        </p>
+      </div>
+
+      {/* Principle Status */}
+      <div className="space-y-3">
+        <h4 className="text-sm font-medium">Principle-wise Status</h4>
+        <div className="grid gap-2">
+          {BRSR_PRINCIPLES.slice(0, 6).map((principle) => (
+            <div key={principle.id} className="flex items-center justify-between p-2 rounded-lg border">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-success" />
+                <span className="text-sm">Principle {principle.id}</span>
+              </div>
+              <Badge variant="outline" className="text-xs">
+                {principle.essentialIndicators.length} indicators
+              </Badge>
+            </div>
+          ))}
+          {BRSR_PRINCIPLES.slice(6).map((principle) => (
+            <div key={principle.id} className="flex items-center justify-between p-2 rounded-lg border border-warning/50">
+              <div className="flex items-center gap-2">
+                <AlertCircle className="h-4 w-4 text-warning" />
+                <span className="text-sm">Principle {principle.id}</span>
+              </div>
+              <Badge variant="outline" className="text-xs">
+                Incomplete
+              </Badge>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Generate Button */}
+      <Button 
+        onClick={generateBRSRReport} 
+        disabled={isGenerating}
+        className="w-full gap-2"
+      >
+        {isGenerating ? (
+          <>
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Generating Report...
+          </>
+        ) : (
+          <>
+            <Download className="h-4 w-4" />
+            Generate BRSR Report (PDF)
+          </>
+        )}
+      </Button>
+
+      <p className="text-xs text-muted-foreground text-center">
+        Report will include all 9 BRSR principles with essential and leadership indicators
+      </p>
+    </div>
+  );
+
+  // If trigger is provided, render as a Sheet
+  if (trigger) {
+    return (
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetTrigger asChild>{trigger}</SheetTrigger>
+        <SheetContent className="overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5 text-primary" />
+              BRSR Report Generator
+            </SheetTitle>
+            <SheetDescription>
+              Generate comprehensive BRSR report aligned with SEBI guidelines
+            </SheetDescription>
+          </SheetHeader>
+          <div className="mt-6">
+            {reportContent}
+          </div>
+        </SheetContent>
+      </Sheet>
+    );
+  }
+
+  // Default: render as a Card
   return (
     <Card>
       <CardHeader>
@@ -191,74 +297,8 @@ export const BRSRReportGenerator = ({ companyData }: BRSRReportGeneratorProps) =
           Generate comprehensive BRSR report aligned with SEBI guidelines
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6">
-        {/* Completeness Status */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">Report Completeness</span>
-            <Badge variant={completeness >= 80 ? 'default' : 'secondary'}>
-              {completeness}%
-            </Badge>
-          </div>
-          <Progress value={completeness} className="h-2" />
-          <p className="text-xs text-muted-foreground">
-            {completeness >= 80 
-              ? 'Your report meets the minimum requirements for BRSR compliance'
-              : 'Complete remaining sections to meet BRSR requirements'}
-          </p>
-        </div>
-
-        {/* Principle Status */}
-        <div className="space-y-3">
-          <h4 className="text-sm font-medium">Principle-wise Status</h4>
-          <div className="grid gap-2">
-            {BRSR_PRINCIPLES.slice(0, 6).map((principle) => (
-              <div key={principle.id} className="flex items-center justify-between p-2 rounded-lg border">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-success" />
-                  <span className="text-sm">Principle {principle.id}</span>
-                </div>
-                <Badge variant="outline" className="text-xs">
-                  {principle.essentialIndicators.length} indicators
-                </Badge>
-              </div>
-            ))}
-            {BRSR_PRINCIPLES.slice(6).map((principle) => (
-              <div key={principle.id} className="flex items-center justify-between p-2 rounded-lg border border-warning/50">
-                <div className="flex items-center gap-2">
-                  <AlertCircle className="h-4 w-4 text-warning" />
-                  <span className="text-sm">Principle {principle.id}</span>
-                </div>
-                <Badge variant="outline" className="text-xs">
-                  Incomplete
-                </Badge>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Generate Button */}
-        <Button 
-          onClick={generateBRSRReport} 
-          disabled={isGenerating}
-          className="w-full gap-2"
-        >
-          {isGenerating ? (
-            <>
-              <Loader2 className="h-4 w-4 animate-spin" />
-              Generating Report...
-            </>
-          ) : (
-            <>
-              <Download className="h-4 w-4" />
-              Generate BRSR Report (PDF)
-            </>
-          )}
-        </Button>
-
-        <p className="text-xs text-muted-foreground text-center">
-          Report will include all 9 BRSR principles with essential and leadership indicators
-        </p>
+      <CardContent>
+        {reportContent}
       </CardContent>
     </Card>
   );
