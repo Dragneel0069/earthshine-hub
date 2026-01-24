@@ -13,6 +13,9 @@ import { StaggerContainer, StaggerItem } from "@/components/animations/StaggerCo
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { SEO } from "@/components/shared/SEO";
+import ScrollExpandMedia from "@/components/blocks/scroll-expansion-hero";
+import heroImage from "@/assets/hero-india-solar.jpg";
+import heroVideo from "@/assets/hero-renewable-energy.mp4";
 
 const stats = [
   { value: "500+", label: "Indian Companies", icon: Globe2 },
@@ -131,7 +134,10 @@ const Index = () => {
         keywords="carbon footprint India, carbon credits, emissions tracking, sustainability platform, GHG protocol, BRSR compliance, carbon offset, net zero, climate action"
       />
       <div ref={containerRef} className="min-h-screen bg-background overflow-hidden">
-        <Navbar />
+        {/* Fixed Navbar over scroll hero */}
+        <div className="fixed top-0 left-0 right-0 z-50">
+          <Navbar />
+        </div>
 
         {/* Section 1: India-Focused Hero */}
         <main id="main-content">
@@ -139,6 +145,60 @@ const Index = () => {
         
         {/* Section 1.5: Original Hero with Parallax 3D Globe (Alternative View) */}
         <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden hidden">
+        {/* Section 1: Immersive Scroll Expansion Hero */}
+        <main id="main-content">
+        <ScrollExpandMedia
+          src={heroVideo}
+          poster={heroImage}
+          background={heroImage}
+          title="India's Path to Net Zero"
+          date="Carbon Intelligence Platform"
+          scrollToExpand="Scroll to explore"
+          textBlend={true}
+        >
+          {/* Hero CTA Content that appears on scroll */}
+          <div className="bg-background/80 backdrop-blur-xl rounded-3xl p-8 lg:p-12 max-w-2xl mx-auto border border-border/50 shadow-2xl">
+            <motion.div 
+              className="inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-sm font-medium text-primary mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+              </span>
+              <span>India's Premier Carbon Platform</span>
+            </motion.div>
+            
+            <h2 className="text-2xl lg:text-4xl font-bold font-display mb-4 text-foreground">
+              Transform Complex Emissions Data Into 
+              <span className="text-primary block mt-1">Actionable Insights</span>
+            </h2>
+            
+            <p className="text-muted-foreground mb-8">
+              AI-powered tracking, real-time analytics, and seamless BRSR compliance for enterprises committed to sustainability.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/signup">
+                <Button size="lg" className="w-full sm:w-auto gap-2 bg-primary hover:bg-primary/90 text-primary-foreground shadow-glow">
+                  Start Free Trial
+                  <ArrowRight className="h-5 w-5" />
+                </Button>
+              </Link>
+              <Link to="/dashboard">
+                <Button size="lg" variant="outline" className="w-full sm:w-auto gap-2 border-primary/30 text-foreground hover:bg-primary/10">
+                  <Play className="h-4 w-4" />
+                  View Demo
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </ScrollExpandMedia>
+
+        {/* Traditional Hero Section (visible after scroll) */}
+        <section ref={heroRef} className="relative py-32 flex items-center overflow-hidden bg-background">
           {/* Animated Grid Background */}
           <div className="absolute inset-0 grid-background opacity-30" />
           
@@ -159,81 +219,53 @@ const Index = () => {
             }}
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
           />
-          <motion.div 
-            className="absolute top-1/2 right-1/3 w-[400px] h-[400px] bg-lime/15 rounded-full blur-[120px]"
-            animate={{ 
-              scale: [1, 1.1, 1],
-              x: [0, 50, 0],
-            }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          />
 
           <motion.div 
-            className="container relative z-10 py-20"
+            className="container relative z-10"
             style={{ y: heroY, opacity: heroOpacity }}
           >
             <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div className="text-center lg:text-left">
-                <motion.div 
-                  className="inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-sm font-medium text-primary mb-8"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-                  </span>
-                  <span>India's Premier Carbon Platform</span>
-                </motion.div>
-                
-                <motion.h1 
-                  className="text-4xl sm:text-5xl lg:text-7xl font-bold font-display tracking-tight mb-6"
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.1 }}
-                >
-                  <motion.span 
-                    className="bg-gradient-to-r from-primary via-secondary to-lime bg-clip-text text-transparent"
-                    animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
-                    transition={{ duration: 5, repeat: Infinity }}
-                    style={{ backgroundSize: "200% 200%" }}
-                  >
-                    India's Path to Net Zero
-                  </motion.span>
-                </motion.h1>
-                
-                <motion.p 
-                  className="text-lg lg:text-xl text-muted-foreground mb-10 max-w-xl mx-auto lg:mx-0"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                >
-                  We help you plot it. Transform complex emissions data into actionable insights with AI-powered tracking and seamless BRSR compliance.
-                </motion.p>
+              <ScrollReveal animation="fadeRight">
+                <div className="text-center lg:text-left">
+                  <h2 className="text-3xl lg:text-5xl font-bold font-display tracking-tight mb-6">
+                    <span className="text-foreground">Real-Time </span>
+                    <motion.span 
+                      className="bg-gradient-to-r from-primary via-secondary to-lime bg-clip-text text-transparent"
+                      animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+                      transition={{ duration: 5, repeat: Infinity }}
+                      style={{ backgroundSize: "200% 200%" }}
+                    >
+                      Carbon Intelligence
+                    </motion.span>
+                  </h2>
+                  
+                  <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto lg:mx-0">
+                    See your entire carbon footprint at a glance. Our platform helps 500+ Indian companies identify reduction opportunities and track progress toward Net Zero.
+                  </p>
 
-                <motion.div 
-                  className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
-                >
-                  <Link to="/signup">
-                    <Button size="xl" className="w-full sm:w-auto gap-2 bg-primary hover:bg-primary/90 text-primary-foreground shadow-glow animate-pulse-glow">
-                      Start Free Trial
-                      <ArrowRight className="h-5 w-5" />
-                    </Button>
-                  </Link>
-                  <Link to="/dashboard">
-                    <Button size="xl" variant="outline" className="w-full sm:w-auto gap-2 border-primary/30 text-foreground hover:bg-primary/10 glass">
-                      <Play className="h-4 w-4" />
-                      View Demo
-                    </Button>
-                  </Link>
-                </motion.div>
-              </div>
+                  <ul className="space-y-3 text-left max-w-md mx-auto lg:mx-0">
+                    {[
+                      "Live emissions monitoring across all scopes",
+                      "AI-powered anomaly detection",
+                      "Automated BRSR compliance reporting",
+                      "Carbon credit marketplace integration"
+                    ].map((item, i) => (
+                      <motion.li 
+                        key={i}
+                        className="flex items-center gap-3"
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                      >
+                        <div className="w-2 h-2 rounded-full bg-primary shadow-glow" />
+                        <span className="text-muted-foreground">{item}</span>
+                      </motion.li>
+                    ))}
+                  </ul>
+                </div>
+              </ScrollReveal>
 
-              {/* Parallax 3D Globe */}
+              {/* 3D Globe */}
               <motion.div 
                 className="relative"
                 style={{ 
@@ -244,17 +276,10 @@ const Index = () => {
                 }}
               >
                 <div className="relative">
-                  {/* Glow effect behind globe */}
                   <div className="absolute inset-0 bg-gradient-radial from-primary/30 via-secondary/10 to-transparent rounded-full blur-3xl scale-110" />
                   <motion.div
-                    animate={{ 
-                      rotateY: [0, 360],
-                    }}
-                    transition={{ 
-                      duration: 60, 
-                      repeat: Infinity, 
-                      ease: "linear" 
-                    }}
+                    animate={{ rotateY: [0, 360] }}
+                    transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
                   >
                     <EarthGlobe />
                   </motion.div>
@@ -263,15 +288,6 @@ const Index = () => {
             </div>
 
             <AnimatedGraphLine />
-          </motion.div>
-
-          {/* Scroll Indicator */}
-          <motion.div 
-            className="absolute bottom-8 left-1/2 -translate-x-1/2"
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <ChevronDown className="h-8 w-8 text-primary/50" />
           </motion.div>
         </section>
 
