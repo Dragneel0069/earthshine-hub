@@ -1,0 +1,13 @@
+# Zero Graph Security Policy
+# https://securitytxt.org/
+
+Contact: mailto:security@zerograph.in
+Expires: 2027-01-01T00:00:00.000Z
+Preferred-Languages: en, hi
+Canonical: https://earthshine-hub.lovable.app/.well-known/security.txt
+Policy: https://earthshine-hub.lovable.app/security-policy
+
+# If you discover a security vulnerability, please report it responsibly.
+# We appreciate your help in keeping our platform secure.
+
+# Acknowledgments: https://earthshine-hub.lovable.app/security-acknowledgments
