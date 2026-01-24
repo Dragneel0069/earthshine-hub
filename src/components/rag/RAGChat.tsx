@@ -10,6 +10,7 @@ import { signRequest, getSignedHeaders } from "@/lib/requestSigning";
 import { useAuth } from "@/hooks/useAuth";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { SmartSuggestions } from "./SmartSuggestions";
 interface Message {
   id: string;
   role: "user" | "assistant";
@@ -216,16 +217,27 @@ export function RAGChat({ conversationId }: RAGChatProps) {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-center py-12"
+              className="py-8"
             >
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
-                <Sparkles className="w-8 h-8 text-primary" />
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
+                  <Sparkles className="w-8 h-8 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Carbon Knowledge Assistant</h3>
+                <p className="text-muted-foreground max-w-md mx-auto">
+                  Ask questions about carbon markets, BRSR compliance, CBAM regulations, 
+                  and sustainability reporting. I'll search our knowledge base to help you.
+                </p>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Carbon Knowledge Assistant</h3>
-              <p className="text-muted-foreground max-w-md mx-auto">
-                Ask questions about carbon markets, crediting mechanisms, audit guidance, 
-                and sustainability reporting. I'll search the knowledge base to provide accurate answers.
-              </p>
+              
+              {/* Smart Suggestions */}
+              <SmartSuggestions
+                onSuggestionClick={(suggestion) => {
+                  setInput(suggestion);
+                  textareaRef.current?.focus();
+                }}
+                className="max-w-xl mx-auto"
+              />
             </motion.div>
           )}
 
