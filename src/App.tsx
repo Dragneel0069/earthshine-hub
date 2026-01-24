@@ -7,6 +7,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider } from "@/hooks/useAuth";
 import { CookieConsent } from "@/components/shared/CookieConsent";
 import { GlobalErrorBoundary } from "@/components/shared/GlobalErrorBoundary";
+import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
@@ -27,6 +28,8 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import ScrollDemo from "./pages/ScrollDemo";
 import Methodology from "./pages/Methodology";
+import DataImport from "./pages/DataImport";
+import Suppliers from "./pages/Suppliers";
 
 const queryClient = new QueryClient();
 
@@ -60,9 +63,12 @@ const App = () => (
                 <Route path="/terms" element={<TermsOfService />} />
                 <Route path="/scroll-demo" element={<ScrollDemo />} />
                 <Route path="/methodology" element={<Methodology />} />
+                <Route path="/data-import" element={<DataImport />} />
+                <Route path="/suppliers" element={<Suppliers />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
+              <OnboardingWizard />
               <CookieConsent />
             </AuthProvider>
           </BrowserRouter>
