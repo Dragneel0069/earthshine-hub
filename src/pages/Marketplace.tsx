@@ -37,6 +37,7 @@ import { PageTransition } from "@/components/animations/PageTransition";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { SEO } from "@/components/shared/SEO";
 import { MarketplaceSkeleton, ProjectCardSkeleton, ProjectCardListSkeleton } from "@/components/skeletons/MarketplaceSkeleton";
+import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 
 // Indian states
 const indianStates = [
@@ -377,100 +378,102 @@ const Marketplace = () => {
         <div className="flex">
           {/* Sidebar Filters */}
           {showFilters && (
-            <aside className="w-72 border-r border-primary/10 bg-card/50 backdrop-blur-sm p-6 min-h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="font-semibold text-lg flex items-center gap-2 text-foreground">
-                  <Filter className="h-4 w-4 text-primary" />
-                  Filters
-                </h2>
-                {hasActiveFilters && (
-                  <Button variant="ghost" size="sm" onClick={clearFilters} className="text-muted-foreground hover:text-foreground">
-                    <X className="h-3 w-3 mr-1" />
-                    Clear
-                  </Button>
-                )}
-              </div>
-
-              {/* Project Type */}
-              <div className="mb-6">
-                <Label className="text-sm font-medium mb-3 block text-foreground">Project Type</Label>
-                <div className="space-y-2">
-                  {projectTypes.map((type) => (
-                    <div key={type.id} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={type.id}
-                        checked={selectedTypes.includes(type.id)}
-                        onCheckedChange={() => toggleType(type.id)}
-                        className="border-primary/30 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
-                      />
-                      <label
-                        htmlFor={type.id}
-                        className="text-sm flex items-center gap-2 cursor-pointer text-muted-foreground hover:text-foreground transition-colors"
-                      >
-                        <type.icon className="h-3.5 w-3.5 text-primary" />
-                        {type.label}
-                      </label>
-                    </div>
-                  ))}
+            <ErrorBoundary section="Filters">
+              <aside className="w-72 border-r border-primary/10 bg-card/50 backdrop-blur-sm p-6 min-h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="font-semibold text-lg flex items-center gap-2 text-foreground">
+                    <Filter className="h-4 w-4 text-primary" />
+                    Filters
+                  </h2>
+                  {hasActiveFilters && (
+                    <Button variant="ghost" size="sm" onClick={clearFilters} className="text-muted-foreground hover:text-foreground">
+                      <X className="h-3 w-3 mr-1" />
+                      Clear
+                    </Button>
+                  )}
                 </div>
-              </div>
 
-              {/* State */}
-              <div className="mb-6">
-                <Label className="text-sm font-medium mb-3 block text-foreground">State</Label>
-                <Select value={selectedState} onValueChange={setSelectedState}>
-                  <SelectTrigger className="glass border-primary/20 focus:border-primary">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-popover/95 backdrop-blur-xl border-primary/20 max-h-[250px] z-50">
-                    {indianStates.map((state) => (
-                      <SelectItem key={state} value={state} className="focus:bg-primary/20">
-                        {state}
-                      </SelectItem>
+                {/* Project Type */}
+                <div className="mb-6">
+                  <Label className="text-sm font-medium mb-3 block text-foreground">Project Type</Label>
+                  <div className="space-y-2">
+                    {projectTypes.map((type) => (
+                      <div key={type.id} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={type.id}
+                          checked={selectedTypes.includes(type.id)}
+                          onCheckedChange={() => toggleType(type.id)}
+                          className="border-primary/30 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                        />
+                        <label
+                          htmlFor={type.id}
+                          className="text-sm flex items-center gap-2 cursor-pointer text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          <type.icon className="h-3.5 w-3.5 text-primary" />
+                          {type.label}
+                        </label>
+                      </div>
                     ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Verification */}
-              <div className="mb-6">
-                <Label className="text-sm font-medium mb-3 block text-foreground">Verification Standard</Label>
-                <div className="space-y-2">
-                  {verificationStandards.map((ver) => (
-                    <div key={ver.id} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={ver.id}
-                        checked={selectedVerifications.includes(ver.id)}
-                        onCheckedChange={() => toggleVerification(ver.id)}
-                        className="border-primary/30 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
-                      />
-                      <label htmlFor={ver.id} className="text-sm cursor-pointer text-muted-foreground hover:text-foreground transition-colors">
-                        {ver.label}
-                      </label>
-                    </div>
-                  ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Price Range */}
-              <div className="mb-6">
-                <Label className="text-sm font-medium mb-3 block text-foreground">
-                  Price Range (₹/credit)
-                </Label>
-                <Slider
-                  value={priceRange}
-                  onValueChange={setPriceRange}
-                  min={500}
-                  max={5000}
-                  step={100}
-                  className="mb-2"
-                />
-                <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>₹{priceRange[0].toLocaleString("en-IN")}</span>
-                  <span>₹{priceRange[1].toLocaleString("en-IN")}</span>
+                {/* State */}
+                <div className="mb-6">
+                  <Label className="text-sm font-medium mb-3 block text-foreground">State</Label>
+                  <Select value={selectedState} onValueChange={setSelectedState}>
+                    <SelectTrigger className="glass border-primary/20 focus:border-primary">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-popover/95 backdrop-blur-xl border-primary/20 max-h-[250px] z-50">
+                      {indianStates.map((state) => (
+                        <SelectItem key={state} value={state} className="focus:bg-primary/20">
+                          {state}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-              </div>
-            </aside>
+
+                {/* Verification */}
+                <div className="mb-6">
+                  <Label className="text-sm font-medium mb-3 block text-foreground">Verification Standard</Label>
+                  <div className="space-y-2">
+                    {verificationStandards.map((ver) => (
+                      <div key={ver.id} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={ver.id}
+                          checked={selectedVerifications.includes(ver.id)}
+                          onCheckedChange={() => toggleVerification(ver.id)}
+                          className="border-primary/30 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                        />
+                        <label htmlFor={ver.id} className="text-sm cursor-pointer text-muted-foreground hover:text-foreground transition-colors">
+                          {ver.label}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Price Range */}
+                <div className="mb-6">
+                  <Label className="text-sm font-medium mb-3 block text-foreground">
+                    Price Range (₹/credit)
+                  </Label>
+                  <Slider
+                    value={priceRange}
+                    onValueChange={setPriceRange}
+                    min={500}
+                    max={5000}
+                    step={100}
+                    className="mb-2"
+                  />
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    <span>₹{priceRange[0].toLocaleString("en-IN")}</span>
+                    <span>₹{priceRange[1].toLocaleString("en-IN")}</span>
+                  </div>
+                </div>
+              </aside>
+            </ErrorBoundary>
           )}
 
           {/* Main Content */}
@@ -538,138 +541,140 @@ const Marketplace = () => {
             </p>
 
             {/* Credits Grid/List */}
-            <div
-              className={
-                viewMode === "grid"
-                  ? "grid gap-5 md:grid-cols-2 xl:grid-cols-3"
-                  : "flex flex-col gap-4"
-              }
-            >
-              {filteredCredits.map((credit, index) => {
-                const IconComponent = getProjectIcon(credit.type);
-                const verLabel = verificationStandards.find(
-                  (v) => v.id === credit.verification
-                )?.label;
+            <ErrorBoundary section="Project Listings">
+              <div
+                className={
+                  viewMode === "grid"
+                    ? "grid gap-5 md:grid-cols-2 xl:grid-cols-3"
+                    : "flex flex-col gap-4"
+                }
+              >
+                {filteredCredits.map((credit, index) => {
+                  const IconComponent = getProjectIcon(credit.type);
+                  const verLabel = verificationStandards.find(
+                    (v) => v.id === credit.verification
+                  )?.label;
 
-                if (viewMode === "list") {
+                  if (viewMode === "list") {
+                    return (
+                      <motion.div
+                        key={credit.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.05 }}
+                      >
+                        <Card className="flex flex-col sm:flex-row items-stretch glass-strong border-primary/10 hover:border-primary/30 hover:shadow-glow transition-all">
+                          <div className="p-4 sm:p-5 flex items-center justify-center bg-gradient-to-br from-primary/10 to-secondary/5 sm:w-28">
+                            <div className="rounded-xl bg-card/80 p-3">
+                              <IconComponent className="h-8 w-8 text-primary" />
+                            </div>
+                          </div>
+                          <div className="flex-1 p-4 sm:p-5">
+                            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 mb-2">
+                              <div>
+                                <h3 className="font-semibold text-lg text-foreground">{credit.projectName}</h3>
+                                <p className="text-sm text-muted-foreground flex items-center gap-1">
+                                  <MapPin className="h-3 w-3" />
+                                  {credit.city}, {credit.state}
+                                </p>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Badge variant="secondary" className="gap-1 bg-primary/20 text-primary border-0">
+                                  <ShieldCheck className="h-3 w-3" />
+                                  {verLabel}
+                                </Badge>
+                                <Badge variant="outline" className="gap-1 border-secondary/30 text-secondary">
+                                  <Star className="h-3 w-3 fill-secondary" />
+                                  {credit.sellerRating}
+                                </Badge>
+                              </div>
+                            </div>
+                            <p className="text-sm text-muted-foreground mb-3">{credit.description}</p>
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                              <div className="flex items-center gap-4 text-sm">
+                                <span className="text-muted-foreground">
+                                  Available:{" "}
+                                  <span className="text-foreground font-medium">
+                                    {credit.availableCredits.toLocaleString("en-IN")}
+                                  </span>
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-3">
+                                <span className="text-lg font-bold text-primary flex items-center">
+                                  <IndianRupee className="h-4 w-4" />
+                                  {credit.pricePerCredit.toLocaleString("en-IN")}
+                                  <span className="text-xs font-normal text-muted-foreground ml-1">
+                                    /credit
+                                  </span>
+                                </span>
+                                <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                                  Buy Now
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        </Card>
+                      </motion.div>
+                    );
+                  }
+
                   return (
                     <motion.div
                       key={credit.id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.05 }}
+                      whileHover={{ y: -5, scale: 1.02 }}
                     >
-                      <Card className="flex flex-col sm:flex-row items-stretch glass-strong border-primary/10 hover:border-primary/30 hover:shadow-glow transition-all">
-                        <div className="p-4 sm:p-5 flex items-center justify-center bg-gradient-to-br from-primary/10 to-secondary/5 sm:w-28">
-                          <div className="rounded-xl bg-card/80 p-3">
-                            <IconComponent className="h-8 w-8 text-primary" />
+                      <Card className="h-full glass-strong border-primary/10 hover:border-primary/30 hover:shadow-glow transition-all">
+                        <CardHeader className="pb-3">
+                          <div className="flex items-start justify-between">
+                            <div className="rounded-xl bg-gradient-to-br from-primary/20 to-secondary/10 p-3">
+                              <IconComponent className="h-6 w-6 text-primary" />
+                            </div>
+                            <Badge variant="outline" className="gap-1 border-secondary/30 text-secondary text-xs">
+                              <Star className="h-3 w-3 fill-secondary" />
+                              {credit.sellerRating}
+                            </Badge>
                           </div>
-                        </div>
-                        <div className="flex-1 p-4 sm:p-5">
-                          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 mb-2">
-                            <div>
-                              <h3 className="font-semibold text-lg text-foreground">{credit.projectName}</h3>
-                              <p className="text-sm text-muted-foreground flex items-center gap-1">
-                                <MapPin className="h-3 w-3" />
-                                {credit.city}, {credit.state}
-                              </p>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Badge variant="secondary" className="gap-1 bg-primary/20 text-primary border-0">
-                                <ShieldCheck className="h-3 w-3" />
-                                {verLabel}
-                              </Badge>
-                              <Badge variant="outline" className="gap-1 border-secondary/30 text-secondary">
-                                <Star className="h-3 w-3 fill-secondary" />
-                                {credit.sellerRating}
-                              </Badge>
-                            </div>
+                          <h3 className="font-semibold text-lg mt-3 text-foreground">{credit.projectName}</h3>
+                          <p className="text-xs text-muted-foreground flex items-center gap-1">
+                            <MapPin className="h-3 w-3" />
+                            {credit.city}, {credit.state}
+                          </p>
+                        </CardHeader>
+                        <CardContent className="py-0">
+                          <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                            {credit.description}
+                          </p>
+                          <Badge variant="secondary" className="gap-1 text-xs bg-primary/20 text-primary border-0">
+                            <ShieldCheck className="h-3 w-3" />
+                            {verLabel}
+                          </Badge>
+                        </CardContent>
+                        <CardFooter className="flex-col gap-3 pt-4">
+                          <div className="w-full flex items-center justify-between text-sm">
+                            <span className="text-muted-foreground">Available</span>
+                            <span className="font-medium text-foreground">
+                              {credit.availableCredits.toLocaleString("en-IN")} credits
+                            </span>
                           </div>
-                          <p className="text-sm text-muted-foreground mb-3">{credit.description}</p>
-                          <div className="flex flex-wrap items-center justify-between gap-2">
-                            <div className="flex items-center gap-4 text-sm">
-                              <span className="text-muted-foreground">
-                                Available:{" "}
-                                <span className="text-foreground font-medium">
-                                  {credit.availableCredits.toLocaleString("en-IN")}
-                                </span>
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-3">
-                              <span className="text-lg font-bold text-primary flex items-center">
-                                <IndianRupee className="h-4 w-4" />
-                                {credit.pricePerCredit.toLocaleString("en-IN")}
-                                <span className="text-xs font-normal text-muted-foreground ml-1">
-                                  /credit
-                                </span>
-                              </span>
-                              <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                                Buy Now
-                              </Button>
-                            </div>
+                          <div className="w-full flex items-center justify-between">
+                            <span className="text-lg font-bold text-primary flex items-center">
+                              <IndianRupee className="h-4 w-4" />
+                              {credit.pricePerCredit.toLocaleString("en-IN")}
+                            </span>
+                            <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-glow">
+                              Buy Now
+                            </Button>
                           </div>
-                        </div>
+                        </CardFooter>
                       </Card>
                     </motion.div>
                   );
-                }
-
-                return (
-                  <motion.div
-                    key={credit.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    whileHover={{ y: -5, scale: 1.02 }}
-                  >
-                    <Card className="h-full glass-strong border-primary/10 hover:border-primary/30 hover:shadow-glow transition-all">
-                      <CardHeader className="pb-3">
-                        <div className="flex items-start justify-between">
-                          <div className="rounded-xl bg-gradient-to-br from-primary/20 to-secondary/10 p-3">
-                            <IconComponent className="h-6 w-6 text-primary" />
-                          </div>
-                          <Badge variant="outline" className="gap-1 border-secondary/30 text-secondary text-xs">
-                            <Star className="h-3 w-3 fill-secondary" />
-                            {credit.sellerRating}
-                          </Badge>
-                        </div>
-                        <h3 className="font-semibold text-lg mt-3 text-foreground">{credit.projectName}</h3>
-                        <p className="text-xs text-muted-foreground flex items-center gap-1">
-                          <MapPin className="h-3 w-3" />
-                          {credit.city}, {credit.state}
-                        </p>
-                      </CardHeader>
-                      <CardContent className="py-0">
-                        <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                          {credit.description}
-                        </p>
-                        <Badge variant="secondary" className="gap-1 text-xs bg-primary/20 text-primary border-0">
-                          <ShieldCheck className="h-3 w-3" />
-                          {verLabel}
-                        </Badge>
-                      </CardContent>
-                      <CardFooter className="flex-col gap-3 pt-4">
-                        <div className="w-full flex items-center justify-between text-sm">
-                          <span className="text-muted-foreground">Available</span>
-                          <span className="font-medium text-foreground">
-                            {credit.availableCredits.toLocaleString("en-IN")} credits
-                          </span>
-                        </div>
-                        <div className="w-full flex items-center justify-between">
-                          <span className="text-lg font-bold text-primary flex items-center">
-                            <IndianRupee className="h-4 w-4" />
-                            {credit.pricePerCredit.toLocaleString("en-IN")}
-                          </span>
-                          <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-glow">
-                            Buy Now
-                          </Button>
-                        </div>
-                      </CardFooter>
-                    </Card>
-                  </motion.div>
-                );
-              })}
-            </div>
+                })}
+              </div>
+            </ErrorBoundary>
 
             {filteredCredits.length === 0 && (
               <div className="text-center py-16">
