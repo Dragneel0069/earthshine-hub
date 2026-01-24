@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useState, ReactNode } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
 
 interface ScrollExpandMediaProps {
   src: string;
@@ -28,6 +28,7 @@ const ScrollExpandMedia = ({
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isVideo, setIsVideo] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
     const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov'];
@@ -38,6 +39,7 @@ const ScrollExpandMedia = ({
     const handleReset = () => {
       if (containerRef.current) {
         window.scrollTo(0, 0);
+        setIsComplete(false);
       }
     };
 
@@ -48,6 +50,11 @@ const ScrollExpandMedia = ({
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end start'],
+  });
+
+  // Track when animation is complete
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    setIsComplete(latest >= 0.95);
   });
 
   // Media container transforms
@@ -66,92 +73,101 @@ const ScrollExpandMedia = ({
   const contentOpacity = useTransform(scrollYProgress, [0.35, 0.5], [0, 1]);
   const contentY = useTransform(scrollYProgress, [0.35, 0.5], [100, 0]);
 
+  // Fade out the entire fixed section
+  const sectionOpacity = useTransform(scrollYProgress, [0.8, 1], [1, 0]);
+
   return (
-    <div ref={containerRef} className="relative h-[300vh]">
-      {/* Background Image */}
-      <div
-        className="fixed inset-0 z-0"
-        style={{
-          backgroundImage: `url(${background})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
+    <div ref={containerRef} className="relative h-[200vh]">
+      {/* Fixed container that fades out */}
+      <motion.div 
+        className="fixed inset-0 z-10"
+        style={{ 
+          opacity: sectionOpacity,
+          pointerEvents: isComplete ? 'none' : 'auto'
         }}
-      />
-
-      {/* Fixed container for media */}
-      <div className="fixed inset-0 z-10 flex items-center justify-center">
-        {/* Title overlay */}
-        <motion.div
-          className="absolute inset-0 z-20 flex flex-col items-center justify-center pointer-events-none"
-          style={{ opacity: titleOpacity, y: titleY }}
-        >
-          <span className="text-white/60 text-sm uppercase tracking-widest mb-2">
-            {date}
-          </span>
-          <h1
-            className={`text-4xl md:text-6xl lg:text-7xl font-bold text-center px-4 ${
-              textBlend ? 'text-white mix-blend-difference' : 'text-white'
-            }`}
-          >
-            {title}
-          </h1>
-          <p className="text-white/60 text-sm mt-4 animate-pulse">
-            {scrollToExpand}
-          </p>
-        </motion.div>
-
-        {/* Media container */}
-        <motion.div
-          className="relative w-full h-full overflow-hidden"
+      >
+        {/* Background Image */}
+        <div
+          className="absolute inset-0 z-0"
           style={{
-            scale: mediaScale,
-            borderRadius: mediaRadius,
-            y: mediaY,
+            backgroundImage: `url(${background})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
           }}
-        >
-          {isVideo ? (
-            <video
-              ref={videoRef}
-              src={src}
-              poster={poster}
-              autoPlay
-              muted
-              loop
-              playsInline
-              onLoadedData={() => setIsLoaded(true)}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <img
-              src={src}
-              alt={title}
-              onLoad={() => setIsLoaded(true)}
-              className="w-full h-full object-cover"
-            />
-          )}
+        />
 
-          {/* Dark overlay for content readability */}
+        {/* Fixed container for media */}
+        <div className="absolute inset-0 z-10 flex items-center justify-center">
+          {/* Title overlay */}
           <motion.div
-            className="absolute inset-0 bg-black pointer-events-none"
-            style={{ opacity: overlayOpacity }}
-          />
-        </motion.div>
-
-        {/* Content overlay */}
-        {children && (
-          <motion.div
-            className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none"
-            style={{ opacity: contentOpacity, y: contentY }}
+            className="absolute inset-0 z-20 flex flex-col items-center justify-center pointer-events-none"
+            style={{ opacity: titleOpacity, y: titleY }}
           >
-            <div className="pointer-events-auto max-w-4xl mx-auto px-6">
-              {children}
-            </div>
+            <span className="text-white/60 text-sm uppercase tracking-widest mb-2">
+              {date}
+            </span>
+            <h1
+              className={`text-4xl md:text-6xl lg:text-7xl font-bold font-display text-center px-4 ${
+                textBlend ? 'text-white mix-blend-difference' : 'text-white drop-shadow-2xl'
+              }`}
+            >
+              {title}
+            </h1>
+            <p className="text-white/60 text-sm mt-4 animate-pulse">
+              {scrollToExpand}
+            </p>
           </motion.div>
-        )}
-      </div>
 
-      {/* Scroll spacer */}
-      <div className="h-[300vh]" />
+          {/* Media container */}
+          <motion.div
+            className="relative w-full h-full overflow-hidden"
+            style={{
+              scale: mediaScale,
+              borderRadius: mediaRadius,
+              y: mediaY,
+            }}
+          >
+            {isVideo ? (
+              <video
+                ref={videoRef}
+                src={src}
+                poster={poster}
+                autoPlay
+                muted
+                loop
+                playsInline
+                onLoadedData={() => setIsLoaded(true)}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <img
+                src={src}
+                alt={title}
+                onLoad={() => setIsLoaded(true)}
+                className="w-full h-full object-cover"
+              />
+            )}
+
+            {/* Dark overlay for content readability */}
+            <motion.div
+              className="absolute inset-0 bg-black pointer-events-none"
+              style={{ opacity: overlayOpacity }}
+            />
+          </motion.div>
+
+          {/* Content overlay */}
+          {children && (
+            <motion.div
+              className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none"
+              style={{ opacity: contentOpacity, y: contentY }}
+            >
+              <div className="pointer-events-auto max-w-4xl mx-auto px-6">
+                {children}
+              </div>
+            </motion.div>
+          )}
+        </div>
+      </motion.div>
     </div>
   );
 };
