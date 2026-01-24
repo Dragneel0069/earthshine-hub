@@ -7,6 +7,9 @@ import { TestimonialsSection } from "@/components/landing/TestimonialsSection";
 import { TrustBadges } from "@/components/landing/TrustBadges";
 import { KnowledgeAgentSection } from "@/components/landing/KnowledgeAgentSection";
 import { IndiaHeroSection } from "@/components/landing/IndiaHeroSection";
+import { QuickCalculatorWidget } from "@/components/landing/QuickCalculatorWidget";
+import { MethodologySection } from "@/components/landing/MethodologySection";
+import { HowItWorksSection } from "@/components/landing/HowItWorksSection";
 import { PageTransition } from "@/components/animations/PageTransition";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { StaggerContainer, StaggerItem } from "@/components/animations/StaggerContainer";
@@ -16,6 +19,7 @@ import { SEO } from "@/components/shared/SEO";
 import ScrollExpandMedia from "@/components/blocks/scroll-expansion-hero";
 import heroImage from "@/assets/hero-india-solar.jpg";
 import heroVideo from "@/assets/hero-renewable-energy.mp4";
+import { Footer } from "@/components/layout/Footer";
 
 const stats = [
   { value: "500+", label: "Indian Companies", icon: Globe2 },
@@ -411,6 +415,12 @@ const Index = () => {
         {/* Knowledge Agent Section */}
         <KnowledgeAgentSection />
 
+        {/* Quick Calculator Widget - Lead Magnet */}
+        <QuickCalculatorWidget />
+
+        {/* How It Works Section */}
+        <HowItWorksSection />
+
         {/* Section 3: The Method - Interactive Graph */}
         <section className="relative py-32 overflow-hidden">
           <div className="absolute inset-0 dot-background opacity-30" />
@@ -419,14 +429,14 @@ const Index = () => {
             <ScrollReveal className="text-center max-w-3xl mx-auto mb-20">
               <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-sm font-medium text-primary mb-6">
                 <Target className="h-4 w-4" />
-                <span>THE METHOD</span>
+                <span>PLATFORM FEATURES</span>
               </div>
               <h2 className="text-3xl lg:text-5xl font-bold font-display mb-4">
-                <span className="text-foreground">Your Path to </span>
+                <span className="text-foreground">Everything You Need for </span>
                 <span className="text-secondary">Net Zero</span>
               </h2>
               <p className="text-lg text-muted-foreground">
-                Follow the proven pathway that 500+ Indian companies use to achieve their sustainability goals.
+                Enterprise-grade tools that 500+ Indian companies use to achieve their sustainability goals.
               </p>
             </ScrollReveal>
 
@@ -459,6 +469,9 @@ const Index = () => {
             </div>
           </div>
         </section>
+
+        {/* Methodology & Data Sources Section */}
+        <MethodologySection />
 
         {/* Stats Section */}
         <section className="py-20 relative">
@@ -540,70 +553,7 @@ const Index = () => {
         </main>
 
         {/* Footer */}
-        <footer className="border-t border-border/50 py-16 bg-card/30" role="contentinfo">
-          <div className="container">
-            <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-5 mb-12">
-              <ScrollReveal delay={0} className="lg:col-span-2">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary">
-                    <Leaf className="h-5 w-5 text-primary-foreground" />
-                  </div>
-                  <span className="font-display font-bold text-xl">Zero Graph</span>
-                </div>
-                <p className="text-sm text-muted-foreground mb-4">
-                  India's leading carbon intelligence platform for enterprises committed to Net Zero. 
-                  Track, reduce, and offset your carbon footprint with verified data.
-                </p>
-                <div className="flex gap-4">
-                  <a href="https://twitter.com/ZeroGraph" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors" aria-label="Twitter">
-                    <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                  </a>
-                  <a href="https://linkedin.com/company/zerograph" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors" aria-label="LinkedIn">
-                    <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                  </a>
-                </div>
-              </ScrollReveal>
-              <ScrollReveal delay={0.1}>
-                <h4 className="font-semibold mb-4">Platform</h4>
-                <ul className="space-y-3 text-sm text-muted-foreground">
-                  <li><Link to="/dashboard" className="hover:text-foreground transition-colors">Dashboard</Link></li>
-                  <li><Link to="/calculators" className="hover:text-foreground transition-colors">Calculators</Link></li>
-                  <li><Link to="/reports" className="hover:text-foreground transition-colors">Reports</Link></li>
-                  <li><Link to="/marketplace" className="hover:text-foreground transition-colors">Marketplace</Link></li>
-                </ul>
-              </ScrollReveal>
-              <ScrollReveal delay={0.2}>
-                <h4 className="font-semibold mb-4">Resources</h4>
-                <ul className="space-y-3 text-sm text-muted-foreground">
-                  <li><Link to="/methodology" className="hover:text-foreground transition-colors">Methodology</Link></li>
-                  <li><Link to="/blog" className="hover:text-foreground transition-colors">Blog</Link></li>
-                  <li><Link to="/compliance" className="hover:text-foreground transition-colors">Compliance Hub</Link></li>
-                  <li><Link to="/knowledge" className="hover:text-foreground transition-colors">Knowledge Agent</Link></li>
-                </ul>
-              </ScrollReveal>
-              <ScrollReveal delay={0.3}>
-                <h4 className="font-semibold mb-4">Company</h4>
-                <ul className="space-y-3 text-sm text-muted-foreground">
-                  <li><Link to="/about" className="hover:text-foreground transition-colors">About</Link></li>
-                  <li><Link to="/pricing" className="hover:text-foreground transition-colors">Pricing</Link></li>
-                  <li><Link to="/consultation" className="hover:text-foreground transition-colors">Contact</Link></li>
-                  <li><a href="mailto:info@zerograph.in" className="hover:text-foreground transition-colors">info@zerograph.in</a></li>
-                </ul>
-              </ScrollReveal>
-            </div>
-            <div className="border-t border-border/50 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-              <p className="text-sm text-muted-foreground">
-                © 2026 Zero Graph. All rights reserved.
-              </p>
-              <div className="flex gap-6 text-sm text-muted-foreground">
-                <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
-                <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
-                <Link to="/privacy#cookies" className="hover:text-foreground transition-colors">Cookies</Link>
-                <Link to="/methodology" className="hover:text-foreground transition-colors">Methodology</Link>
-              </div>
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </PageTransition>
   );
