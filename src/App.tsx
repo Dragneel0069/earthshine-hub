@@ -30,6 +30,7 @@ import ScrollDemo from "./pages/ScrollDemo";
 import Methodology from "./pages/Methodology";
 import DataImport from "./pages/DataImport";
 import Suppliers from "./pages/Suppliers";
+import MarketplaceEnhanced from "./pages/MarketplaceEnhanced";
 
 const queryClient = new QueryClient();
 
@@ -48,7 +49,7 @@ const App = () => (
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/reports" element={<Reports />} />
-                <Route path="/marketplace" element={<Marketplace />} />
+                <Route path="/marketplace" element={<MarketplaceEnhanced />} />
                 <Route path="/calculators" element={<Calculators />} />
                 <Route path="/consultation" element={<Consultation />} />
                 <Route path="/about" element={<About />} />
