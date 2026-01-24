@@ -64,45 +64,75 @@ export type Database = {
       }
       carbon_projects: {
         Row: {
+          additionality_score: number | null
           available_credits: number
+          co_benefits: string[] | null
+          country: string | null
           created_at: string
           description: string | null
+          developer: string | null
+          documents: Json | null
           id: string
           impact_details: string | null
           location: string
+          methodology_id: string | null
+          permanence_risk: string | null
           price_per_credit: number
           project_name: string
           project_type: string
+          registry: string | null
+          sdg_alignment: Json | null
           total_credits: number
           updated_at: string
+          verification_body: string | null
           verification_status: string
         }
         Insert: {
+          additionality_score?: number | null
           available_credits?: number
+          co_benefits?: string[] | null
+          country?: string | null
           created_at?: string
           description?: string | null
+          developer?: string | null
+          documents?: Json | null
           id?: string
           impact_details?: string | null
           location: string
+          methodology_id?: string | null
+          permanence_risk?: string | null
           price_per_credit: number
           project_name: string
           project_type: string
+          registry?: string | null
+          sdg_alignment?: Json | null
           total_credits?: number
           updated_at?: string
+          verification_body?: string | null
           verification_status?: string
         }
         Update: {
+          additionality_score?: number | null
           available_credits?: number
+          co_benefits?: string[] | null
+          country?: string | null
           created_at?: string
           description?: string | null
+          developer?: string | null
+          documents?: Json | null
           id?: string
           impact_details?: string | null
           location?: string
+          methodology_id?: string | null
+          permanence_risk?: string | null
           price_per_credit?: number
           project_name?: string
           project_type?: string
+          registry?: string | null
+          sdg_alignment?: Json | null
           total_credits?: number
           updated_at?: string
+          verification_body?: string | null
           verification_status?: string
         }
         Relationships: []
@@ -185,6 +215,116 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      credit_batches: {
+        Row: {
+          available_credits: number
+          created_at: string
+          id: string
+          price_per_ton: number
+          project_id: string
+          quality_breakdown: Json | null
+          quality_score: number | null
+          registry_status: string | null
+          reserved_credits: number
+          retired_credits: number
+          serial_number_end: string | null
+          serial_number_start: string | null
+          total_credits: number
+          updated_at: string
+          vintage_year: number
+        }
+        Insert: {
+          available_credits?: number
+          created_at?: string
+          id?: string
+          price_per_ton: number
+          project_id: string
+          quality_breakdown?: Json | null
+          quality_score?: number | null
+          registry_status?: string | null
+          reserved_credits?: number
+          retired_credits?: number
+          serial_number_end?: string | null
+          serial_number_start?: string | null
+          total_credits?: number
+          updated_at?: string
+          vintage_year: number
+        }
+        Update: {
+          available_credits?: number
+          created_at?: string
+          id?: string
+          price_per_ton?: number
+          project_id?: string
+          quality_breakdown?: Json | null
+          quality_score?: number | null
+          registry_status?: string | null
+          reserved_credits?: number
+          retired_credits?: number
+          serial_number_end?: string | null
+          serial_number_start?: string | null
+          total_credits?: number
+          updated_at?: string
+          vintage_year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "credit_batches_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "carbon_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      credit_ledger: {
+        Row: {
+          action: string
+          actor_id: string | null
+          batch_id: string | null
+          created_at: string
+          credits_amount: number
+          id: string
+          metadata: Json | null
+          order_id: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          batch_id?: string | null
+          created_at?: string
+          credits_amount: number
+          id?: string
+          metadata?: Json | null
+          order_id?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          batch_id?: string | null
+          created_at?: string
+          credits_amount?: number
+          id?: string
+          metadata?: Json | null
+          order_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "credit_ledger_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "credit_batches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credit_ledger_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_orders"
             referencedColumns: ["id"]
           },
         ]
@@ -274,6 +414,90 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_orders: {
+        Row: {
+          batch_id: string | null
+          buyer_id: string | null
+          certificate_id: string | null
+          commission_amount: number | null
+          created_at: string
+          credits_purchased: number
+          escrow_status: string | null
+          gst_amount: number | null
+          id: string
+          order_number: string
+          payment_status: string | null
+          price_per_credit: number
+          project_id: string | null
+          registry_retirement_id: string | null
+          retirement_confirmed_at: string | null
+          retirement_requested_at: string | null
+          retirement_status: string | null
+          seller_id: string | null
+          total_amount: number
+          updated_at: string
+        }
+        Insert: {
+          batch_id?: string | null
+          buyer_id?: string | null
+          certificate_id?: string | null
+          commission_amount?: number | null
+          created_at?: string
+          credits_purchased: number
+          escrow_status?: string | null
+          gst_amount?: number | null
+          id?: string
+          order_number: string
+          payment_status?: string | null
+          price_per_credit: number
+          project_id?: string | null
+          registry_retirement_id?: string | null
+          retirement_confirmed_at?: string | null
+          retirement_requested_at?: string | null
+          retirement_status?: string | null
+          seller_id?: string | null
+          total_amount: number
+          updated_at?: string
+        }
+        Update: {
+          batch_id?: string | null
+          buyer_id?: string | null
+          certificate_id?: string | null
+          commission_amount?: number | null
+          created_at?: string
+          credits_purchased?: number
+          escrow_status?: string | null
+          gst_amount?: number | null
+          id?: string
+          order_number?: string
+          payment_status?: string | null
+          price_per_credit?: number
+          project_id?: string | null
+          registry_retirement_id?: string | null
+          retirement_confirmed_at?: string | null
+          retirement_requested_at?: string | null
+          retirement_status?: string | null
+          seller_id?: string | null
+          total_amount?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_orders_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "credit_batches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketplace_orders_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "carbon_projects"
             referencedColumns: ["id"]
           },
         ]
@@ -584,6 +808,68 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      retirement_certificates: {
+        Row: {
+          beneficiary_name: string | null
+          beneficiary_statement: string | null
+          buyer_id: string | null
+          certificate_number: string
+          created_at: string
+          credits_retired: number
+          id: string
+          order_id: string
+          pdf_url: string | null
+          project_name: string
+          registry: string
+          retirement_date: string
+          serial_numbers: string | null
+          verification_hash: string | null
+          vintage_year: number
+        }
+        Insert: {
+          beneficiary_name?: string | null
+          beneficiary_statement?: string | null
+          buyer_id?: string | null
+          certificate_number: string
+          created_at?: string
+          credits_retired: number
+          id?: string
+          order_id: string
+          pdf_url?: string | null
+          project_name: string
+          registry: string
+          retirement_date?: string
+          serial_numbers?: string | null
+          verification_hash?: string | null
+          vintage_year: number
+        }
+        Update: {
+          beneficiary_name?: string | null
+          beneficiary_statement?: string | null
+          buyer_id?: string | null
+          certificate_number?: string
+          created_at?: string
+          credits_retired?: number
+          id?: string
+          order_id?: string
+          pdf_url?: string | null
+          project_name?: string
+          registry?: string
+          retirement_date?: string
+          serial_numbers?: string | null
+          verification_hash?: string | null
+          vintage_year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "retirement_certificates_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_orders"
             referencedColumns: ["id"]
           },
         ]
