@@ -138,6 +138,9 @@ const ScrollExpandMedia = ({
                 playsInline
                 onLoadedData={() => setIsLoaded(true)}
                 className="w-full h-full object-cover"
+                style={{
+                  filter: 'saturate(1.1) contrast(1.05)',
+                }}
               />
             ) : (
               <img
@@ -145,8 +148,43 @@ const ScrollExpandMedia = ({
                 alt={title}
                 onLoad={() => setIsLoaded(true)}
                 className="w-full h-full object-cover"
+                style={{
+                  filter: 'saturate(1.1) contrast(1.05)',
+                }}
               />
             )}
+
+            {/* Cinematic vignette overlay */}
+            <div 
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: 'radial-gradient(ellipse at center, transparent 0%, transparent 40%, rgba(0,0,0,0.3) 80%, rgba(0,0,0,0.6) 100%)',
+              }}
+            />
+
+            {/* Color grading overlay - subtle teal/green tint */}
+            <div 
+              className="absolute inset-0 pointer-events-none mix-blend-overlay"
+              style={{
+                background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.05) 50%, rgba(20, 184, 166, 0.1) 100%)',
+              }}
+            />
+
+            {/* Top gradient for navbar readability */}
+            <div 
+              className="absolute top-0 left-0 right-0 h-32 pointer-events-none"
+              style={{
+                background: 'linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 100%)',
+              }}
+            />
+
+            {/* Bottom gradient for text readability */}
+            <div 
+              className="absolute bottom-0 left-0 right-0 h-48 pointer-events-none"
+              style={{
+                background: 'linear-gradient(to top, rgba(0,0,0,0.3) 0%, transparent 100%)',
+              }}
+            />
 
             {/* Dark overlay for content readability */}
             <motion.div
