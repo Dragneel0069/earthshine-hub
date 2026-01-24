@@ -24,7 +24,8 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
@@ -293,7 +294,11 @@ export function GuidedOnboarding({ open: controlledOpen, onComplete }: GuidedOnb
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-xl p-0 overflow-hidden bg-gradient-to-b from-background to-muted/30">
+      <DialogContent className="max-w-xl p-0 overflow-hidden bg-gradient-to-b from-background to-muted/30" aria-describedby="guided-onboarding-description">
+        <VisuallyHidden>
+          <DialogTitle>Welcome Setup</DialogTitle>
+          <DialogDescription id="guided-onboarding-description">Personalize your Zero Graph experience</DialogDescription>
+        </VisuallyHidden>
         {/* Progress Bar */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-muted">
           <motion.div 

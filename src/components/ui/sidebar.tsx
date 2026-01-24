@@ -8,7 +8,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -163,7 +164,12 @@ const Sidebar = React.forwardRef<
             } as React.CSSProperties
           }
           side={side}
+          aria-describedby="sidebar-description"
         >
+          <VisuallyHidden>
+            <SheetTitle>Navigation Sidebar</SheetTitle>
+            <SheetDescription id="sidebar-description">Main navigation menu</SheetDescription>
+          </VisuallyHidden>
           <div className="flex h-full w-full flex-col">{children}</div>
         </SheetContent>
       </Sheet>
