@@ -7,7 +7,8 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -247,7 +248,11 @@ export function OnboardingWizard({ open: controlledOpen, onComplete }: Onboardin
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-2xl p-0 overflow-hidden">
+      <DialogContent className="max-w-2xl p-0 overflow-hidden" aria-describedby="onboarding-wizard-description">
+        <VisuallyHidden>
+          <DialogTitle>Onboarding Wizard</DialogTitle>
+          <DialogDescription id="onboarding-wizard-description">Set up your carbon accounting platform</DialogDescription>
+        </VisuallyHidden>
         {/* Progress Header */}
         <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground p-6">
           <h2 className="text-xl font-bold mb-2">Welcome to Zero Graph</h2>
