@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
@@ -12,9 +13,15 @@ import {
   Sparkles,
   Building2,
   Factory,
-  Leaf
+  Leaf,
+  Zap,
+  Car,
+  Package
 } from "lucide-react";
 import { DashboardCalculator } from "@/components/calculators/DashboardCalculator";
+import { EnergyCalculator } from "@/components/calculators/EnergyCalculator";
+import { TransportCalculator } from "@/components/calculators/TransportCalculator";
+import { SupplyChainCalculator } from "@/components/calculators/SupplyChainCalculator";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { PageTransition } from "@/components/animations/PageTransition";
 import { SEO } from "@/components/shared/SEO";
@@ -99,10 +106,45 @@ const Calculators = () => {
           </div>
         </section>
 
-        {/* Dashboard Calculator Section */}
+        {/* Calculator Tabs Section */}
         <section className="py-8 relative bg-muted/30">
           <div className="container relative z-10 max-w-[1600px]">
-            <DashboardCalculator />
+            <Tabs defaultValue="comprehensive" className="space-y-6">
+              <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
+                <TabsTrigger value="comprehensive" className="gap-2">
+                  <Calculator className="h-4 w-4" />
+                  <span className="hidden sm:inline">Comprehensive</span>
+                </TabsTrigger>
+                <TabsTrigger value="energy" className="gap-2">
+                  <Zap className="h-4 w-4" />
+                  <span className="hidden sm:inline">Energy</span>
+                </TabsTrigger>
+                <TabsTrigger value="transport" className="gap-2">
+                  <Car className="h-4 w-4" />
+                  <span className="hidden sm:inline">Transport</span>
+                </TabsTrigger>
+                <TabsTrigger value="supply-chain" className="gap-2">
+                  <Package className="h-4 w-4" />
+                  <span className="hidden sm:inline">Supply Chain</span>
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="comprehensive">
+                <DashboardCalculator />
+              </TabsContent>
+
+              <TabsContent value="energy">
+                <EnergyCalculator />
+              </TabsContent>
+
+              <TabsContent value="transport">
+                <TransportCalculator />
+              </TabsContent>
+
+              <TabsContent value="supply-chain">
+                <SupplyChainCalculator />
+              </TabsContent>
+            </Tabs>
           </div>
         </section>
 

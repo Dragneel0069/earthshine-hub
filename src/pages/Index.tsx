@@ -6,6 +6,7 @@ import { EarthGlobe } from "@/components/3d/EarthGlobe";
 import { TestimonialsSection } from "@/components/landing/TestimonialsSection";
 import { TrustBadges } from "@/components/landing/TrustBadges";
 import { KnowledgeAgentSection } from "@/components/landing/KnowledgeAgentSection";
+import { IndiaHeroSection } from "@/components/landing/IndiaHeroSection";
 import { PageTransition } from "@/components/animations/PageTransition";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { StaggerContainer, StaggerItem } from "@/components/animations/StaggerContainer";
@@ -132,9 +133,12 @@ const Index = () => {
       <div ref={containerRef} className="min-h-screen bg-background overflow-hidden">
         <Navbar />
 
-        {/* Section 1: Hero with Parallax 3D Globe */}
+        {/* Section 1: India-Focused Hero */}
         <main id="main-content">
-        <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden">
+        <IndiaHeroSection />
+        
+        {/* Section 1.5: Original Hero with Parallax 3D Globe (Alternative View) */}
+        <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden hidden">
           {/* Animated Grid Background */}
           <div className="absolute inset-0 grid-background opacity-30" />
           
