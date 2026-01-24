@@ -7,12 +7,39 @@ const corsHeaders = {
 };
 
 // ============================================
+// SECURITY: JWT Authentication
+// ============================================
+async function authenticateUser(req: Request): Promise<{ userId: string | null; error?: string }> {
+  const authHeader = req.headers.get("Authorization");
+  
+  if (!authHeader?.startsWith("Bearer ")) {
+    return { userId: null, error: "Missing or invalid authorization header" };
+  }
+
+  const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
+  const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    global: { headers: { Authorization: authHeader } },
+  });
+
+  const token = authHeader.replace("Bearer ", "");
+  const { data, error } = await supabase.auth.getUser(token);
+
+  if (error || !data?.user) {
+    console.warn("JWT validation failed:", error?.message);
+    return { userId: null, error: "Invalid or expired token" };
+  }
+
+  return { userId: data.user.id };
+}
+
+// ============================================
 // SECURITY: Request Signing - Replay Attack Prevention
 // ============================================
 const REQUEST_TIMESTAMP_TOLERANCE_MS = 30000; // 30 seconds
 const usedNonces = new Map<string, number>(); // nonce -> expiry timestamp
 
-// Clean up expired nonces periodically
 function cleanupNonces() {
   const now = Date.now();
   for (const [nonce, expiry] of usedNonces.entries()) {
@@ -22,7 +49,6 @@ function cleanupNonces() {
   }
 }
 
-// Verify request signature
 async function verifyRequestSignature(
   req: Request,
   body: string
@@ -31,24 +57,19 @@ async function verifyRequestSignature(
   const nonce = req.headers.get("x-request-nonce");
   const signature = req.headers.get("x-request-signature");
 
-  // If no signing headers, allow request (backwards compatibility)
-  // In production, you might want to require signing
   if (!timestamp && !nonce && !signature) {
     return { valid: true };
   }
 
-  // If some headers present but not all, reject
   if (!timestamp || !nonce || !signature) {
     return { valid: false, error: "Missing request signing headers" };
   }
 
-  // Validate timestamp format
   const timestampNum = parseInt(timestamp, 10);
   if (isNaN(timestampNum)) {
     return { valid: false, error: "Invalid timestamp format" };
   }
 
-  // Check timestamp is within tolerance window
   const now = Date.now();
   const timeDiff = Math.abs(now - timestampNum);
   if (timeDiff > REQUEST_TIMESTAMP_TOLERANCE_MS) {
@@ -56,18 +77,15 @@ async function verifyRequestSignature(
     return { valid: false, error: "Request expired. Please try again." };
   }
 
-  // Check nonce hasn't been used
   if (usedNonces.has(nonce)) {
     console.warn(`Nonce reuse detected: ${nonce}`);
     return { valid: false, error: "Duplicate request detected" };
   }
 
-  // Validate nonce format (32 hex chars)
   if (!/^[a-f0-9]{32}$/i.test(nonce)) {
     return { valid: false, error: "Invalid nonce format" };
   }
 
-  // Verify signature
   const message = `${timestamp}.${nonce}.${body}`;
   const encoder = new TextEncoder();
   const data = encoder.encode(message);
@@ -80,10 +98,8 @@ async function verifyRequestSignature(
     return { valid: false, error: "Invalid request signature" };
   }
 
-  // Store nonce with expiry (cleanup window + tolerance)
   usedNonces.set(nonce, now + REQUEST_TIMESTAMP_TOLERANCE_MS * 2);
   
-  // Periodic cleanup
   if (usedNonces.size > 1000) {
     cleanupNonces();
   }
@@ -94,11 +110,10 @@ async function verifyRequestSignature(
 // ============================================
 // SECURITY: Rate Limiting Configuration
 // ============================================
-const RATE_LIMIT_WINDOW_MS = 60000; // 1 minute
-const MAX_REQUESTS_PER_WINDOW = 20; // 20 requests per minute per IP
-const MAX_REQUESTS_PER_USER = 30; // 30 requests per minute per authenticated user
+const RATE_LIMIT_WINDOW_MS = 60000;
+const MAX_REQUESTS_PER_WINDOW = 20;
+const MAX_REQUESTS_PER_USER = 30;
 
-// In-memory rate limit store (resets on function cold start)
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
 
 function checkRateLimit(identifier: string, maxRequests: number): { allowed: boolean; remaining: number; resetIn: number } {
@@ -143,7 +158,6 @@ function validateInput(body: unknown): { valid: true; data: { query: string; con
   
   const { query, conversationId, messages = [] } = body as Record<string, unknown>;
   
-  // Validate query
   if (typeof query !== "string") {
     return { valid: false, error: "Query must be a string" };
   }
@@ -157,7 +171,6 @@ function validateInput(body: unknown): { valid: true; data: { query: string; con
     return { valid: false, error: `Query must be less than ${MAX_QUERY_LENGTH} characters` };
   }
   
-  // Validate conversationId (optional UUID)
   if (conversationId !== undefined && conversationId !== null) {
     if (typeof conversationId !== "string") {
       return { valid: false, error: "ConversationId must be a string" };
@@ -168,7 +181,6 @@ function validateInput(body: unknown): { valid: true; data: { query: string; con
     }
   }
   
-  // Validate messages array
   if (!Array.isArray(messages)) {
     return { valid: false, error: "Messages must be an array" };
   }
@@ -211,7 +223,6 @@ function validateInput(body: unknown): { valid: true; data: { query: string; con
   };
 }
 
-// Sanitize string to prevent injection
 function sanitize(str: string): string {
   return str.replace(/[<>]/g, "").trim();
 }
@@ -223,13 +234,24 @@ serve(async (req) => {
 
   try {
     // ============================================
+    // SECURITY: JWT Authentication Check
+    // ============================================
+    const authResult = await authenticateUser(req);
+    if (!authResult.userId) {
+      return new Response(
+        JSON.stringify({ error: authResult.error || "Unauthorized" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    
+    const userId = authResult.userId;
+    console.log("Authenticated user:", userId);
+
+    // ============================================
     // SECURITY: Rate Limiting Check
     // ============================================
     const clientIP = getClientIP(req);
-    const authHeader = req.headers.get("authorization");
-    const userId = authHeader ? authHeader.replace("Bearer ", "").substring(0, 36) : null;
     
-    // Check IP-based rate limit
     const ipRateLimit = checkRateLimit(`ip:${clientIP}`, MAX_REQUESTS_PER_WINDOW);
     if (!ipRateLimit.allowed) {
       console.warn(`Rate limit exceeded for IP: ${clientIP}`);
@@ -251,27 +273,24 @@ serve(async (req) => {
       );
     }
     
-    // Check user-based rate limit (more generous for authenticated users)
-    if (userId) {
-      const userRateLimit = checkRateLimit(`user:${userId}`, MAX_REQUESTS_PER_USER);
-      if (!userRateLimit.allowed) {
-        console.warn(`Rate limit exceeded for user: ${userId}`);
-        return new Response(
-          JSON.stringify({ 
-            error: "Too many requests. Please try again later.",
-            retryAfter: Math.ceil(userRateLimit.resetIn / 1000)
-          }),
-          { 
-            status: 429, 
-            headers: { 
-              ...corsHeaders, 
-              "Content-Type": "application/json",
-              "Retry-After": String(Math.ceil(userRateLimit.resetIn / 1000)),
-              "X-RateLimit-Remaining": "0"
-            } 
-          }
-        );
-      }
+    const userRateLimit = checkRateLimit(`user:${userId}`, MAX_REQUESTS_PER_USER);
+    if (!userRateLimit.allowed) {
+      console.warn(`Rate limit exceeded for user: ${userId}`);
+      return new Response(
+        JSON.stringify({ 
+          error: "Too many requests. Please try again later.",
+          retryAfter: Math.ceil(userRateLimit.resetIn / 1000)
+        }),
+        { 
+          status: 429, 
+          headers: { 
+            ...corsHeaders, 
+            "Content-Type": "application/json",
+            "Retry-After": String(Math.ceil(userRateLimit.resetIn / 1000)),
+            "X-RateLimit-Remaining": "0"
+          } 
+        }
+      );
     }
 
     // ============================================
@@ -289,7 +308,6 @@ serve(async (req) => {
       );
     }
 
-    // Verify request signature to prevent replay attacks
     const signatureResult = await verifyRequestSignature(req, bodyText);
     if (!signatureResult.valid) {
       console.warn(`Request signature verification failed: ${signatureResult.error}`);
@@ -356,7 +374,6 @@ serve(async (req) => {
         excerpt: chunk.content.substring(0, 200) + "...",
       }));
     } else {
-      // If no chunks found, try searching documents directly
       const { data: docResults } = await supabase
         .from("rag_documents")
         .select("id, title, content")
@@ -432,7 +449,6 @@ ${context}`;
       throw new Error(`AI gateway error: ${response.status}`);
     }
 
-    // Return streaming response with sources in header
     const responseHeaders = {
       ...corsHeaders,
       "Content-Type": "text/event-stream",

@@ -7,12 +7,49 @@ const corsHeaders = {
 };
 
 // ============================================
+// SECURITY: JWT Authentication
+// ============================================
+async function authenticateUser(req: Request): Promise<{ userId: string | null; isAdmin: boolean; error?: string }> {
+  const authHeader = req.headers.get("Authorization");
+  
+  if (!authHeader?.startsWith("Bearer ")) {
+    return { userId: null, isAdmin: false, error: "Missing or invalid authorization header" };
+  }
+
+  const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
+  const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
+  const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    global: { headers: { Authorization: authHeader } },
+  });
+
+  const token = authHeader.replace("Bearer ", "");
+  const { data, error } = await supabase.auth.getUser(token);
+
+  if (error || !data?.user) {
+    console.warn("JWT validation failed:", error?.message);
+    return { userId: null, isAdmin: false, error: "Invalid or expired token" };
+  }
+
+  // Check if user is admin using service role
+  const adminSupabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+  const { data: roleData } = await adminSupabase
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", data.user.id)
+    .eq("role", "admin")
+    .single();
+
+  return { userId: data.user.id, isAdmin: !!roleData };
+}
+
+// ============================================
 // SECURITY: Request Signing - Replay Attack Prevention
 // ============================================
-const REQUEST_TIMESTAMP_TOLERANCE_MS = 30000; // 30 seconds
-const usedNonces = new Map<string, number>(); // nonce -> expiry timestamp
+const REQUEST_TIMESTAMP_TOLERANCE_MS = 30000;
+const usedNonces = new Map<string, number>();
 
-// Clean up expired nonces periodically
 function cleanupNonces() {
   const now = Date.now();
   for (const [nonce, expiry] of usedNonces.entries()) {
@@ -22,7 +59,6 @@ function cleanupNonces() {
   }
 }
 
-// Verify request signature
 async function verifyRequestSignature(
   req: Request,
   body: string
@@ -31,23 +67,19 @@ async function verifyRequestSignature(
   const nonce = req.headers.get("x-request-nonce");
   const signature = req.headers.get("x-request-signature");
 
-  // If no signing headers, allow request (backwards compatibility)
   if (!timestamp && !nonce && !signature) {
     return { valid: true };
   }
 
-  // If some headers present but not all, reject
   if (!timestamp || !nonce || !signature) {
     return { valid: false, error: "Missing request signing headers" };
   }
 
-  // Validate timestamp format
   const timestampNum = parseInt(timestamp, 10);
   if (isNaN(timestampNum)) {
     return { valid: false, error: "Invalid timestamp format" };
   }
 
-  // Check timestamp is within tolerance window
   const now = Date.now();
   const timeDiff = Math.abs(now - timestampNum);
   if (timeDiff > REQUEST_TIMESTAMP_TOLERANCE_MS) {
@@ -55,18 +87,15 @@ async function verifyRequestSignature(
     return { valid: false, error: "Request expired. Please try again." };
   }
 
-  // Check nonce hasn't been used
   if (usedNonces.has(nonce)) {
     console.warn(`Nonce reuse detected: ${nonce}`);
     return { valid: false, error: "Duplicate request detected" };
   }
 
-  // Validate nonce format (32 hex chars)
   if (!/^[a-f0-9]{32}$/i.test(nonce)) {
     return { valid: false, error: "Invalid nonce format" };
   }
 
-  // Verify signature
   const message = `${timestamp}.${nonce}.${body}`;
   const encoder = new TextEncoder();
   const data = encoder.encode(message);
@@ -79,10 +108,8 @@ async function verifyRequestSignature(
     return { valid: false, error: "Invalid request signature" };
   }
 
-  // Store nonce with expiry
   usedNonces.set(nonce, now + REQUEST_TIMESTAMP_TOLERANCE_MS * 2);
   
-  // Periodic cleanup
   if (usedNonces.size > 1000) {
     cleanupNonces();
   }
@@ -93,11 +120,10 @@ async function verifyRequestSignature(
 // ============================================
 // SECURITY: Rate Limiting Configuration
 // ============================================
-const RATE_LIMIT_WINDOW_MS = 60000; // 1 minute
-const MAX_REQUESTS_PER_WINDOW = 10; // 10 document uploads per minute per IP
-const MAX_REQUESTS_PER_USER = 15; // 15 document uploads per minute per authenticated user
+const RATE_LIMIT_WINDOW_MS = 60000;
+const MAX_REQUESTS_PER_WINDOW = 10;
+const MAX_REQUESTS_PER_USER = 15;
 
-// In-memory rate limit store
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
 
 function checkRateLimit(identifier: string, maxRequests: number): { allowed: boolean; remaining: number; resetIn: number } {
@@ -126,7 +152,7 @@ function getClientIP(req: Request): string {
 // ============================================
 // SECURITY: Input Validation
 // ============================================
-const MAX_CONTENT_LENGTH = 100000; // 100KB
+const MAX_CONTENT_LENGTH = 100000;
 const MAX_TITLE_LENGTH = 255;
 const MAX_URL_LENGTH = 2048;
 
@@ -145,7 +171,6 @@ function validateInput(body: unknown): { valid: true; data: ValidatedInput } | {
   
   const { documentId, content, title, sourceType, sourceUrl } = body as Record<string, unknown>;
   
-  // Validate documentId (optional UUID)
   if (documentId !== undefined && documentId !== null) {
     if (typeof documentId !== "string") {
       return { valid: false, error: "DocumentId must be a string" };
@@ -156,7 +181,6 @@ function validateInput(body: unknown): { valid: true; data: ValidatedInput } | {
     }
   }
   
-  // Validate content (required)
   if (typeof content !== "string") {
     return { valid: false, error: "Content must be a string" };
   }
@@ -170,7 +194,6 @@ function validateInput(body: unknown): { valid: true; data: ValidatedInput } | {
     return { valid: false, error: `Content must be less than ${MAX_CONTENT_LENGTH} characters (${Math.round(MAX_CONTENT_LENGTH / 1024)}KB)` };
   }
   
-  // Validate title (required)
   if (typeof title !== "string") {
     return { valid: false, error: "Title must be a string" };
   }
@@ -184,14 +207,12 @@ function validateInput(body: unknown): { valid: true; data: ValidatedInput } | {
     return { valid: false, error: `Title must be less than ${MAX_TITLE_LENGTH} characters` };
   }
   
-  // Validate sourceType
   const validSourceTypes = ["text", "file", "url"];
   const validatedSourceType = (sourceType || "text") as string;
   if (!validSourceTypes.includes(validatedSourceType)) {
     return { valid: false, error: "Invalid sourceType. Must be 'text', 'file', or 'url'" };
   }
   
-  // Validate sourceUrl (optional)
   let validatedSourceUrl: string | undefined;
   if (sourceUrl !== undefined && sourceUrl !== null) {
     if (typeof sourceUrl !== "string") {
@@ -202,7 +223,6 @@ function validateInput(body: unknown): { valid: true; data: ValidatedInput } | {
       return { valid: false, error: `SourceUrl must be less than ${MAX_URL_LENGTH} characters` };
     }
     
-    // Basic URL validation
     try {
       const url = new URL(sourceUrl);
       if (!["http:", "https:"].includes(url.protocol)) {
@@ -226,12 +246,10 @@ function validateInput(body: unknown): { valid: true; data: ValidatedInput } | {
   };
 }
 
-// Sanitize string to prevent injection
 function sanitize(str: string): string {
   return str.replace(/[<>]/g, "").trim();
 }
 
-// Chunk text into smaller pieces
 function chunkText(text: string, chunkSize = 500, overlap = 50): string[] {
   const chunks: string[] = [];
   const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
@@ -242,7 +260,6 @@ function chunkText(text: string, chunkSize = 500, overlap = 50): string[] {
     const trimmedSentence = sentence.trim();
     if (currentChunk.length + trimmedSentence.length > chunkSize && currentChunk.length > 0) {
       chunks.push(currentChunk.trim());
-      // Keep overlap from the end of current chunk
       const words = currentChunk.split(" ");
       const overlapWords = words.slice(-Math.ceil(overlap / 10));
       currentChunk = overlapWords.join(" ") + " " + trimmedSentence;
@@ -265,13 +282,31 @@ serve(async (req) => {
 
   try {
     // ============================================
+    // SECURITY: JWT Authentication & Admin Check
+    // ============================================
+    const authResult = await authenticateUser(req);
+    if (!authResult.userId) {
+      return new Response(
+        JSON.stringify({ error: authResult.error || "Unauthorized" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Only admins can add documents to the knowledge base
+    if (!authResult.isAdmin) {
+      return new Response(
+        JSON.stringify({ error: "Forbidden: Admin access required to manage documents" }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    console.log("Authenticated admin user:", authResult.userId);
+
+    // ============================================
     // SECURITY: Rate Limiting Check
     // ============================================
     const clientIP = getClientIP(req);
-    const authHeader = req.headers.get("authorization");
-    const userId = authHeader ? authHeader.replace("Bearer ", "").substring(0, 36) : null;
     
-    // Check IP-based rate limit
     const ipRateLimit = checkRateLimit(`ip:${clientIP}`, MAX_REQUESTS_PER_WINDOW);
     if (!ipRateLimit.allowed) {
       console.warn(`Rate limit exceeded for IP: ${clientIP}`);
@@ -292,27 +327,24 @@ serve(async (req) => {
       );
     }
     
-    // Check user-based rate limit
-    if (userId) {
-      const userRateLimit = checkRateLimit(`user:${userId}`, MAX_REQUESTS_PER_USER);
-      if (!userRateLimit.allowed) {
-        console.warn(`Rate limit exceeded for user: ${userId}`);
-        return new Response(
-          JSON.stringify({ 
-            error: "Too many requests. Please try again later.",
-            retryAfter: Math.ceil(userRateLimit.resetIn / 1000)
-          }),
-          { 
-            status: 429, 
-            headers: { 
-              ...corsHeaders, 
-              "Content-Type": "application/json",
-              "Retry-After": String(Math.ceil(userRateLimit.resetIn / 1000)),
-              "X-RateLimit-Remaining": "0"
-            } 
-          }
-        );
-      }
+    const userRateLimit = checkRateLimit(`user:${authResult.userId}`, MAX_REQUESTS_PER_USER);
+    if (!userRateLimit.allowed) {
+      console.warn(`Rate limit exceeded for user: ${authResult.userId}`);
+      return new Response(
+        JSON.stringify({ 
+          error: "Too many requests. Please try again later.",
+          retryAfter: Math.ceil(userRateLimit.resetIn / 1000)
+        }),
+        { 
+          status: 429, 
+          headers: { 
+            ...corsHeaders, 
+            "Content-Type": "application/json",
+            "Retry-After": String(Math.ceil(userRateLimit.resetIn / 1000)),
+            "X-RateLimit-Remaining": "0"
+          } 
+        }
+      );
     }
 
     // ============================================
@@ -330,7 +362,6 @@ serve(async (req) => {
       );
     }
 
-    // Verify request signature to prevent replay attacks
     const signatureResult = await verifyRequestSignature(req, bodyText);
     if (!signatureResult.valid) {
       console.warn(`Request signature verification failed: ${signatureResult.error}`);
@@ -362,7 +393,6 @@ serve(async (req) => {
 
     console.log("Processing document:", title, "Content length:", content.length);
 
-    // Create or update document
     let docId = documentId;
     if (!docId) {
       const { data: doc, error: docError } = await supabase
@@ -384,14 +414,11 @@ serve(async (req) => {
       console.log("Created document:", docId);
     }
 
-    // Chunk the content
     const chunks = chunkText(content);
     console.log(`Created ${chunks.length} chunks`);
 
-    // Delete existing chunks for this document
     await supabase.from("rag_chunks").delete().eq("document_id", docId);
 
-    // Insert chunks (search_vector will be auto-generated by trigger)
     const chunksToInsert = chunks.map((chunk, index) => ({
       document_id: docId,
       content: chunk,

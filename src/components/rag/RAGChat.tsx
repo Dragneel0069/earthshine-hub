@@ -1,13 +1,15 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Bot, User, FileText, Loader2, Sparkles } from "lucide-react";
+import { Send, Bot, User, FileText, Loader2, Sparkles, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { signRequest, getSignedHeaders } from "@/lib/requestSigning";
-
+import { useAuth } from "@/hooks/useAuth";
+import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 interface Message {
   id: string;
   role: "user" | "assistant";
@@ -25,6 +27,7 @@ interface RAGChatProps {
 }
 
 export function RAGChat({ conversationId }: RAGChatProps) {
+  const { user, session } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +43,29 @@ export function RAGChat({ conversationId }: RAGChatProps) {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Show login prompt if not authenticated
+  if (!user) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full p-8 text-center">
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
+          <Lock className="w-8 h-8 text-primary" />
+        </div>
+        <h3 className="text-xl font-semibold mb-2">Authentication Required</h3>
+        <p className="text-muted-foreground max-w-md mx-auto mb-6">
+          Please log in to access the Carbon Knowledge Assistant. Your conversations will be saved securely.
+        </p>
+        <div className="flex gap-4">
+          <Link to="/login">
+            <Button variant="outline">Log In</Button>
+          </Link>
+          <Link to="/signup">
+            <Button>Sign Up</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -79,13 +105,16 @@ export function RAGChat({ conversationId }: RAGChatProps) {
       // Sign the request to prevent replay attacks
       const signedRequest = await signRequest(payload);
       
+      // Get the current session token
+      const { data: { session: currentSession } } = await supabase.auth.getSession();
+      
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/rag-chat`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            Authorization: `Bearer ${currentSession?.access_token || ""}`,
             ...getSignedHeaders(signedRequest),
           },
           body: JSON.stringify(payload),
