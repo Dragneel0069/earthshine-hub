@@ -32,6 +32,7 @@ import { StaggerContainer, StaggerItem } from "@/components/animations/StaggerCo
 import { motion } from "framer-motion";
 import { SEO } from "@/components/shared/SEO";
 import { DashboardSkeleton } from "@/components/skeletons/DashboardSkeleton";
+import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 
 // Import new dashboard components
 import { EmissionsOverview } from "@/components/dashboard/EmissionsOverview";
@@ -145,12 +146,14 @@ const Dashboard = () => {
           </ScrollReveal>
 
           {/* Key Metrics Overview */}
-          <ScrollReveal delay={0.1}>
-            <EmissionsOverview 
-              currentFootprint={mockCurrentFootprint}
-              previousFootprint={mockPreviousFootprint}
-            />
-          </ScrollReveal>
+          <ErrorBoundary section="Emissions Overview">
+            <ScrollReveal delay={0.1}>
+              <EmissionsOverview 
+                currentFootprint={mockCurrentFootprint}
+                previousFootprint={mockPreviousFootprint}
+              />
+            </ScrollReveal>
+          </ErrorBoundary>
 
           {/* Enhanced Analytics Section */}
           <ScrollReveal delay={0.2}>
@@ -165,9 +168,15 @@ const Dashboard = () => {
               {/* Overview Tab */}
               <TabsContent value="overview" className="space-y-6">
                 <div className="grid gap-6 lg:grid-cols-3">
-                  <EmissionsBreakdownChart footprint={mockCurrentFootprint} />
-                  <ReductionTargets targets={mockReductionTargets} />
-                  <EmissionsByCategory sources={mockEmissionSources} />
+                  <ErrorBoundary section="Breakdown Chart">
+                    <EmissionsBreakdownChart footprint={mockCurrentFootprint} />
+                  </ErrorBoundary>
+                  <ErrorBoundary section="Reduction Targets">
+                    <ReductionTargets targets={mockReductionTargets} />
+                  </ErrorBoundary>
+                  <ErrorBoundary section="Category Chart">
+                    <EmissionsByCategory sources={mockEmissionSources} />
+                  </ErrorBoundary>
                 </div>
 
                 {/* Quick Insights */}
@@ -221,12 +230,16 @@ const Dashboard = () => {
 
               {/* Trends Tab */}
               <TabsContent value="trends" className="space-y-6">
-                <EmissionsTrendChart data={mockMonthlyTrend} />
-                <MonthlyTrendChart 
-                  data={summary?.monthlyTrend} 
-                  target={150}
-                  isLoading={isLoading}
-                />
+                <ErrorBoundary section="Emissions Trend">
+                  <EmissionsTrendChart data={mockMonthlyTrend} />
+                </ErrorBoundary>
+                <ErrorBoundary section="Monthly Trend">
+                  <MonthlyTrendChart 
+                    data={summary?.monthlyTrend} 
+                    target={150}
+                    isLoading={isLoading}
+                  />
+                </ErrorBoundary>
               </TabsContent>
 
               {/* 3D View Tab */}
@@ -234,47 +247,49 @@ const Dashboard = () => {
                 <div className="grid gap-6 lg:grid-cols-3 mb-8">
             {/* 3D Visualization - Spans 2 columns */}
             <ScrollReveal className="lg:col-span-2" animation="fadeRight">
-              <Card className="overflow-hidden border-0 bg-gradient-to-br from-card via-card to-primary/5 h-full">
-                <CardHeader className="pb-2">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle className="text-lg font-display flex items-center gap-2">
-                        <Globe2 className="h-5 w-5 text-primary" />
-                        3D Emissions Overview
-                      </CardTitle>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Interactive visualization of your carbon footprint by scope
-                      </p>
+              <ErrorBoundary section="3D Visualization">
+                <Card className="overflow-hidden border-0 bg-gradient-to-br from-card via-card to-primary/5 h-full">
+                  <CardHeader className="pb-2">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <CardTitle className="text-lg font-display flex items-center gap-2">
+                          <Globe2 className="h-5 w-5 text-primary" />
+                          3D Emissions Overview
+                        </CardTitle>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Interactive visualization of your carbon footprint by scope
+                        </p>
+                      </div>
+                      <Badge variant="secondary" className="gap-1">
+                        <Activity className="h-3 w-3" />
+                        Live
+                      </Badge>
                     </div>
-                    <Badge variant="secondary" className="gap-1">
-                      <Activity className="h-3 w-3" />
-                      Live
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent className="p-0">
-                  <Dashboard3DScene 
-                    scope1={summary?.byScope.scope1 || 450}
-                    scope2={summary?.byScope.scope2 || 380}
-                    scope3={summary?.byScope.scope3 || 720}
-                  />
-                  {/* Legend */}
-                  <div className="flex flex-wrap items-center justify-center gap-6 p-4 border-t border-border/50">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full bg-emerald-500" />
-                      <span className="text-sm text-muted-foreground">Scope 1: {summary?.byScope.scope1?.toFixed(0) || 450} tCO₂e</span>
+                  </CardHeader>
+                  <CardContent className="p-0">
+                    <Dashboard3DScene 
+                      scope1={summary?.byScope.scope1 || 450}
+                      scope2={summary?.byScope.scope2 || 380}
+                      scope3={summary?.byScope.scope3 || 720}
+                    />
+                    {/* Legend */}
+                    <div className="flex flex-wrap items-center justify-center gap-6 p-4 border-t border-border/50">
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded-full bg-emerald-500" />
+                        <span className="text-sm text-muted-foreground">Scope 1: {summary?.byScope.scope1?.toFixed(0) || 450} tCO₂e</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded-full bg-blue-500" />
+                        <span className="text-sm text-muted-foreground">Scope 2: {summary?.byScope.scope2?.toFixed(0) || 380} tCO₂e</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded-full bg-amber-500" />
+                        <span className="text-sm text-muted-foreground">Scope 3: {summary?.byScope.scope3?.toFixed(0) || 720} tCO₂e</span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full bg-blue-500" />
-                      <span className="text-sm text-muted-foreground">Scope 2: {summary?.byScope.scope2?.toFixed(0) || 380} tCO₂e</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full bg-amber-500" />
-                      <span className="text-sm text-muted-foreground">Scope 3: {summary?.byScope.scope3?.toFixed(0) || 720} tCO₂e</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </ErrorBoundary>
             </ScrollReveal>
 
             {/* Total Emissions Counter */}
@@ -353,14 +368,18 @@ const Dashboard = () => {
           {/* Charts Grid */}
           <div className="grid gap-6 lg:grid-cols-3 mb-8">
             <ScrollReveal className="lg:col-span-2" animation="fadeUp">
-              <MonthlyTrendChart 
-                data={summary?.monthlyTrend} 
-                target={150}
-                isLoading={isLoading}
-              />
+              <ErrorBoundary section="Monthly Trend Chart">
+                <MonthlyTrendChart 
+                  data={summary?.monthlyTrend} 
+                  target={150}
+                  isLoading={isLoading}
+                />
+              </ErrorBoundary>
             </ScrollReveal>
             <ScrollReveal animation="fadeUp" delay={0.1}>
-              <QuickActions />
+              <ErrorBoundary section="Quick Actions">
+                <QuickActions />
+              </ErrorBoundary>
             </ScrollReveal>
           </div>
               </TabsContent>
@@ -369,10 +388,12 @@ const Dashboard = () => {
               <TabsContent value="legacy" className="space-y-6">
                 <div className="grid gap-6 lg:grid-cols-3">
                   <ScrollReveal className="lg:col-span-2" animation="fadeUp">
-                    <RecentActivity 
-                      activities={summary?.recentActivity} 
-                      isLoading={isLoading}
-                    />
+                    <ErrorBoundary section="Recent Activity">
+                      <RecentActivity 
+                        activities={summary?.recentActivity} 
+                        isLoading={isLoading}
+                      />
+                    </ErrorBoundary>
                   </ScrollReveal>
                   
                   {/* CTA Card */}
