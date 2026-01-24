@@ -189,6 +189,45 @@ export type Database = {
           },
         ]
       }
+      csv_imports: {
+        Row: {
+          created_at: string
+          error_count: number | null
+          errors: Json | null
+          file_name: string
+          id: string
+          import_type: string
+          row_count: number | null
+          status: string | null
+          success_count: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          error_count?: number | null
+          errors?: Json | null
+          file_name: string
+          id?: string
+          import_type: string
+          row_count?: number | null
+          status?: string | null
+          success_count?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          error_count?: number | null
+          errors?: Json | null
+          file_name?: string
+          id?: string
+          import_type?: string
+          row_count?: number | null
+          status?: string | null
+          success_count?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       emissions: {
         Row: {
           category: string
@@ -279,6 +318,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      organization_settings: {
+        Row: {
+          baseline_year: number | null
+          company_name: string
+          company_size: string | null
+          created_at: string
+          financial_year_start: string | null
+          id: string
+          industry_type: string | null
+          locations: Json | null
+          onboarding_completed: boolean | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          baseline_year?: number | null
+          company_name: string
+          company_size?: string | null
+          created_at?: string
+          financial_year_start?: string | null
+          id?: string
+          industry_type?: string | null
+          locations?: Json | null
+          onboarding_completed?: boolean | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          baseline_year?: number | null
+          company_name?: string
+          company_size?: string | null
+          created_at?: string
+          financial_year_start?: string | null
+          id?: string
+          industry_type?: string | null
+          locations?: Json | null
+          onboarding_completed?: boolean | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       quiz_responses: {
         Row: {
@@ -553,6 +634,89 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      supplier_requests: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          due_date: string | null
+          id: string
+          request_type: string
+          response_data: Json | null
+          status: string | null
+          supplier_id: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          request_type: string
+          response_data?: Json | null
+          status?: string | null
+          supplier_id: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          request_type?: string
+          response_data?: Json | null
+          status?: string | null
+          supplier_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "supplier_requests_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      suppliers: {
+        Row: {
+          annual_spend: number | null
+          category: string
+          created_at: string
+          email: string | null
+          emissions_data: Json | null
+          id: string
+          last_updated: string | null
+          name: string
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          annual_spend?: number | null
+          category: string
+          created_at?: string
+          email?: string | null
+          emissions_data?: Json | null
+          id?: string
+          last_updated?: string | null
+          name: string
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          annual_spend?: number | null
+          category?: string
+          created_at?: string
+          email?: string | null
+          emissions_data?: Json | null
+          id?: string
+          last_updated?: string | null
+          name?: string
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       user_certifications: {
         Row: {

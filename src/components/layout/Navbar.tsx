@@ -62,6 +62,18 @@ const platforms = [
     href: "/dashboard",
   },
   {
+    title: "Data Import",
+    description: "Upload CSV data for bulk emissions",
+    icon: FileText,
+    href: "/data-import",
+  },
+  {
+    title: "Supply Chain",
+    description: "Track Scope 3 supplier emissions",
+    icon: Building2,
+    href: "/suppliers",
+  },
+  {
     title: "BRSR Reports",
     description: "Automated compliance reporting",
     icon: FileText,
