@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { Leaf } from "lucide-react";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
+import zeroGraphLogo from "@/assets/zerograph-logo.png";
 
 const platformLinks = [
   { label: "Dashboard", href: "/dashboard" },
@@ -39,9 +39,11 @@ export function Footer() {
           {/* Brand Column */}
           <ScrollReveal delay={0} className="lg:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary">
-                <Leaf className="h-5 w-5 text-primary-foreground" />
-              </div>
+              <img 
+                src={zeroGraphLogo} 
+                alt="Zero Graph Logo" 
+                className="h-10 w-10 object-contain"
+              />
               <span className="font-display font-bold text-xl">Zero Graph</span>
             </div>
             <p className="text-sm text-muted-foreground mb-4">
