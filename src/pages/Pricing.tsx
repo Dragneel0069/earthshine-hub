@@ -1,54 +1,65 @@
 import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Check, X, Sparkles, Building2, Rocket, HelpCircle } from "lucide-react";
+import { Check, X, Sparkles, Building2, Rocket, HelpCircle, Calculator, Users, ArrowRight, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { SEO } from "@/components/shared/SEO";
+import { Switch } from "@/components/ui/switch";
+import { useState } from "react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const plans = [
   {
-    name: "Free",
-    description: "Perfect for individuals exploring carbon tracking",
-    price: "₹0",
-    period: "forever",
+    name: "Starter",
+    description: "For small teams getting started with carbon tracking",
+    monthlyPrice: 2499,
+    yearlyPrice: 1999,
     icon: Sparkles,
     popular: false,
-    cta: "Get Started Free",
-    ctaLink: "/signup",
-    features: [
-      { name: "Personal carbon calculator", included: true },
-      { name: "Monthly emissions tracking", included: true },
-      { name: "Basic dashboard", included: true },
-      { name: "Up to 3 emission sources", included: true },
-      { name: "Community support", included: true },
-      { name: "BRSR reporting", included: false },
-      { name: "Carbon credit marketplace", included: false },
-      { name: "API access", included: false },
-      { name: "Dedicated support", included: false },
-      { name: "Custom integrations", included: false },
-    ],
-  },
-  {
-    name: "Pro",
-    description: "For SMEs and growing businesses committed to sustainability",
-    price: "₹4,999",
-    period: "/month",
-    icon: Rocket,
-    popular: true,
+    employees: "1-50 employees",
     cta: "Start Free Trial",
     ctaLink: "/signup",
     features: [
-      { name: "Everything in Free", included: true },
-      { name: "Unlimited emission sources", included: true },
+      { name: "Up to 5 team members", included: true },
+      { name: "Scope 1 & 2 emissions tracking", included: true },
+      { name: "Basic dashboard & charts", included: true },
+      { name: "Monthly emissions reports", included: true },
+      { name: "Email support", included: true },
+      { name: "CEA India emission factors", included: true },
+      { name: "BRSR report generation", included: false },
+      { name: "Scope 3 supply chain", included: false },
+      { name: "Accounting integrations", included: false },
+      { name: "API access", included: false },
+    ],
+  },
+  {
+    name: "Professional",
+    description: "For growing businesses with compliance requirements",
+    monthlyPrice: 7499,
+    yearlyPrice: 5999,
+    icon: Rocket,
+    popular: true,
+    employees: "51-500 employees",
+    cta: "Start Free Trial",
+    ctaLink: "/signup",
+    features: [
+      { name: "Up to 25 team members", included: true },
       { name: "Scope 1, 2 & 3 tracking", included: true },
       { name: "BRSR report generation", included: true },
       { name: "Carbon credit marketplace", included: true },
+      { name: "Vendor emission surveys", included: true },
+      { name: "Tally & Zoho integration", included: true },
       { name: "AI-powered insights", included: true },
-      { name: "Priority email support", included: true },
-      { name: "Team collaboration (5 users)", included: true },
+      { name: "Priority email support (24h)", included: true },
       { name: "API access", included: false },
       { name: "Custom integrations", included: false },
     ],
@@ -56,63 +67,85 @@ const plans = [
   {
     name: "Enterprise",
     description: "For large organizations with complex sustainability needs",
-    price: "Custom",
-    period: "",
+    monthlyPrice: null,
+    yearlyPrice: null,
     icon: Building2,
     popular: false,
+    employees: "500+ employees",
     cta: "Contact Sales",
     ctaLink: "/consultation",
     features: [
-      { name: "Everything in Pro", included: true },
-      { name: "Unlimited users", included: true },
-      { name: "Advanced BRSR + CSRD + CDP", included: true },
+      { name: "Unlimited team members", included: true },
+      { name: "Advanced BRSR + CDP + GRI", included: true },
+      { name: "Multi-location tracking", included: true },
+      { name: "SAP & Oracle integration", included: true },
       { name: "Dedicated account manager", included: true },
       { name: "Custom API integrations", included: true },
       { name: "White-label options", included: true },
-      { name: "SLA guarantees", included: true },
+      { name: "SLA guarantees (99.9%)", included: true },
       { name: "On-premise deployment", included: true },
-      { name: "Custom training", included: true },
       { name: "24/7 priority support", included: true },
     ],
   },
 ];
 
+const comparisonFeatures = [
+  { name: "Team Members", starter: "5", professional: "25", enterprise: "Unlimited" },
+  { name: "Emission Scopes", starter: "1 & 2", professional: "1, 2 & 3", enterprise: "1, 2 & 3" },
+  { name: "Reporting Frameworks", starter: "Basic", professional: "BRSR", enterprise: "BRSR, CDP, GRI, TCFD" },
+  { name: "Data Retention", starter: "2 years", professional: "5 years", enterprise: "Unlimited" },
+  { name: "Accounting Integration", starter: "—", professional: "Tally, Zoho", enterprise: "SAP, Oracle, All" },
+  { name: "Vendor Surveys", starter: "—", professional: "✓", enterprise: "✓" },
+  { name: "Support", starter: "Email", professional: "Priority (24h)", enterprise: "24/7 Dedicated" },
+  { name: "API Access", starter: "—", professional: "—", enterprise: "✓" },
+];
+
 const faqs = [
   {
-    question: "Can I switch plans at any time?",
-    answer: "Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately, and we'll prorate your billing accordingly.",
+    question: "Is there a free trial?",
+    answer: "Yes! All paid plans come with a 14-day free trial. No credit card required to start. You can explore all features before committing.",
   },
   {
-    question: "Is there a free trial for Pro?",
-    answer: "Yes! Pro comes with a 14-day free trial. No credit card required to start.",
+    question: "Can I switch plans at any time?",
+    answer: "Absolutely. You can upgrade or downgrade your plan at any time. Changes take effect immediately, and we'll prorate your billing accordingly.",
   },
   {
     question: "What payment methods do you accept?",
-    answer: "We accept all major credit cards, UPI, net banking, and can also process invoices for Enterprise customers.",
+    answer: "We accept all major credit/debit cards, UPI, net banking, and bank transfers. Enterprise customers can also pay via invoice with NET-30 terms.",
   },
   {
-    question: "Do you offer discounts for annual billing?",
-    answer: "Yes, annual billing saves you 20% compared to monthly billing. Contact us for special pricing.",
+    question: "Do you offer discounts for NGOs or startups?",
+    answer: "Yes! We offer 50% off for registered non-profits and special startup pricing for DIPP-registered startups. Contact us to learn more.",
+  },
+  {
+    question: "What happens to my data if I cancel?",
+    answer: "Your data remains accessible for 30 days after cancellation. You can export all your data during this period. After that, it's securely deleted per GDPR requirements.",
+  },
+  {
+    question: "Is my data secure?",
+    answer: "Yes. We use enterprise-grade encryption (AES-256), are SOC 2 compliant, and host all data in India-based data centers. Your data is never shared with third parties.",
   },
 ];
 
-const comparisonFeatures = [
-  { name: "Emission Sources", free: "3", pro: "Unlimited", enterprise: "Unlimited" },
-  { name: "Team Members", free: "1", pro: "5", enterprise: "Unlimited" },
-  { name: "Reporting Frameworks", free: "None", pro: "BRSR", enterprise: "BRSR, CSRD, CDP, GRI" },
-  { name: "Data Retention", free: "1 year", pro: "5 years", enterprise: "Unlimited" },
-  { name: "Support", free: "Community", pro: "Email (24h)", enterprise: "24/7 Dedicated" },
-  { name: "API Access", free: "—", pro: "—", enterprise: "✓" },
-  { name: "Custom Integrations", free: "—", pro: "—", enterprise: "✓" },
+const trustedBy = [
+  "500+ Companies", "₹50Cr+ Savings Enabled", "1M+ Tonnes Tracked", "100% BRSR Compliant"
 ];
 
 export default function Pricing() {
+  const [isYearly, setIsYearly] = useState(true);
+
+  const formatPrice = (monthly: number | null, yearly: number | null) => {
+    if (monthly === null) return "Custom";
+    const price = isYearly ? yearly : monthly;
+    return `₹${price?.toLocaleString('en-IN')}`;
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <SEO 
-        title="Pricing"
+        title="Pricing - Simple, Transparent Plans"
         url="/pricing"
-        description="Choose the right Zero Graph plan for your business. Free, Pro, and Enterprise options for carbon tracking, BRSR reporting, and carbon credit marketplace access."
+        description="Choose the right Zero Graph plan for your business. Transparent pricing in INR with plans starting at ₹2,499/month. Free trial available."
         keywords="Zero Graph pricing, carbon tracking plans, BRSR reporting cost, carbon offset pricing India, sustainability software pricing"
       />
       <Navbar />
@@ -128,23 +161,52 @@ export default function Pricing() {
             transition={{ duration: 0.5 }}
           >
             <Badge variant="outline" className="mb-4 border-primary/30 text-primary">
-              Simple, Transparent Pricing
+              💰 Save 20% with annual billing
             </Badge>
             <h1 className="text-4xl md:text-5xl font-display font-bold mb-6">
-              Choose the Right Plan for Your{" "}
-              <span className="text-primary">Sustainability Journey</span>
+              Simple, Transparent{" "}
+              <span className="text-primary">Pricing</span>
             </h1>
-            <p className="text-xl text-muted-foreground">
-              From individuals to enterprises, we have a plan that fits your carbon management needs. 
-              Start free, scale as you grow.
+            <p className="text-xl text-muted-foreground mb-8">
+              No hidden fees. No surprises. Start free, scale as you grow.
             </p>
+            
+            {/* Billing Toggle */}
+            <div className="flex items-center justify-center gap-4 mb-8">
+              <span className={`text-sm font-medium ${!isYearly ? 'text-foreground' : 'text-muted-foreground'}`}>
+                Monthly
+              </span>
+              <Switch 
+                checked={isYearly} 
+                onCheckedChange={setIsYearly}
+                className="data-[state=checked]:bg-primary"
+              />
+              <span className={`text-sm font-medium ${isYearly ? 'text-foreground' : 'text-muted-foreground'}`}>
+                Yearly
+              </span>
+              {isYearly && (
+                <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                  Save 20%
+                </Badge>
+              )}
+            </div>
+
+            {/* Trust indicators */}
+            <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
+              {trustedBy.map((item, idx) => (
+                <span key={idx} className="flex items-center gap-1">
+                  <Check className="h-4 w-4 text-primary" />
+                  {item}
+                </span>
+              ))}
+            </div>
           </motion.div>
         </div>
       </section>
 
       {/* Pricing Cards */}
       <section className="py-12 container">
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {plans.map((plan, index) => (
             <motion.div
               key={plan.name}
@@ -155,7 +217,7 @@ export default function Pricing() {
               <Card 
                 className={`relative h-full flex flex-col ${
                   plan.popular 
-                    ? "border-primary shadow-glow scale-105 z-10" 
+                    ? "border-primary shadow-glow scale-[1.02] z-10" 
                     : "border-border/50"
                 }`}
               >
@@ -174,11 +236,26 @@ export default function Pricing() {
                   <CardDescription className="text-muted-foreground">
                     {plan.description}
                   </CardDescription>
+                  <Badge variant="outline" className="mx-auto mt-2">
+                    <Users className="h-3 w-3 mr-1" />
+                    {plan.employees}
+                  </Badge>
                 </CardHeader>
                 <CardContent className="flex-1">
                   <div className="text-center mb-6">
-                    <span className="text-4xl font-bold text-foreground">{plan.price}</span>
-                    <span className="text-muted-foreground">{plan.period}</span>
+                    <div className="flex items-baseline justify-center gap-1">
+                      <span className="text-4xl font-bold text-foreground">
+                        {formatPrice(plan.monthlyPrice, plan.yearlyPrice)}
+                      </span>
+                      {plan.monthlyPrice !== null && (
+                        <span className="text-muted-foreground">/month</span>
+                      )}
+                    </div>
+                    {plan.monthlyPrice !== null && isYearly && (
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Billed annually (₹{((plan.yearlyPrice || 0) * 12).toLocaleString('en-IN')}/year)
+                      </p>
+                    )}
                   </div>
                   <ul className="space-y-3">
                     {plan.features.map((feature) => (
@@ -207,6 +284,7 @@ export default function Pricing() {
                       size="lg"
                     >
                       {plan.cta}
+                      <ArrowRight className="h-4 w-4 ml-2" />
                     </Button>
                   </Link>
                 </CardFooter>
@@ -214,59 +292,25 @@ export default function Pricing() {
             </motion.div>
           ))}
         </div>
+
+        {/* Calculator CTA */}
+        <motion.div 
+          className="text-center mt-12"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+        >
+          <p className="text-muted-foreground mb-4">Not sure which plan fits your needs?</p>
+          <Link to="/calculators">
+            <Button variant="outline" size="lg">
+              <Calculator className="h-4 w-4 mr-2" />
+              Try Our Free Calculator
+            </Button>
+          </Link>
+        </motion.div>
       </section>
 
       {/* Feature Comparison Table */}
-      <section className="py-20 container">
-        <motion.div 
-          className="text-center mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <h2 className="text-3xl font-display font-bold mb-4">
-            Compare Plans
-          </h2>
-          <p className="text-muted-foreground">
-            See what's included in each plan at a glance
-          </p>
-        </motion.div>
-        
-        <motion.div 
-          className="max-w-4xl mx-auto overflow-hidden rounded-xl border border-border/50"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-muted/30">
-                  <th className="text-left p-4 font-medium text-foreground">Feature</th>
-                  <th className="text-center p-4 font-medium text-foreground">Free</th>
-                  <th className="text-center p-4 font-medium text-primary">Pro</th>
-                  <th className="text-center p-4 font-medium text-foreground">Enterprise</th>
-                </tr>
-              </thead>
-              <tbody>
-                {comparisonFeatures.map((feature, index) => (
-                  <tr 
-                    key={feature.name} 
-                    className={index % 2 === 0 ? "bg-background" : "bg-muted/10"}
-                  >
-                    <td className="p-4 text-foreground">{feature.name}</td>
-                    <td className="p-4 text-center text-muted-foreground">{feature.free}</td>
-                    <td className="p-4 text-center text-foreground font-medium">{feature.pro}</td>
-                    <td className="p-4 text-center text-muted-foreground">{feature.enterprise}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* FAQs */}
       <section className="py-20 bg-muted/20">
         <div className="container">
           <motion.div 
@@ -276,70 +320,134 @@ export default function Pricing() {
             viewport={{ once: true }}
           >
             <h2 className="text-3xl font-display font-bold mb-4">
-              Frequently Asked Questions
+              Compare Plans
             </h2>
             <p className="text-muted-foreground">
-              Have questions? We've got answers.
+              See what's included at each level
             </p>
           </motion.div>
           
-          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {faqs.map((faq, index) => (
-              <motion.div
-                key={faq.question}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Card className="h-full border-border/50">
-                  <CardHeader>
-                    <CardTitle className="text-lg flex items-start gap-2">
-                      <HelpCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                      {faq.question}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">{faq.answer}</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
+          <motion.div 
+            className="max-w-4xl mx-auto overflow-hidden rounded-xl border border-border/50 bg-card"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-muted/50">
+                    <th className="text-left p-4 font-medium text-foreground">Feature</th>
+                    <th className="text-center p-4 font-medium text-foreground">
+                      <div>Starter</div>
+                      <div className="text-xs font-normal text-muted-foreground">₹2,499/mo</div>
+                    </th>
+                    <th className="text-center p-4 font-medium text-primary bg-primary/5">
+                      <div>Professional</div>
+                      <div className="text-xs font-normal text-muted-foreground">₹7,499/mo</div>
+                    </th>
+                    <th className="text-center p-4 font-medium text-foreground">
+                      <div>Enterprise</div>
+                      <div className="text-xs font-normal text-muted-foreground">Custom</div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {comparisonFeatures.map((feature, index) => (
+                    <tr 
+                      key={feature.name} 
+                      className={index % 2 === 0 ? "bg-background" : "bg-muted/10"}
+                    >
+                      <td className="p-4 text-foreground font-medium">{feature.name}</td>
+                      <td className="p-4 text-center text-muted-foreground">{feature.starter}</td>
+                      <td className="p-4 text-center text-foreground font-medium bg-primary/5">{feature.professional}</td>
+                      <td className="p-4 text-center text-muted-foreground">{feature.enterprise}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* FAQs */}
       <section className="py-20 container">
         <motion.div 
-          className="max-w-3xl mx-auto text-center"
+          className="text-center mb-12"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
           <h2 className="text-3xl font-display font-bold mb-4">
-            Ready to Start Your Sustainability Journey?
+            Frequently Asked Questions
           </h2>
-          <p className="text-muted-foreground mb-8">
-            Join hundreds of Indian businesses already tracking and reducing their carbon footprint.
+          <p className="text-muted-foreground">
+            Have questions? We've got answers.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/signup">
-              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-glow">
-                Start Free Trial
-              </Button>
-            </Link>
-            <Link to="/consultation">
-              <Button size="lg" variant="outline">
-                Talk to an Expert
-              </Button>
-            </Link>
-          </div>
+        </motion.div>
+        
+        <motion.div 
+          className="max-w-3xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <Accordion type="single" collapsible className="w-full">
+            {faqs.map((faq, index) => (
+              <AccordionItem key={index} value={`item-${index}`}>
+                <AccordionTrigger className="text-left hover:no-underline">
+                  <span className="flex items-center gap-2">
+                    <HelpCircle className="h-4 w-4 text-primary flex-shrink-0" />
+                    {faq.question}
+                  </span>
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground pl-6">
+                  {faq.answer}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </motion.div>
       </section>
 
-      {/* Footer spacer */}
-      <div className="h-20" />
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-primary/5 to-primary/10">
+        <div className="container">
+          <motion.div 
+            className="max-w-3xl mx-auto text-center"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <Zap className="h-12 w-12 text-primary mx-auto mb-4" />
+            <h2 className="text-3xl font-display font-bold mb-4">
+              Ready to Start Your Sustainability Journey?
+            </h2>
+            <p className="text-muted-foreground mb-8">
+              Join 500+ Indian businesses already tracking and reducing their carbon footprint with Zero Graph.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/signup">
+                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-glow min-w-[200px]">
+                  Start Free 14-Day Trial
+                  <ArrowRight className="h-4 w-4 ml-2" />
+                </Button>
+              </Link>
+              <Link to="/consultation">
+                <Button size="lg" variant="outline" className="min-w-[200px]">
+                  Talk to Sales
+                </Button>
+              </Link>
+            </div>
+            <p className="text-sm text-muted-foreground mt-4">
+              No credit card required • Cancel anytime
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      <Footer />
     </div>
   );
 }

@@ -40,6 +40,7 @@ import { EmissionsBreakdownChart } from "@/components/dashboard/EmissionsBreakdo
 import { EmissionsTrendChart } from "@/components/dashboard/EmissionsTrendChart";
 import { ReductionTargets } from "@/components/dashboard/ReductionTargets";
 import { EmissionsByCategory } from "@/components/dashboard/EmissionsByCategory";
+import { AccountingIntegrations } from "@/components/integrations/AccountingIntegrations";
 
 // Import mock data
 import { 
@@ -473,11 +474,16 @@ const Dashboard = () => {
                         Transition 30% of fleet to EVs can save 28 tCO₂e/year and ₹4.2L in fuel costs
                       </p>
                     </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </ScrollReveal>
+477:                   </div>
+478:                 </div>
+479:               </CardContent>
+480:             </Card>
+481:           </ScrollReveal>
+482: 
+483:           {/* Integrations Quick Access */}
+484:           <ScrollReveal delay={0.4}>
+485:             <AccountingIntegrations compact />
+486:           </ScrollReveal>
             </>
           )}
         </main>
