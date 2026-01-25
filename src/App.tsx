@@ -9,6 +9,7 @@ import { CookieConsent } from "@/components/shared/CookieConsent";
 import { GlobalErrorBoundary } from "@/components/shared/GlobalErrorBoundary";
 import { GuidedOnboarding } from "@/components/onboarding/GuidedOnboarding";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
@@ -76,6 +77,7 @@ const App = () => (
               </Routes>
               <GuidedOnboarding />
               <CookieConsent />
+              <InstallPrompt />
             </AuthProvider>
           </BrowserRouter>
         </TooltipProvider>
