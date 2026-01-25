@@ -33,20 +33,20 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border/50 py-16 bg-card/30" role="contentinfo">
-      <div className="container">
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-5 mb-12">
+    <footer className="border-t border-border/50 py-10 md:py-16 bg-card/30" role="contentinfo">
+      <div className="container px-4 md:px-6">
+        <div className="grid gap-8 md:gap-12 grid-cols-2 md:grid-cols-2 lg:grid-cols-5 mb-8 md:mb-12">
           {/* Brand Column */}
-          <ScrollReveal delay={0} className="lg:col-span-2">
-            <div className="flex items-center gap-2 mb-4">
+          <ScrollReveal delay={0} className="col-span-2 lg:col-span-2">
+            <div className="flex items-center gap-2 mb-3 md:mb-4">
               <img 
                 src={zeroGraphLogo} 
                 alt="Zero Graph Logo" 
-                className="h-10 w-10 object-contain"
+                className="h-8 w-8 md:h-10 md:w-10 object-contain"
               />
-              <span className="font-display font-bold text-xl">Zero Graph</span>
+              <span className="font-display font-bold text-lg md:text-xl">Zero Graph</span>
             </div>
-            <p className="text-sm text-muted-foreground mb-4">
+            <p className="text-xs md:text-sm text-muted-foreground mb-3 md:mb-4">
               India's leading carbon intelligence platform for enterprises committed to Net Zero. 
               Track, reduce, and offset your carbon footprint with verified data.
             </p>
@@ -55,7 +55,7 @@ export function Footer() {
                 href="https://twitter.com/ZeroGraph" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="text-muted-foreground hover:text-primary transition-colors" 
+                className="text-muted-foreground hover:text-primary transition-colors p-2 -ml-2" 
                 aria-label="Follow us on Twitter"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -66,7 +66,7 @@ export function Footer() {
                 href="https://linkedin.com/company/zerograph" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="text-muted-foreground hover:text-primary transition-colors" 
+                className="text-muted-foreground hover:text-primary transition-colors p-2" 
                 aria-label="Connect with us on LinkedIn"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -78,12 +78,12 @@ export function Footer() {
 
           {/* Platform Links */}
           <ScrollReveal delay={0.1}>
-            <h4 className="font-semibold mb-4">Platform</h4>
+            <h4 className="font-semibold text-sm md:text-base mb-3 md:mb-4">Platform</h4>
             <nav aria-label="Platform navigation">
-              <ul className="space-y-3 text-sm text-muted-foreground">
+              <ul className="space-y-2 md:space-y-3 text-xs md:text-sm text-muted-foreground">
                 {platformLinks.map((link) => (
                   <li key={link.href}>
-                    <Link to={link.href} className="hover:text-foreground transition-colors">
+                    <Link to={link.href} className="hover:text-foreground transition-colors py-1 inline-block">
                       {link.label}
                     </Link>
                   </li>
@@ -94,12 +94,12 @@ export function Footer() {
 
           {/* Resources Links */}
           <ScrollReveal delay={0.2}>
-            <h4 className="font-semibold mb-4">Resources</h4>
+            <h4 className="font-semibold text-sm md:text-base mb-3 md:mb-4">Resources</h4>
             <nav aria-label="Resources navigation">
-              <ul className="space-y-3 text-sm text-muted-foreground">
+              <ul className="space-y-2 md:space-y-3 text-xs md:text-sm text-muted-foreground">
                 {resourceLinks.map((link) => (
                   <li key={link.href}>
-                    <Link to={link.href} className="hover:text-foreground transition-colors">
+                    <Link to={link.href} className="hover:text-foreground transition-colors py-1 inline-block">
                       {link.label}
                     </Link>
                   </li>
@@ -110,18 +110,18 @@ export function Footer() {
 
           {/* Company Links */}
           <ScrollReveal delay={0.3}>
-            <h4 className="font-semibold mb-4">Company</h4>
+            <h4 className="font-semibold text-sm md:text-base mb-3 md:mb-4">Company</h4>
             <nav aria-label="Company navigation">
-              <ul className="space-y-3 text-sm text-muted-foreground">
+              <ul className="space-y-2 md:space-y-3 text-xs md:text-sm text-muted-foreground">
                 {companyLinks.map((link) => (
                   <li key={link.href}>
-                    <Link to={link.href} className="hover:text-foreground transition-colors">
+                    <Link to={link.href} className="hover:text-foreground transition-colors py-1 inline-block">
                       {link.label}
                     </Link>
                   </li>
                 ))}
                 <li>
-                  <a href="mailto:info@zerograph.in" className="hover:text-foreground transition-colors">
+                  <a href="mailto:info@zerograph.in" className="hover:text-foreground transition-colors py-1 inline-block break-all">
                     info@zerograph.in
                   </a>
                 </li>
@@ -131,15 +131,15 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-border/50 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-muted-foreground">
+        <div className="border-t border-border/50 pt-6 md:pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-xs md:text-sm text-muted-foreground text-center md:text-left">
             © {currentYear} Zero Graph. All rights reserved.
           </p>
           <nav aria-label="Legal navigation">
-            <ul className="flex gap-6 text-sm text-muted-foreground">
+            <ul className="flex flex-wrap justify-center gap-4 md:gap-6 text-xs md:text-sm text-muted-foreground">
               {legalLinks.map((link) => (
                 <li key={link.href}>
-                  <Link to={link.href} className="hover:text-foreground transition-colors">
+                  <Link to={link.href} className="hover:text-foreground transition-colors py-1">
                     {link.label}
                   </Link>
                 </li>

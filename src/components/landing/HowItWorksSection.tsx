@@ -49,27 +49,27 @@ const steps = [
 
 export function HowItWorksSection() {
   return (
-    <section className="py-24 relative overflow-hidden">
+    <section className="py-16 md:py-24 relative overflow-hidden">
       <div className="absolute inset-0 grid-background opacity-20" />
       
-      <div className="container relative z-10">
-        <ScrollReveal className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-sm font-medium text-secondary mb-6">
-            <Leaf className="h-4 w-4" />
+      <div className="container relative z-10 px-4 md:px-6">
+        <ScrollReveal className="text-center max-w-3xl mx-auto mb-10 md:mb-16">
+          <div className="inline-flex items-center gap-2 rounded-full glass px-3 md:px-4 py-1.5 md:py-2 text-xs md:text-sm font-medium text-secondary mb-4 md:mb-6">
+            <Leaf className="h-3.5 w-3.5 md:h-4 md:w-4" />
             <span>HOW IT WORKS</span>
           </div>
-          <h2 className="text-3xl lg:text-5xl font-bold font-display mb-4">
+          <h2 className="text-2xl sm:text-3xl lg:text-5xl font-bold font-display mb-3 md:mb-4">
             <span className="text-foreground">From Data to </span>
             <span className="text-primary">Decarbonization</span>
             <span className="text-foreground"> in 4 Steps</span>
           </h2>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-sm md:text-lg text-muted-foreground">
             Go from scattered data to actionable climate strategy in minutes, not months.
           </p>
         </ScrollReveal>
 
         {/* Steps Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-8 md:mb-12">
           {steps.map((step, index) => (
             <motion.div
               key={step.title}
@@ -84,26 +84,26 @@ export function HowItWorksSection() {
                 <div className="hidden lg:block absolute top-16 left-full w-full h-0.5 bg-gradient-to-r from-border via-primary/30 to-border z-0" />
               )}
               
-              <div className="relative bg-card rounded-2xl border border-border p-6 h-full hover:shadow-xl transition-all hover:-translate-y-1">
+              <div className="relative bg-card rounded-xl md:rounded-2xl border border-border p-4 md:p-6 h-full hover:shadow-xl transition-all hover:-translate-y-1">
                 {/* Step Number */}
-                <div className={`absolute -top-3 -left-3 w-10 h-10 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center text-white font-bold text-sm shadow-lg`}>
+                <div className={`absolute -top-2 -left-2 md:-top-3 md:-left-3 w-7 h-7 md:w-10 md:h-10 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center text-white font-bold text-[10px] md:text-sm shadow-lg`}>
                   {step.number}
                 </div>
 
                 {/* Icon */}
-                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${step.color} bg-opacity-10 flex items-center justify-center mb-4 mt-2`}>
-                  <step.icon className="h-7 w-7 text-primary" />
+                <div className={`w-10 h-10 md:w-14 md:h-14 rounded-lg md:rounded-xl bg-gradient-to-br ${step.color} bg-opacity-10 flex items-center justify-center mb-3 md:mb-4 mt-2`}>
+                  <step.icon className="h-5 w-5 md:h-7 md:w-7 text-primary" />
                 </div>
 
                 {/* Content */}
-                <h3 className="text-lg font-bold font-display mb-2">{step.title}</h3>
-                <p className="text-sm text-muted-foreground mb-4">{step.description}</p>
+                <h3 className="text-sm md:text-lg font-bold font-display mb-1 md:mb-2">{step.title}</h3>
+                <p className="text-xs md:text-sm text-muted-foreground mb-2 md:mb-4 line-clamp-3 md:line-clamp-none">{step.description}</p>
 
                 {/* Features */}
-                <div className="space-y-2">
+                <div className="space-y-1 md:space-y-2 hidden sm:block">
                   {step.features.map((feature) => (
-                    <div key={feature} className="flex items-center gap-2 text-xs">
-                      <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
+                    <div key={feature} className="flex items-center gap-1.5 md:gap-2 text-[10px] md:text-xs">
+                      <CheckCircle2 className="h-3 w-3 md:h-3.5 md:w-3.5 text-primary flex-shrink-0" />
                       <span className="text-muted-foreground">{feature}</span>
                     </div>
                   ))}
@@ -120,20 +120,20 @@ export function HowItWorksSection() {
           viewport={{ once: true }}
           className="text-center"
         >
-          <div className="inline-flex flex-col sm:flex-row gap-4">
-            <Link to="/signup">
-              <Button size="lg" className="gap-2">
+          <div className="inline-flex flex-col sm:flex-row gap-3 md:gap-4">
+            <Link to="/signup" className="w-full sm:w-auto">
+              <Button size="lg" className="w-full sm:w-auto gap-2 text-sm md:text-base">
                 Start Free Trial
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
-            <Link to="/consultation">
-              <Button size="lg" variant="outline" className="gap-2">
+            <Link to="/consultation" className="w-full sm:w-auto">
+              <Button size="lg" variant="outline" className="w-full sm:w-auto gap-2 text-sm md:text-base">
                 Schedule Demo
               </Button>
             </Link>
           </div>
-          <p className="mt-4 text-sm text-muted-foreground">
+          <p className="mt-3 md:mt-4 text-xs md:text-sm text-muted-foreground">
             No credit card required • 14-day free trial • Cancel anytime
           </p>
         </motion.div>
