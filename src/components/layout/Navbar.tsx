@@ -347,57 +347,57 @@ export function Navbar() {
       {/* Mobile Menu */}
       {mobileMenuOpen && (
         <motion.div 
-          className="border-t border-border/50 bg-background/95 backdrop-blur-xl lg:hidden"
+          className="border-t border-border/50 bg-background/95 backdrop-blur-xl lg:hidden max-h-[calc(100vh-4rem)] overflow-y-auto"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
         >
-          <div className="container py-4 space-y-4">
-            <div className="space-y-2">
-              <p className="text-xs font-semibold text-muted-foreground uppercase px-4">Solutions</p>
+          <div className="container py-4 space-y-3">
+            <div className="space-y-1">
+              <p className="text-xs font-semibold text-muted-foreground uppercase px-4 py-2">Solutions</p>
               {solutions.map((item) => (
                 <Link
                   key={item.title}
                   to={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-muted/50"
+                  className="flex items-center gap-3 rounded-lg px-4 py-3.5 text-sm font-medium transition-colors hover:bg-muted/50 active:bg-muted"
                 >
-                  <item.icon className="h-5 w-5 text-primary" />
+                  <item.icon className="h-5 w-5 text-primary flex-shrink-0" />
                   <span className="text-foreground">{item.title}</span>
                 </Link>
               ))}
             </div>
-            <div className="space-y-2">
-              <p className="text-xs font-semibold text-muted-foreground uppercase px-4">Platforms</p>
+            <div className="space-y-1">
+              <p className="text-xs font-semibold text-muted-foreground uppercase px-4 py-2">Platforms</p>
               {platforms.map((item) => (
                 <Link
                   key={item.title}
                   to={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-muted/50"
+                  className="flex items-center gap-3 rounded-lg px-4 py-3.5 text-sm font-medium transition-colors hover:bg-muted/50 active:bg-muted"
                 >
-                  <item.icon className="h-5 w-5 text-primary" />
+                  <item.icon className="h-5 w-5 text-primary flex-shrink-0" />
                   <span className="text-foreground">{item.title}</span>
                 </Link>
               ))}
             </div>
-            <div className="space-y-2">
-              <p className="text-xs font-semibold text-muted-foreground uppercase px-4">Calculators</p>
+            <div className="space-y-1">
+              <p className="text-xs font-semibold text-muted-foreground uppercase px-4 py-2">Calculators</p>
               <Link
                 to="/calculators"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-muted/50"
+                className="flex items-center gap-3 rounded-lg px-4 py-3.5 text-sm font-medium transition-colors hover:bg-muted/50 active:bg-muted"
               >
-                <Calculator className="h-5 w-5 text-primary" />
+                <Calculator className="h-5 w-5 text-primary flex-shrink-0" />
                 <span className="text-foreground">All Calculators</span>
               </Link>
             </div>
-            <div className="flex flex-col gap-2 pt-4 border-t border-border/50">
-              <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
-                <Button variant="outline" className="w-full border-border/50">Login</Button>
+            <div className="flex flex-col gap-3 pt-4 border-t border-border/50 px-4">
+              <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="w-full">
+                <Button variant="outline" className="w-full h-12 text-base border-border/50">Login</Button>
               </Link>
-              <Link to="/signup" onClick={() => setMobileMenuOpen(false)}>
-                <Button className="w-full bg-primary text-primary-foreground">Sign Up</Button>
+              <Link to="/signup" onClick={() => setMobileMenuOpen(false)} className="w-full">
+                <Button className="w-full h-12 text-base bg-primary text-primary-foreground">Sign Up</Button>
               </Link>
             </div>
           </div>
