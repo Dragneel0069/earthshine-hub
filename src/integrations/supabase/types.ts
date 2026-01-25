@@ -101,6 +101,232 @@ export type Database = {
         }
         Relationships: []
       }
+      credit_orders: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          beneficiary_name: string | null
+          beneficiary_type: string | null
+          cancellation_reason: string | null
+          cancelled_at: string | null
+          catalog_id: string
+          created_at: string | null
+          created_by: string
+          escrow_released_at: string | null
+          escrow_started_at: string | null
+          failed_at: string | null
+          failure_reason: string | null
+          gst_amount: number
+          id: string
+          order_number: string
+          org_id: string
+          paid_at: string | null
+          payment_method: string | null
+          payment_reference: string | null
+          platform_fee: number
+          price_per_ton: number
+          quantity: number
+          registry_retirement_id: string | null
+          retired_at: string | null
+          retirement_reason: string | null
+          status: Database["public"]["Enums"]["order_status"]
+          subtotal: number
+          total_amount: number
+          updated_at: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          beneficiary_name?: string | null
+          beneficiary_type?: string | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          catalog_id: string
+          created_at?: string | null
+          created_by: string
+          escrow_released_at?: string | null
+          escrow_started_at?: string | null
+          failed_at?: string | null
+          failure_reason?: string | null
+          gst_amount?: number
+          id?: string
+          order_number: string
+          org_id: string
+          paid_at?: string | null
+          payment_method?: string | null
+          payment_reference?: string | null
+          platform_fee?: number
+          price_per_ton: number
+          quantity: number
+          registry_retirement_id?: string | null
+          retired_at?: string | null
+          retirement_reason?: string | null
+          status?: Database["public"]["Enums"]["order_status"]
+          subtotal: number
+          total_amount: number
+          updated_at?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          beneficiary_name?: string | null
+          beneficiary_type?: string | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          catalog_id?: string
+          created_at?: string | null
+          created_by?: string
+          escrow_released_at?: string | null
+          escrow_started_at?: string | null
+          failed_at?: string | null
+          failure_reason?: string | null
+          gst_amount?: number
+          id?: string
+          order_number?: string
+          org_id?: string
+          paid_at?: string | null
+          payment_method?: string | null
+          payment_reference?: string | null
+          platform_fee?: number
+          price_per_ton?: number
+          quantity?: number
+          registry_retirement_id?: string | null
+          retired_at?: string | null
+          retirement_reason?: string | null
+          status?: Database["public"]["Enums"]["order_status"]
+          subtotal?: number
+          total_amount?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "credit_orders_approved_by_fkey"
+            columns: ["approved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credit_orders_catalog_id_fkey"
+            columns: ["catalog_id"]
+            isOneToOne: false
+            referencedRelation: "credits_catalog"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credit_orders_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credit_orders_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      credits_catalog: {
+        Row: {
+          available_credits: number
+          co_benefits: string[] | null
+          country: string
+          created_at: string | null
+          currency: string
+          description: string | null
+          documentation_url: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          listed_by: string | null
+          methodology_id: string | null
+          price_per_ton: number
+          project_name: string
+          project_type: string
+          quality_breakdown: Json | null
+          quality_score: number
+          registry: string
+          reserved_credits: number
+          retired_credits: number
+          sdg_alignment: number[] | null
+          state: string | null
+          total_credits: number
+          updated_at: string | null
+          verification_body: string | null
+          verification_date: string | null
+          vintage_year: number
+        }
+        Insert: {
+          available_credits?: number
+          co_benefits?: string[] | null
+          country?: string
+          created_at?: string | null
+          currency?: string
+          description?: string | null
+          documentation_url?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          listed_by?: string | null
+          methodology_id?: string | null
+          price_per_ton: number
+          project_name: string
+          project_type: string
+          quality_breakdown?: Json | null
+          quality_score?: number
+          registry: string
+          reserved_credits?: number
+          retired_credits?: number
+          sdg_alignment?: number[] | null
+          state?: string | null
+          total_credits?: number
+          updated_at?: string | null
+          verification_body?: string | null
+          verification_date?: string | null
+          vintage_year: number
+        }
+        Update: {
+          available_credits?: number
+          co_benefits?: string[] | null
+          country?: string
+          created_at?: string | null
+          currency?: string
+          description?: string | null
+          documentation_url?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          listed_by?: string | null
+          methodology_id?: string | null
+          price_per_ton?: number
+          project_name?: string
+          project_type?: string
+          quality_breakdown?: Json | null
+          quality_score?: number
+          registry?: string
+          reserved_credits?: number
+          retired_credits?: number
+          sdg_alignment?: number[] | null
+          state?: string | null
+          total_credits?: number
+          updated_at?: string | null
+          verification_body?: string | null
+          verification_date?: string | null
+          vintage_year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "credits_catalog_listed_by_fkey"
+            columns: ["listed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       emissions_records: {
         Row: {
           activity_data: number
@@ -676,6 +902,81 @@ export type Database = {
           },
         ]
       }
+      retirement_proofs: {
+        Row: {
+          beneficiary_name: string
+          beneficiary_type: string | null
+          blockchain_tx_id: string | null
+          catalog_snapshot: Json
+          certificate_number: string
+          certificate_url: string | null
+          created_at: string | null
+          generated_at: string | null
+          id: string
+          order_id: string
+          org_id: string
+          quantity: number
+          registry: string
+          registry_confirmation_date: string | null
+          registry_retirement_id: string | null
+          retirement_reason: string | null
+          verification_hash: string | null
+        }
+        Insert: {
+          beneficiary_name: string
+          beneficiary_type?: string | null
+          blockchain_tx_id?: string | null
+          catalog_snapshot: Json
+          certificate_number: string
+          certificate_url?: string | null
+          created_at?: string | null
+          generated_at?: string | null
+          id?: string
+          order_id: string
+          org_id: string
+          quantity: number
+          registry: string
+          registry_confirmation_date?: string | null
+          registry_retirement_id?: string | null
+          retirement_reason?: string | null
+          verification_hash?: string | null
+        }
+        Update: {
+          beneficiary_name?: string
+          beneficiary_type?: string | null
+          blockchain_tx_id?: string | null
+          catalog_snapshot?: Json
+          certificate_number?: string
+          certificate_url?: string | null
+          created_at?: string | null
+          generated_at?: string | null
+          id?: string
+          order_id?: string
+          org_id?: string
+          quantity?: number
+          registry?: string
+          registry_confirmation_date?: string | null
+          registry_retirement_id?: string | null
+          retirement_reason?: string | null
+          verification_hash?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "retirement_proofs_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "credit_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "retirement_proofs_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -683,6 +984,16 @@ export type Database = {
     Functions: {
       approve_emission: { Args: { _emission_id: string }; Returns: Json }
       approve_report: { Args: { _report_id: string }; Returns: Json }
+      cancel_order: {
+        Args: { _order_id: string; _reason: string }
+        Returns: Json
+      }
+      complete_retirement: {
+        Args: { _order_id: string; _registry_retirement_id?: string }
+        Returns: Json
+      }
+      generate_certificate_number: { Args: never; Returns: string }
+      generate_order_number: { Args: never; Returns: string }
       has_org_role: {
         Args: {
           _org_id: string
@@ -706,6 +1017,17 @@ export type Database = {
         }
         Returns: boolean
       }
+      initiate_order: {
+        Args: {
+          _beneficiary_name?: string
+          _beneficiary_type?: string
+          _catalog_id: string
+          _org_id: string
+          _quantity: number
+          _retirement_reason?: string
+        }
+        Returns: Json
+      }
       is_org_member: {
         Args: { _org_id: string; _user_id: string }
         Returns: boolean
@@ -722,6 +1044,10 @@ export type Database = {
           _org_id: string
         }
         Returns: undefined
+      }
+      mark_order_paid: {
+        Args: { _order_id: string; _payment_reference: string }
+        Returns: Json
       }
       reject_emission: {
         Args: { _emission_id: string; _reason: string }
@@ -751,6 +1077,7 @@ export type Database = {
           similarity: number
         }[]
       }
+      start_escrow: { Args: { _order_id: string }; Returns: Json }
       submit_emission_for_review: {
         Args: { _emission_id: string }
         Returns: Json
