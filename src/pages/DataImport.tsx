@@ -34,15 +34,9 @@ export default function DataImport() {
   }, [user]);
 
   const fetchImportHistory = async () => {
-    const { data, error } = await (supabase
-      .from('csv_imports') as any)
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(10);
-
-    if (!error && data) {
-      setImportHistory(data);
-    }
+    // CSV imports table removed in Phase 1 migration
+    // Will be re-implemented in Phase 3 with org-scoped imports
+    setImportHistory([]);
   };
 
   return (
