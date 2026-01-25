@@ -156,13 +156,23 @@ export default function ComplianceHub() {
     queryKey: ["userProfile", user?.id],
     queryFn: async () => {
       if (!user) return null;
-      const { data, error } = await supabase
-        .from("users")
-        .select("*")
+      // Get user's organization
+      const { data: membership } = await supabase
+        .from("organization_members")
+        .select("org_id, organizations(*)")
         .eq("user_id", user.id)
+        .limit(1)
         .single();
-      if (error) throw error;
-      return data;
+      
+      if (!membership) return null;
+      const org = (membership as any).organizations;
+      return {
+        company_name: org?.name || '',
+        industry_type: org?.sector || '',
+        city: org?.city || '',
+        state: org?.state || '',
+        gst_number: org?.gst_number || '',
+      };
     },
     enabled: !!user,
   });

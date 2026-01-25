@@ -101,6 +101,112 @@ export type Database = {
         }
         Relationships: []
       }
+      emissions_records: {
+        Row: {
+          activity_data: number
+          activity_unit: string
+          approved_at: string | null
+          approved_by: string | null
+          category: string
+          co2e_kg: number
+          created_at: string | null
+          created_by: string
+          emission_factor: number | null
+          emission_factor_source: string | null
+          evidence_url: string | null
+          facility_location: string | null
+          id: string
+          locked_at: string | null
+          notes: string | null
+          org_id: string
+          rejection_reason: string | null
+          reporting_period_end: string
+          reporting_period_start: string
+          reporting_year: number
+          scope: number
+          source: string | null
+          status: Database["public"]["Enums"]["record_status"]
+          sub_category: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          activity_data: number
+          activity_unit: string
+          approved_at?: string | null
+          approved_by?: string | null
+          category: string
+          co2e_kg: number
+          created_at?: string | null
+          created_by: string
+          emission_factor?: number | null
+          emission_factor_source?: string | null
+          evidence_url?: string | null
+          facility_location?: string | null
+          id?: string
+          locked_at?: string | null
+          notes?: string | null
+          org_id: string
+          rejection_reason?: string | null
+          reporting_period_end: string
+          reporting_period_start: string
+          reporting_year: number
+          scope: number
+          source?: string | null
+          status?: Database["public"]["Enums"]["record_status"]
+          sub_category?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          activity_data?: number
+          activity_unit?: string
+          approved_at?: string | null
+          approved_by?: string | null
+          category?: string
+          co2e_kg?: number
+          created_at?: string | null
+          created_by?: string
+          emission_factor?: number | null
+          emission_factor_source?: string | null
+          evidence_url?: string | null
+          facility_location?: string | null
+          id?: string
+          locked_at?: string | null
+          notes?: string | null
+          org_id?: string
+          rejection_reason?: string | null
+          reporting_period_end?: string
+          reporting_period_start?: string
+          reporting_year?: number
+          scope?: number
+          source?: string | null
+          status?: Database["public"]["Enums"]["record_status"]
+          sub_category?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "emissions_records_approved_by_fkey"
+            columns: ["approved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "emissions_records_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "emissions_records_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ledger: {
         Row: {
           action: string
@@ -466,11 +572,117 @@ export type Database = {
           },
         ]
       }
+      reports: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          created_at: string | null
+          created_by: string
+          file_url: string | null
+          id: string
+          locked_at: string | null
+          locked_by: string | null
+          notes: string | null
+          org_id: string
+          rejection_reason: string | null
+          report_data: Json
+          report_type: Database["public"]["Enums"]["report_type"]
+          reporting_period_end: string | null
+          reporting_period_start: string | null
+          reporting_year: number
+          status: Database["public"]["Enums"]["record_status"]
+          summary: string | null
+          supporting_docs: Json | null
+          title: string
+          updated_at: string | null
+          version: number | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string | null
+          created_by: string
+          file_url?: string | null
+          id?: string
+          locked_at?: string | null
+          locked_by?: string | null
+          notes?: string | null
+          org_id: string
+          rejection_reason?: string | null
+          report_data?: Json
+          report_type: Database["public"]["Enums"]["report_type"]
+          reporting_period_end?: string | null
+          reporting_period_start?: string | null
+          reporting_year: number
+          status?: Database["public"]["Enums"]["record_status"]
+          summary?: string | null
+          supporting_docs?: Json | null
+          title: string
+          updated_at?: string | null
+          version?: number | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string | null
+          created_by?: string
+          file_url?: string | null
+          id?: string
+          locked_at?: string | null
+          locked_by?: string | null
+          notes?: string | null
+          org_id?: string
+          rejection_reason?: string | null
+          report_data?: Json
+          report_type?: Database["public"]["Enums"]["report_type"]
+          reporting_period_end?: string | null
+          reporting_period_start?: string | null
+          reporting_year?: number
+          status?: Database["public"]["Enums"]["record_status"]
+          summary?: string | null
+          supporting_docs?: Json | null
+          title?: string
+          updated_at?: string | null
+          version?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reports_approved_by_fkey"
+            columns: ["approved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reports_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reports_locked_by_fkey"
+            columns: ["locked_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reports_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      approve_emission: { Args: { _emission_id: string }; Returns: Json }
+      approve_report: { Args: { _report_id: string }; Returns: Json }
       has_org_role: {
         Args: {
           _org_id: string
@@ -498,6 +710,7 @@ export type Database = {
         Args: { _org_id: string; _user_id: string }
         Returns: boolean
       }
+      lock_report: { Args: { _report_id: string }; Returns: Json }
       log_to_ledger: {
         Args: {
           _action: string
@@ -509,6 +722,10 @@ export type Database = {
           _org_id: string
         }
         Returns: undefined
+      }
+      reject_emission: {
+        Args: { _emission_id: string; _reason: string }
+        Returns: Json
       }
       search_chunks_fulltext: {
         Args: { match_count?: number; search_query: string }
@@ -534,6 +751,11 @@ export type Database = {
           similarity: number
         }[]
       }
+      submit_emission_for_review: {
+        Args: { _emission_id: string }
+        Returns: Json
+      }
+      submit_report_for_review: { Args: { _report_id: string }; Returns: Json }
     }
     Enums: {
       order_status:

@@ -270,25 +270,9 @@ export default function SustainabilityQuiz() {
     const recommendations = getRecommendations(score);
 
     try {
-      let userId = null;
-      if (user) {
-        const { data: profile } = await supabase
-          .from("users")
-          .select("id")
-          .eq("user_id", user.id)
-          .single();
-        userId = profile?.id;
-      }
-
-      await supabase.from("quiz_responses").insert({
-        user_id: userId,
-        session_id: crypto.randomUUID(),
-        quiz_type: "sustainability_readiness",
-        responses: answers,
-        score,
-        recommendations,
-      });
-
+      // Quiz responses table removed in Phase 1 migration
+      // Results shown locally, will be saved when table is re-added in Phase 3
+      console.log('Quiz completed:', { score, recommendations });
       setShowResults(true);
     } catch (error) {
       console.error("Failed to save quiz:", error);

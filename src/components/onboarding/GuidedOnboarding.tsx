@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import { 
   Building2, 
-  Calendar, 
-  MapPin, 
   Users, 
   Target, 
   Check, 
@@ -18,12 +16,9 @@ import {
   Lightbulb
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -48,7 +43,7 @@ const STEPS = [
   },
   { 
     id: 2, 
-    title: 'Your Company',
+    title: 'Your Organization',
     subtitle: 'Tell us about your business',
     icon: Building2,
     tip: 'We use this to customize emission factors'
@@ -150,8 +145,8 @@ export function GuidedOnboarding({ open: controlledOpen, onComplete }: GuidedOnb
   const [direction, setDirection] = useState(0);
 
   const [settings, setSettings] = useState({
-    company_name: '',
-    industry_type: '',
+    organization_name: '',
+    sector: '',
     company_size: '',
     primary_goal: '',
   });
@@ -171,31 +166,20 @@ export function GuidedOnboarding({ open: controlledOpen, onComplete }: GuidedOnb
   const checkOnboardingStatus = async () => {
     if (!user) return;
     
-    const { data, error } = await supabase
-      .from('organization_settings')
-      .select('onboarding_completed')
+    // Check if user has any organizations
+    const { data: memberships } = await supabase
+      .from('organization_members')
+      .select('org_id')
       .eq('user_id', user.id)
-      .maybeSingle();
+      .limit(1);
 
-    if (error) {
-      console.error('Error checking onboarding:', error);
-      setHasCompletedOnboarding(false);
-      if (controlledOpen === undefined) {
-        setIsOpen(true);
-      }
-      return;
-    }
-
-    if (!data) {
+    if (!memberships || memberships.length === 0) {
       setHasCompletedOnboarding(false);
       if (controlledOpen === undefined) {
         setIsOpen(true);
       }
     } else {
-      setHasCompletedOnboarding(data.onboarding_completed);
-      if (!data.onboarding_completed && controlledOpen === undefined) {
-        setIsOpen(true);
-      }
+      setHasCompletedOnboarding(true);
     }
   };
 
@@ -204,36 +188,36 @@ export function GuidedOnboarding({ open: controlledOpen, onComplete }: GuidedOnb
     
     setIsLoading(true);
 
-    const { error } = await (supabase.from('organization_settings') as any).upsert({
-      user_id: user.id,
-      company_name: settings.company_name,
-      industry_type: settings.industry_type,
-      company_size: settings.company_size,
-      onboarding_completed: true,
-    }, { onConflict: 'user_id' });
+    try {
+      // Create organization
+      const { data: org, error: orgError } = await supabase
+        .from('organizations')
+        .insert({
+          name: settings.organization_name,
+          sector: settings.sector,
+        })
+        .select()
+        .single();
 
-    if (error) {
-      toast({ variant: 'destructive', title: 'Failed to save settings' });
+      if (orgError) throw orgError;
+
+      // The trigger will auto-add user as admin
+      
+      toast({ title: '🎉 Setup complete!', description: 'Your organization is ready' });
+      setIsOpen(false);
+      setHasCompletedOnboarding(true);
+      
+      if (onComplete) {
+        onComplete();
+      } else {
+        navigate('/dashboard');
+      }
+    } catch (error) {
+      console.error('Onboarding error:', error);
+      toast({ variant: 'destructive', title: 'Failed to complete setup' });
+    } finally {
       setIsLoading(false);
-      return;
     }
-
-    await supabase.from('users').update({
-      company_name: settings.company_name,
-      industry_type: settings.industry_type,
-    }).eq('user_id', user.id);
-
-    toast({ title: '🎉 Setup complete!', description: 'Your dashboard is ready' });
-    setIsOpen(false);
-    setHasCompletedOnboarding(true);
-    
-    if (onComplete) {
-      onComplete();
-    } else {
-      navigate('/dashboard');
-    }
-
-    setIsLoading(false);
   };
 
   const progress = ((step - 1) / (STEPS.length - 1)) * 100;
@@ -257,11 +241,11 @@ export function GuidedOnboarding({ open: controlledOpen, onComplete }: GuidedOnb
       case 1:
         return true;
       case 2:
-        return settings.company_name.length >= 2;
+        return settings.organization_name.length >= 2;
       case 3:
         return !!settings.company_size;
       case 4:
-        return !!settings.industry_type;
+        return !!settings.sector;
       case 5:
         return !!settings.primary_goal;
       case 6:
@@ -297,8 +281,9 @@ export function GuidedOnboarding({ open: controlledOpen, onComplete }: GuidedOnb
       <DialogContent className="max-w-xl p-0 overflow-hidden bg-gradient-to-b from-background to-muted/30" aria-describedby="guided-onboarding-description">
         <VisuallyHidden>
           <DialogTitle>Welcome Setup</DialogTitle>
-          <DialogDescription id="guided-onboarding-description">Personalize your Zero Graph experience</DialogDescription>
+          <DialogDescription id="guided-onboarding-description">Set up your organization on Zero Graph</DialogDescription>
         </VisuallyHidden>
+        
         {/* Progress Bar */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-muted">
           <motion.div 
@@ -373,20 +358,20 @@ export function GuidedOnboarding({ open: controlledOpen, onComplete }: GuidedOnb
                     </div>
                   </div>
                   <p className="text-center text-muted-foreground">
-                    Answer a few quick questions to personalize your Zero Graph experience
+                    Answer a few quick questions to set up your organization
                   </p>
                 </div>
               )}
 
-              {/* Step 2: Company Name */}
+              {/* Step 2: Organization Name */}
               {step === 2 && (
                 <div className="space-y-4 max-w-sm mx-auto">
                   <div>
-                    <Label className="text-base">What's your company name?</Label>
+                    <Label className="text-base">What's your organization name?</Label>
                     <Input
-                      value={settings.company_name}
-                      onChange={e => setSettings(prev => ({ ...prev, company_name: e.target.value }))}
-                      placeholder="Enter your company name"
+                      value={settings.organization_name}
+                      onChange={e => setSettings(prev => ({ ...prev, organization_name: e.target.value }))}
+                      placeholder="Enter your organization name"
                       className="mt-2 h-12 text-lg"
                       autoFocus
                     />
@@ -394,7 +379,7 @@ export function GuidedOnboarding({ open: controlledOpen, onComplete }: GuidedOnb
                 </div>
               )}
 
-              {/* Step 3: Company Size */}
+              {/* Step 3: Organization Size */}
               {step === 3 && (
                 <div className="space-y-4">
                   <Label className="text-base block text-center">How many employees?</Label>
@@ -427,11 +412,11 @@ export function GuidedOnboarding({ open: controlledOpen, onComplete }: GuidedOnb
                       <Card
                         key={ind.value}
                         className={`cursor-pointer transition-all p-3 ${
-                          settings.industry_type === ind.value 
+                          settings.sector === ind.value 
                             ? 'border-primary ring-2 ring-primary/20 bg-primary/5' 
                             : 'hover:border-primary/50'
                         }`}
-                        onClick={() => setSettings(prev => ({ ...prev, industry_type: ind.value }))}
+                        onClick={() => setSettings(prev => ({ ...prev, sector: ind.value }))}
                       >
                         <div className="flex items-center gap-2">
                           <span className="text-xl">{ind.icon}</span>
@@ -488,20 +473,10 @@ export function GuidedOnboarding({ open: controlledOpen, onComplete }: GuidedOnb
                     <Check className="h-10 w-10 text-green-600" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold">You're all set, {settings.company_name}!</h3>
+                    <h3 className="text-xl font-bold">You're all set, {settings.organization_name}!</h3>
                     <p className="text-muted-foreground mt-2">
-                      Your personalized dashboard is ready with industry-specific emission factors
+                      Your organization is ready to start tracking emissions
                     </p>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 text-left max-w-sm mx-auto">
-                    <div className="p-3 rounded-lg bg-muted/50">
-                      <p className="text-xs text-muted-foreground">Industry</p>
-                      <p className="font-medium">{INDUSTRIES.find(i => i.value === settings.industry_type)?.label}</p>
-                    </div>
-                    <div className="p-3 rounded-lg bg-muted/50">
-                      <p className="text-xs text-muted-foreground">Goal</p>
-                      <p className="font-medium">{GOALS.find(g => g.value === settings.primary_goal)?.label}</p>
-                    </div>
                   </div>
                 </div>
               )}
@@ -509,7 +484,7 @@ export function GuidedOnboarding({ open: controlledOpen, onComplete }: GuidedOnb
           </AnimatePresence>
 
           {/* Navigation */}
-          <div className="flex items-center justify-between mt-6 pt-4 border-t">
+          <div className="flex justify-between mt-6 pt-4 border-t">
             <Button
               variant="ghost"
               onClick={goBack}
@@ -519,18 +494,14 @@ export function GuidedOnboarding({ open: controlledOpen, onComplete }: GuidedOnb
               <ChevronLeft className="h-4 w-4 mr-1" />
               Back
             </Button>
-            <Button
-              onClick={goNext}
-              disabled={!canProceed() || isLoading}
-              className="min-w-[140px]"
-            >
+            <Button onClick={goNext} disabled={!canProceed() || isLoading}>
               {isLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : step === STEPS.length ? (
-                'Go to Dashboard'
+                'Get Started'
               ) : (
                 <>
-                  Continue
+                  Next
                   <ChevronRight className="h-4 w-4 ml-1" />
                 </>
               )}
