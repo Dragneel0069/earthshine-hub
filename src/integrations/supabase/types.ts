@@ -101,569 +101,234 @@ export type Database = {
         }
         Relationships: []
       }
-      carbon_projects: {
-        Row: {
-          additionality_score: number | null
-          available_credits: number
-          co_benefits: string[] | null
-          country: string | null
-          created_at: string
-          description: string | null
-          developer: string | null
-          documents: Json | null
-          id: string
-          impact_details: string | null
-          location: string
-          methodology_id: string | null
-          permanence_risk: string | null
-          price_per_credit: number
-          project_name: string
-          project_type: string
-          registry: string | null
-          sdg_alignment: Json | null
-          total_credits: number
-          updated_at: string
-          verification_body: string | null
-          verification_status: string
-        }
-        Insert: {
-          additionality_score?: number | null
-          available_credits?: number
-          co_benefits?: string[] | null
-          country?: string | null
-          created_at?: string
-          description?: string | null
-          developer?: string | null
-          documents?: Json | null
-          id?: string
-          impact_details?: string | null
-          location: string
-          methodology_id?: string | null
-          permanence_risk?: string | null
-          price_per_credit: number
-          project_name: string
-          project_type: string
-          registry?: string | null
-          sdg_alignment?: Json | null
-          total_credits?: number
-          updated_at?: string
-          verification_body?: string | null
-          verification_status?: string
-        }
-        Update: {
-          additionality_score?: number | null
-          available_credits?: number
-          co_benefits?: string[] | null
-          country?: string | null
-          created_at?: string
-          description?: string | null
-          developer?: string | null
-          documents?: Json | null
-          id?: string
-          impact_details?: string | null
-          location?: string
-          methodology_id?: string | null
-          permanence_risk?: string | null
-          price_per_credit?: number
-          project_name?: string
-          project_type?: string
-          registry?: string | null
-          sdg_alignment?: Json | null
-          total_credits?: number
-          updated_at?: string
-          verification_body?: string | null
-          verification_status?: string
-        }
-        Relationships: []
-      }
-      certification_milestones: {
-        Row: {
-          completed_at: string | null
-          created_at: string
-          description: string | null
-          id: string
-          is_completed: boolean
-          order_index: number
-          title: string
-          user_certification_id: string
-        }
-        Insert: {
-          completed_at?: string | null
-          created_at?: string
-          description?: string | null
-          id?: string
-          is_completed?: boolean
-          order_index?: number
-          title: string
-          user_certification_id: string
-        }
-        Update: {
-          completed_at?: string | null
-          created_at?: string
-          description?: string | null
-          id?: string
-          is_completed?: boolean
-          order_index?: number
-          title?: string
-          user_certification_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "certification_milestones_user_certification_id_fkey"
-            columns: ["user_certification_id"]
-            isOneToOne: false
-            referencedRelation: "user_certifications"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      compliance_reports: {
-        Row: {
-          file_url: string | null
-          generated_at: string
-          id: string
-          report_data: Json
-          report_type: Database["public"]["Enums"]["certification_type"]
-          reporting_year: number
-          status: string
-          user_id: string
-        }
-        Insert: {
-          file_url?: string | null
-          generated_at?: string
-          id?: string
-          report_data: Json
-          report_type: Database["public"]["Enums"]["certification_type"]
-          reporting_year: number
-          status?: string
-          user_id: string
-        }
-        Update: {
-          file_url?: string | null
-          generated_at?: string
-          id?: string
-          report_data?: Json
-          report_type?: Database["public"]["Enums"]["certification_type"]
-          reporting_year?: number
-          status?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "compliance_reports_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      credit_batches: {
-        Row: {
-          available_credits: number
-          created_at: string
-          id: string
-          price_per_ton: number
-          project_id: string
-          quality_breakdown: Json | null
-          quality_score: number | null
-          registry_status: string | null
-          reserved_credits: number
-          retired_credits: number
-          serial_number_end: string | null
-          serial_number_start: string | null
-          total_credits: number
-          updated_at: string
-          vintage_year: number
-        }
-        Insert: {
-          available_credits?: number
-          created_at?: string
-          id?: string
-          price_per_ton: number
-          project_id: string
-          quality_breakdown?: Json | null
-          quality_score?: number | null
-          registry_status?: string | null
-          reserved_credits?: number
-          retired_credits?: number
-          serial_number_end?: string | null
-          serial_number_start?: string | null
-          total_credits?: number
-          updated_at?: string
-          vintage_year: number
-        }
-        Update: {
-          available_credits?: number
-          created_at?: string
-          id?: string
-          price_per_ton?: number
-          project_id?: string
-          quality_breakdown?: Json | null
-          quality_score?: number | null
-          registry_status?: string | null
-          reserved_credits?: number
-          retired_credits?: number
-          serial_number_end?: string | null
-          serial_number_start?: string | null
-          total_credits?: number
-          updated_at?: string
-          vintage_year?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "credit_batches_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "carbon_projects"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      credit_ledger: {
+      ledger: {
         Row: {
           action: string
-          actor_id: string | null
-          batch_id: string | null
-          created_at: string
-          credits_amount: number
+          after_state: Json | null
+          before_state: Json | null
+          created_at: string | null
+          entity_id: string
+          entity_type: string
           id: string
+          ip_address: unknown
           metadata: Json | null
-          order_id: string | null
+          org_id: string | null
+          performed_by: string | null
+          user_agent: string | null
         }
         Insert: {
           action: string
-          actor_id?: string | null
-          batch_id?: string | null
-          created_at?: string
-          credits_amount: number
+          after_state?: Json | null
+          before_state?: Json | null
+          created_at?: string | null
+          entity_id: string
+          entity_type: string
           id?: string
+          ip_address?: unknown
           metadata?: Json | null
-          order_id?: string | null
+          org_id?: string | null
+          performed_by?: string | null
+          user_agent?: string | null
         }
         Update: {
           action?: string
-          actor_id?: string | null
-          batch_id?: string | null
-          created_at?: string
-          credits_amount?: number
+          after_state?: Json | null
+          before_state?: Json | null
+          created_at?: string | null
+          entity_id?: string
+          entity_type?: string
           id?: string
+          ip_address?: unknown
           metadata?: Json | null
-          order_id?: string | null
+          org_id?: string | null
+          performed_by?: string | null
+          user_agent?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "credit_ledger_batch_id_fkey"
-            columns: ["batch_id"]
+            foreignKeyName: "ledger_org_id_fkey"
+            columns: ["org_id"]
             isOneToOne: false
-            referencedRelation: "credit_batches"
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "credit_ledger_order_id_fkey"
-            columns: ["order_id"]
+            foreignKeyName: "ledger_performed_by_fkey"
+            columns: ["performed_by"]
             isOneToOne: false
-            referencedRelation: "marketplace_orders"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
       }
-      csv_imports: {
+      organization_members: {
         Row: {
-          created_at: string
-          error_count: number | null
-          errors: Json | null
-          file_name: string
+          accepted_at: string | null
+          created_at: string | null
           id: string
-          import_type: string
-          row_count: number | null
-          status: string | null
-          success_count: number | null
+          invited_at: string | null
+          invited_by: string | null
+          is_active: boolean | null
+          org_id: string
+          org_role: Database["public"]["Enums"]["org_role"]
+          permissions: Database["public"]["Enums"]["permission_type"][] | null
+          updated_at: string | null
           user_id: string
         }
         Insert: {
-          created_at?: string
-          error_count?: number | null
-          errors?: Json | null
-          file_name: string
+          accepted_at?: string | null
+          created_at?: string | null
           id?: string
-          import_type: string
-          row_count?: number | null
-          status?: string | null
-          success_count?: number | null
+          invited_at?: string | null
+          invited_by?: string | null
+          is_active?: boolean | null
+          org_id: string
+          org_role?: Database["public"]["Enums"]["org_role"]
+          permissions?: Database["public"]["Enums"]["permission_type"][] | null
+          updated_at?: string | null
           user_id: string
         }
         Update: {
-          created_at?: string
-          error_count?: number | null
-          errors?: Json | null
-          file_name?: string
+          accepted_at?: string | null
+          created_at?: string | null
           id?: string
-          import_type?: string
-          row_count?: number | null
-          status?: string | null
-          success_count?: number | null
-          user_id?: string
-        }
-        Relationships: []
-      }
-      emissions: {
-        Row: {
-          category: string
-          co2e: number
-          created_at: string
-          date: string
-          emission_factor: number | null
-          id: string
-          quantity: number
-          scope: number
-          unit: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          category: string
-          co2e: number
-          created_at?: string
-          date?: string
-          emission_factor?: number | null
-          id?: string
-          quantity: number
-          scope: number
-          unit: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          category?: string
-          co2e?: number
-          created_at?: string
-          date?: string
-          emission_factor?: number | null
-          id?: string
-          quantity?: number
-          scope?: number
-          unit?: string
-          updated_at?: string
+          invited_at?: string | null
+          invited_by?: string | null
+          is_active?: boolean | null
+          org_id?: string
+          org_role?: Database["public"]["Enums"]["org_role"]
+          permissions?: Database["public"]["Enums"]["permission_type"][] | null
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "emissions_user_id_fkey"
+            foreignKeyName: "organization_members_invited_by_fkey"
+            columns: ["invited_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organization_members_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organization_members_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
       }
-      marketplace_orders: {
+      organizations: {
         Row: {
-          batch_id: string | null
-          buyer_id: string | null
-          certificate_id: string | null
-          commission_amount: number | null
-          created_at: string
-          credits_purchased: number
-          escrow_status: string | null
-          gst_amount: number | null
-          id: string
-          order_number: string
-          payment_status: string | null
-          price_per_credit: number
-          project_id: string | null
-          registry_retirement_id: string | null
-          retirement_confirmed_at: string | null
-          retirement_requested_at: string | null
-          retirement_status: string | null
-          seller_id: string | null
-          total_amount: number
-          updated_at: string
-        }
-        Insert: {
-          batch_id?: string | null
-          buyer_id?: string | null
-          certificate_id?: string | null
-          commission_amount?: number | null
-          created_at?: string
-          credits_purchased: number
-          escrow_status?: string | null
-          gst_amount?: number | null
-          id?: string
-          order_number: string
-          payment_status?: string | null
-          price_per_credit: number
-          project_id?: string | null
-          registry_retirement_id?: string | null
-          retirement_confirmed_at?: string | null
-          retirement_requested_at?: string | null
-          retirement_status?: string | null
-          seller_id?: string | null
-          total_amount: number
-          updated_at?: string
-        }
-        Update: {
-          batch_id?: string | null
-          buyer_id?: string | null
-          certificate_id?: string | null
-          commission_amount?: number | null
-          created_at?: string
-          credits_purchased?: number
-          escrow_status?: string | null
-          gst_amount?: number | null
-          id?: string
-          order_number?: string
-          payment_status?: string | null
-          price_per_credit?: number
-          project_id?: string | null
-          registry_retirement_id?: string | null
-          retirement_confirmed_at?: string | null
-          retirement_requested_at?: string | null
-          retirement_status?: string | null
-          seller_id?: string | null
-          total_amount?: number
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "marketplace_orders_batch_id_fkey"
-            columns: ["batch_id"]
-            isOneToOne: false
-            referencedRelation: "credit_batches"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "marketplace_orders_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "carbon_projects"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      offset_preferences: {
-        Row: {
-          budget_range: string | null
-          created_at: string
-          id: string
-          preferred_locations: string[] | null
-          preferred_project_types: string[] | null
-          priority_factors: Json | null
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          budget_range?: string | null
-          created_at?: string
-          id?: string
-          preferred_locations?: string[] | null
-          preferred_project_types?: string[] | null
-          priority_factors?: Json | null
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          budget_range?: string | null
-          created_at?: string
-          id?: string
-          preferred_locations?: string[] | null
-          preferred_project_types?: string[] | null
-          priority_factors?: Json | null
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "offset_preferences_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      organization_settings: {
-        Row: {
+          annual_revenue: number | null
           baseline_year: number | null
-          company_name: string
-          company_size: string | null
-          created_at: string
+          cin: string | null
+          city: string | null
+          country: string | null
+          created_at: string | null
+          employee_count: number | null
           financial_year_start: string | null
+          gst_number: string | null
           id: string
-          industry_type: string | null
-          locations: Json | null
-          onboarding_completed: boolean | null
-          updated_at: string
-          user_id: string
+          is_active: boolean | null
+          legal_name: string | null
+          logo_url: string | null
+          name: string
+          pan: string | null
+          sector: string | null
+          state: string | null
+          sub_sector: string | null
+          updated_at: string | null
+          website: string | null
         }
         Insert: {
+          annual_revenue?: number | null
           baseline_year?: number | null
-          company_name: string
-          company_size?: string | null
-          created_at?: string
+          cin?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          employee_count?: number | null
           financial_year_start?: string | null
+          gst_number?: string | null
           id?: string
-          industry_type?: string | null
-          locations?: Json | null
-          onboarding_completed?: boolean | null
-          updated_at?: string
-          user_id: string
+          is_active?: boolean | null
+          legal_name?: string | null
+          logo_url?: string | null
+          name: string
+          pan?: string | null
+          sector?: string | null
+          state?: string | null
+          sub_sector?: string | null
+          updated_at?: string | null
+          website?: string | null
         }
         Update: {
+          annual_revenue?: number | null
           baseline_year?: number | null
-          company_name?: string
-          company_size?: string | null
-          created_at?: string
+          cin?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          employee_count?: number | null
           financial_year_start?: string | null
+          gst_number?: string | null
           id?: string
-          industry_type?: string | null
-          locations?: Json | null
-          onboarding_completed?: boolean | null
-          updated_at?: string
-          user_id?: string
+          is_active?: boolean | null
+          legal_name?: string | null
+          logo_url?: string | null
+          name?: string
+          pan?: string | null
+          sector?: string | null
+          state?: string | null
+          sub_sector?: string | null
+          updated_at?: string | null
+          website?: string | null
         }
         Relationships: []
       }
-      quiz_responses: {
+      profiles: {
         Row: {
-          completed_at: string
+          avatar_url: string | null
+          created_at: string | null
+          email: string | null
+          full_name: string | null
           id: string
-          quiz_type: string
-          recommendations: Json | null
-          responses: Json
-          score: number | null
-          session_id: string | null
-          user_id: string | null
+          is_verified: boolean | null
+          phone: string | null
+          platform_role: Database["public"]["Enums"]["platform_role"] | null
+          updated_at: string | null
         }
         Insert: {
-          completed_at?: string
-          id?: string
-          quiz_type?: string
-          recommendations?: Json | null
-          responses: Json
-          score?: number | null
-          session_id?: string | null
-          user_id?: string | null
+          avatar_url?: string | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id: string
+          is_verified?: boolean | null
+          phone?: string | null
+          platform_role?: Database["public"]["Enums"]["platform_role"] | null
+          updated_at?: string | null
         }
         Update: {
-          completed_at?: string
+          avatar_url?: string | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
           id?: string
-          quiz_type?: string
-          recommendations?: Json | null
-          responses?: Json
-          score?: number | null
-          session_id?: string | null
-          user_id?: string | null
+          is_verified?: boolean | null
+          phone?: string | null
+          platform_role?: Database["public"]["Enums"]["platform_role"] | null
+          updated_at?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "quiz_responses_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       rag_chunks: {
         Row: {
@@ -801,367 +466,49 @@ export type Database = {
           },
         ]
       }
-      recs: {
-        Row: {
-          certificate_id: string | null
-          created_at: string
-          energy_source: string
-          id: string
-          project_name: string
-          purchase_date: string
-          purchase_price: number | null
-          quantity_mwh: number
-          registry: string | null
-          user_id: string
-          vintage_year: number
-        }
-        Insert: {
-          certificate_id?: string | null
-          created_at?: string
-          energy_source: string
-          id?: string
-          project_name: string
-          purchase_date?: string
-          purchase_price?: number | null
-          quantity_mwh: number
-          registry?: string | null
-          user_id: string
-          vintage_year: number
-        }
-        Update: {
-          certificate_id?: string | null
-          created_at?: string
-          energy_source?: string
-          id?: string
-          project_name?: string
-          purchase_date?: string
-          purchase_price?: number | null
-          quantity_mwh?: number
-          registry?: string | null
-          user_id?: string
-          vintage_year?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "recs_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      retirement_certificates: {
-        Row: {
-          beneficiary_name: string | null
-          beneficiary_statement: string | null
-          buyer_id: string | null
-          certificate_number: string
-          created_at: string
-          credits_retired: number
-          id: string
-          order_id: string
-          pdf_url: string | null
-          project_name: string
-          registry: string
-          retirement_date: string
-          serial_numbers: string | null
-          verification_hash: string | null
-          vintage_year: number
-        }
-        Insert: {
-          beneficiary_name?: string | null
-          beneficiary_statement?: string | null
-          buyer_id?: string | null
-          certificate_number: string
-          created_at?: string
-          credits_retired: number
-          id?: string
-          order_id: string
-          pdf_url?: string | null
-          project_name: string
-          registry: string
-          retirement_date?: string
-          serial_numbers?: string | null
-          verification_hash?: string | null
-          vintage_year: number
-        }
-        Update: {
-          beneficiary_name?: string | null
-          beneficiary_statement?: string | null
-          buyer_id?: string | null
-          certificate_number?: string
-          created_at?: string
-          credits_retired?: number
-          id?: string
-          order_id?: string
-          pdf_url?: string | null
-          project_name?: string
-          registry?: string
-          retirement_date?: string
-          serial_numbers?: string | null
-          verification_hash?: string | null
-          vintage_year?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "retirement_certificates_order_id_fkey"
-            columns: ["order_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_orders"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      subscriptions: {
-        Row: {
-          created_at: string
-          current_period_end: string | null
-          current_period_start: string | null
-          id: string
-          plan: Database["public"]["Enums"]["subscription_plan"]
-          razorpay_customer_id: string | null
-          razorpay_subscription_id: string | null
-          status: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          current_period_end?: string | null
-          current_period_start?: string | null
-          id?: string
-          plan?: Database["public"]["Enums"]["subscription_plan"]
-          razorpay_customer_id?: string | null
-          razorpay_subscription_id?: string | null
-          status?: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          current_period_end?: string | null
-          current_period_start?: string | null
-          id?: string
-          plan?: Database["public"]["Enums"]["subscription_plan"]
-          razorpay_customer_id?: string | null
-          razorpay_subscription_id?: string | null
-          status?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "subscriptions_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      supplier_requests: {
-        Row: {
-          completed_at: string | null
-          created_at: string
-          due_date: string | null
-          id: string
-          request_type: string
-          response_data: Json | null
-          status: string | null
-          supplier_id: string
-          user_id: string
-        }
-        Insert: {
-          completed_at?: string | null
-          created_at?: string
-          due_date?: string | null
-          id?: string
-          request_type: string
-          response_data?: Json | null
-          status?: string | null
-          supplier_id: string
-          user_id: string
-        }
-        Update: {
-          completed_at?: string | null
-          created_at?: string
-          due_date?: string | null
-          id?: string
-          request_type?: string
-          response_data?: Json | null
-          status?: string | null
-          supplier_id?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "supplier_requests_supplier_id_fkey"
-            columns: ["supplier_id"]
-            isOneToOne: false
-            referencedRelation: "suppliers"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      suppliers: {
-        Row: {
-          annual_spend: number | null
-          category: string
-          created_at: string
-          email: string | null
-          emissions_data: Json | null
-          id: string
-          last_updated: string | null
-          name: string
-          status: string | null
-          user_id: string
-        }
-        Insert: {
-          annual_spend?: number | null
-          category: string
-          created_at?: string
-          email?: string | null
-          emissions_data?: Json | null
-          id?: string
-          last_updated?: string | null
-          name: string
-          status?: string | null
-          user_id: string
-        }
-        Update: {
-          annual_spend?: number | null
-          category?: string
-          created_at?: string
-          email?: string | null
-          emissions_data?: Json | null
-          id?: string
-          last_updated?: string | null
-          name?: string
-          status?: string | null
-          user_id?: string
-        }
-        Relationships: []
-      }
-      user_certifications: {
-        Row: {
-          achieved_date: string | null
-          certification_type: Database["public"]["Enums"]["certification_type"]
-          created_at: string
-          id: string
-          notes: string | null
-          progress_percentage: number
-          status: string
-          target_date: string | null
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          achieved_date?: string | null
-          certification_type: Database["public"]["Enums"]["certification_type"]
-          created_at?: string
-          id?: string
-          notes?: string | null
-          progress_percentage?: number
-          status?: string
-          target_date?: string | null
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          achieved_date?: string | null
-          certification_type?: Database["public"]["Enums"]["certification_type"]
-          created_at?: string
-          id?: string
-          notes?: string | null
-          progress_percentage?: number
-          status?: string
-          target_date?: string | null
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_certifications_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      user_roles: {
-        Row: {
-          created_at: string
-          id: string
-          role: Database["public"]["Enums"]["app_role"]
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          role: Database["public"]["Enums"]["app_role"]
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          role?: Database["public"]["Enums"]["app_role"]
-          user_id?: string
-        }
-        Relationships: []
-      }
-      users: {
-        Row: {
-          city: string | null
-          company_name: string | null
-          created_at: string
-          gst_number: string | null
-          id: string
-          industry_type: string | null
-          state: string | null
-          updated_at: string
-          user_id: string | null
-        }
-        Insert: {
-          city?: string | null
-          company_name?: string | null
-          created_at?: string
-          gst_number?: string | null
-          id?: string
-          industry_type?: string | null
-          state?: string | null
-          updated_at?: string
-          user_id?: string | null
-        }
-        Update: {
-          city?: string | null
-          company_name?: string | null
-          created_at?: string
-          gst_number?: string | null
-          id?: string
-          industry_type?: string | null
-          state?: string | null
-          updated_at?: string
-          user_id?: string | null
-        }
-        Relationships: []
-      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      get_user_plan: {
-        Args: { _user_id: string }
-        Returns: Database["public"]["Enums"]["subscription_plan"]
-      }
-      has_role: {
+      has_org_role: {
         Args: {
-          _role: Database["public"]["Enums"]["app_role"]
+          _org_id: string
+          _role: Database["public"]["Enums"]["org_role"]
           _user_id: string
         }
         Returns: boolean
+      }
+      has_permission: {
+        Args: {
+          _org_id: string
+          _permission: Database["public"]["Enums"]["permission_type"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      has_platform_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["platform_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_org_member: {
+        Args: { _org_id: string; _user_id: string }
+        Returns: boolean
+      }
+      log_to_ledger: {
+        Args: {
+          _action: string
+          _after?: Json
+          _before?: Json
+          _entity_id: string
+          _entity_type: string
+          _metadata?: Json
+          _org_id: string
+        }
+        Returns: undefined
       }
       search_chunks_fulltext: {
         Args: { match_count?: number; search_query: string }
@@ -1189,19 +536,35 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "moderator" | "user"
-      certification_type:
-        | "bcorp"
-        | "cdp"
-        | "gri"
-        | "csrd"
-        | "tcfd"
-        | "sasb"
-        | "sec"
-        | "ecovadis"
-        | "sbti"
-        | "issb"
-      subscription_plan: "free" | "pro" | "enterprise"
+      order_status:
+        | "initiated"
+        | "paid"
+        | "in_escrow"
+        | "retired"
+        | "cancelled"
+        | "failed"
+      org_role: "admin" | "editor" | "viewer"
+      permission_type:
+        | "can_view_emissions"
+        | "can_edit_emissions"
+        | "can_approve_emissions"
+        | "can_view_reports"
+        | "can_generate_reports"
+        | "can_approve_reports"
+        | "can_view_marketplace"
+        | "can_transact"
+        | "can_retire_credits"
+        | "can_view_ledger"
+        | "can_invite_members"
+        | "can_manage_org"
+      platform_role: "platform_admin" | "org_owner" | "consultant" | "auditor"
+      record_status:
+        | "draft"
+        | "pending_review"
+        | "approved"
+        | "locked"
+        | "rejected"
+      report_type: "BRSR" | "GHG" | "CDP" | "Internal"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1329,20 +692,38 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "moderator", "user"],
-      certification_type: [
-        "bcorp",
-        "cdp",
-        "gri",
-        "csrd",
-        "tcfd",
-        "sasb",
-        "sec",
-        "ecovadis",
-        "sbti",
-        "issb",
+      order_status: [
+        "initiated",
+        "paid",
+        "in_escrow",
+        "retired",
+        "cancelled",
+        "failed",
       ],
-      subscription_plan: ["free", "pro", "enterprise"],
+      org_role: ["admin", "editor", "viewer"],
+      permission_type: [
+        "can_view_emissions",
+        "can_edit_emissions",
+        "can_approve_emissions",
+        "can_view_reports",
+        "can_generate_reports",
+        "can_approve_reports",
+        "can_view_marketplace",
+        "can_transact",
+        "can_retire_credits",
+        "can_view_ledger",
+        "can_invite_members",
+        "can_manage_org",
+      ],
+      platform_role: ["platform_admin", "org_owner", "consultant", "auditor"],
+      record_status: [
+        "draft",
+        "pending_review",
+        "approved",
+        "locked",
+        "rejected",
+      ],
+      report_type: ["BRSR", "GHG", "CDP", "Internal"],
     },
   },
 } as const
