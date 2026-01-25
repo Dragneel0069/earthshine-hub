@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider } from "@/hooks/useAuth";
+import { OrganizationProvider } from "@/hooks/useOrganization";
 import { CookieConsent } from "@/components/shared/CookieConsent";
 import { GlobalErrorBoundary } from "@/components/shared/GlobalErrorBoundary";
 import { GuidedOnboarding } from "@/components/onboarding/GuidedOnboarding";
@@ -47,37 +48,39 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <AuthProvider>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
-                <Route path="/marketplace" element={<MarketplaceEnhanced />} />
-                <Route path="/calculators" element={<Calculators />} />
-                <Route path="/consultation" element={<Consultation />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/certifications" element={<Certifications />} />
-                <Route path="/compliance" element={<ProtectedRoute><ComplianceHub /></ProtectedRoute>} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/blog/:slug" element={<Blog />} />
-                <Route path="/quiz" element={<SustainabilityQuiz />} />
-                <Route path="/knowledge" element={<ProtectedRoute><KnowledgeAgent /></ProtectedRoute>} />
-                <Route path="/pricing" element={<Pricing />} />
-                <Route path="/privacy" element={<PrivacyPolicy />} />
-                <Route path="/terms" element={<TermsOfService />} />
-                <Route path="/scroll-demo" element={<ScrollDemo />} />
-                <Route path="/methodology" element={<Methodology />} />
-                <Route path="/data-import" element={<ProtectedRoute><DataImport /></ProtectedRoute>} />
-                <Route path="/suppliers" element={<ProtectedRoute><Suppliers /></ProtectedRoute>} />
-                <Route path="/integrations" element={<ProtectedRoute><Integrations /></ProtectedRoute>} />
-                <Route path="/cbam" element={<ProtectedRoute><CBAMCompliance /></ProtectedRoute>} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-              <GuidedOnboarding />
-              <CookieConsent />
-              <InstallPrompt />
+              <OrganizationProvider>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
+                  <Route path="/marketplace" element={<MarketplaceEnhanced />} />
+                  <Route path="/calculators" element={<Calculators />} />
+                  <Route path="/consultation" element={<Consultation />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/certifications" element={<Certifications />} />
+                  <Route path="/compliance" element={<ProtectedRoute><ComplianceHub /></ProtectedRoute>} />
+                  <Route path="/blog" element={<Blog />} />
+                  <Route path="/blog/:slug" element={<Blog />} />
+                  <Route path="/quiz" element={<SustainabilityQuiz />} />
+                  <Route path="/knowledge" element={<ProtectedRoute><KnowledgeAgent /></ProtectedRoute>} />
+                  <Route path="/pricing" element={<Pricing />} />
+                  <Route path="/privacy" element={<PrivacyPolicy />} />
+                  <Route path="/terms" element={<TermsOfService />} />
+                  <Route path="/scroll-demo" element={<ScrollDemo />} />
+                  <Route path="/methodology" element={<Methodology />} />
+                  <Route path="/data-import" element={<ProtectedRoute><DataImport /></ProtectedRoute>} />
+                  <Route path="/suppliers" element={<ProtectedRoute><Suppliers /></ProtectedRoute>} />
+                  <Route path="/integrations" element={<ProtectedRoute><Integrations /></ProtectedRoute>} />
+                  <Route path="/cbam" element={<ProtectedRoute><CBAMCompliance /></ProtectedRoute>} />
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+                <GuidedOnboarding />
+                <CookieConsent />
+                <InstallPrompt />
+              </OrganizationProvider>
             </AuthProvider>
           </BrowserRouter>
         </TooltipProvider>

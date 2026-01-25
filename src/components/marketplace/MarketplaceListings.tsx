@@ -1,194 +1,64 @@
-import { useState, useEffect } from 'react';
-import { Search, Filter, SlidersHorizontal, LayoutGrid, List, Leaf } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
+import { Search, SlidersHorizontal, LayoutGrid, List, Leaf, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { CreditListingCard, CreditListing } from './CreditListingCard';
 import { PurchaseFlow } from './PurchaseFlow';
-import { calculateQualityScore } from '@/lib/credit-quality-scoring';
+import { useCreditsCatalog, CatalogListing } from '@/hooks/useCreditsCatalog';
 import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/integrations/supabase/client';
-
-// Mock data for demonstration - in production, this comes from the database
-const MOCK_LISTINGS: CreditListing[] = [
-  {
-    id: '1',
-    projectName: 'Gujarat Solar Park Renewable Energy',
-    projectType: 'renewable_energy',
-    registry: 'verra',
-    methodologyId: 'ACM0002',
-    vintageYear: 2023,
-    pricePerTon: 850,
-    availableCredits: 15000,
-    country: 'India',
-    description: 'A 500MW solar power plant displacing coal-fired electricity generation in Gujarat.',
-    qualityScore: 82,
-    qualityBreakdown: calculateQualityScore({
-      registry: 'verra',
-      projectType: 'renewable_energy',
-      vintageYear: 2023,
-      permanenceRisk: 'low',
-      verificationBody: 'dnv',
-      sdgAlignment: [7, 8, 13],
-      coBenefits: ['job_creation', 'clean_energy'],
-    }),
-    coBenefits: ['Job Creation', 'Clean Energy', 'Rural Development'],
-    sdgAlignment: [7, 8, 13],
-    verificationBody: 'DNV',
-  },
-  {
-    id: '2',
-    projectName: 'Karnataka Biogas to Energy',
-    projectType: 'waste_to_energy',
-    registry: 'gold_standard',
-    methodologyId: 'GS-VER',
-    vintageYear: 2022,
-    pricePerTon: 1200,
-    availableCredits: 8500,
-    country: 'India',
-    description: 'Community-based biogas digesters converting agricultural waste to clean cooking fuel.',
-    qualityScore: 88,
-    qualityBreakdown: calculateQualityScore({
-      registry: 'gold_standard',
-      projectType: 'waste_to_energy',
-      vintageYear: 2022,
-      permanenceRisk: 'low',
-      verificationBody: 'sgs',
-      sdgAlignment: [3, 5, 7, 8, 13],
-      coBenefits: ['health', 'gender_equality', 'biodiversity'],
-    }),
-    coBenefits: ['Health Benefits', 'Gender Equality', 'Waste Reduction'],
-    sdgAlignment: [3, 5, 7, 8, 13],
-    verificationBody: 'SGS',
-  },
-  {
-    id: '3',
-    projectName: 'Sundarbans Mangrove Restoration',
-    projectType: 'blue_carbon',
-    registry: 'verra',
-    methodologyId: 'VM0033',
-    vintageYear: 2023,
-    pricePerTon: 1800,
-    availableCredits: 5000,
-    country: 'India',
-    description: 'Restoring degraded mangrove ecosystems in the Sundarbans delta for carbon sequestration.',
-    qualityScore: 78,
-    qualityBreakdown: calculateQualityScore({
-      registry: 'verra',
-      projectType: 'blue_carbon',
-      vintageYear: 2023,
-      permanenceRisk: 'medium',
-      verificationBody: 'bureau_veritas',
-      sdgAlignment: [13, 14, 15],
-      coBenefits: ['biodiversity', 'community_development', 'coastal_protection'],
-    }),
-    coBenefits: ['Biodiversity', 'Coastal Protection', 'Community Livelihoods'],
-    sdgAlignment: [13, 14, 15],
-    verificationBody: 'Bureau Veritas',
-  },
-  {
-    id: '4',
-    projectName: 'Maharashtra Clean Cookstoves',
-    projectType: 'cookstoves',
-    registry: 'gold_standard',
-    methodologyId: 'GS-TPDDTEC',
-    vintageYear: 2024,
-    pricePerTon: 950,
-    availableCredits: 25000,
-    country: 'India',
-    description: 'Distributing fuel-efficient cookstoves to rural households, reducing fuelwood consumption.',
-    qualityScore: 85,
-    qualityBreakdown: calculateQualityScore({
-      registry: 'gold_standard',
-      projectType: 'cookstoves',
-      vintageYear: 2024,
-      permanenceRisk: 'low',
-      verificationBody: 'sgs',
-      sdgAlignment: [3, 5, 7, 13, 15],
-      coBenefits: ['health', 'gender_equality', 'forest_conservation'],
-    }),
-    coBenefits: ['Health Improvement', 'Women Empowerment', 'Forest Conservation'],
-    sdgAlignment: [3, 5, 7, 13, 15],
-    verificationBody: 'SGS',
-  },
-  {
-    id: '5',
-    projectName: 'Rajasthan Wind Power',
-    projectType: 'renewable_energy',
-    registry: 'verra',
-    methodologyId: 'ACM0002',
-    vintageYear: 2021,
-    pricePerTon: 650,
-    availableCredits: 30000,
-    country: 'India',
-    description: 'Wind farm in Jaisalmer district generating clean electricity for the western grid.',
-    qualityScore: 75,
-    qualityBreakdown: calculateQualityScore({
-      registry: 'verra',
-      projectType: 'renewable_energy',
-      vintageYear: 2021,
-      permanenceRisk: 'low',
-      verificationBody: 'tuv',
-      sdgAlignment: [7, 8, 13],
-      coBenefits: ['clean_energy', 'job_creation'],
-    }),
-    coBenefits: ['Clean Energy', 'Local Employment'],
-    sdgAlignment: [7, 8, 13],
-    verificationBody: 'TÜV',
-  },
-  {
-    id: '6',
-    projectName: 'Tamil Nadu Reforestation',
-    projectType: 'afforestation',
-    registry: 'verra',
-    methodologyId: 'AR-ACM0003',
-    vintageYear: 2022,
-    pricePerTon: 1100,
-    availableCredits: 12000,
-    country: 'India',
-    description: 'Community-managed afforestation on degraded lands in Tamil Nadu hill districts.',
-    qualityScore: 72,
-    qualityBreakdown: calculateQualityScore({
-      registry: 'verra',
-      projectType: 'afforestation',
-      vintageYear: 2022,
-      permanenceRisk: 'medium',
-      verificationBody: 'control_union',
-      sdgAlignment: [13, 15, 1, 8],
-      coBenefits: ['biodiversity', 'community_development', 'water_security'],
-    }),
-    coBenefits: ['Biodiversity', 'Water Security', 'Rural Income'],
-    sdgAlignment: [13, 15, 1, 8],
-    verificationBody: 'Control Union',
-  },
-];
 
 const PROJECT_TYPES = [
   { value: 'renewable_energy', label: 'Renewable Energy' },
   { value: 'afforestation', label: 'Afforestation' },
+  { value: 'reforestation', label: 'Reforestation' },
   { value: 'cookstoves', label: 'Clean Cookstoves' },
   { value: 'waste_to_energy', label: 'Waste to Energy' },
   { value: 'blue_carbon', label: 'Blue Carbon' },
   { value: 'industrial', label: 'Industrial' },
+  { value: 'avoided_deforestation', label: 'REDD+' },
 ];
 
 const REGISTRIES = [
   { value: 'verra', label: 'Verra (VCS)' },
   { value: 'gold_standard', label: 'Gold Standard' },
+  { value: 'american_carbon_registry', label: 'ACR' },
+  { value: 'climate_action_reserve', label: 'CAR' },
 ];
 
-const VINTAGES = [2024, 2023, 2022, 2021, 2020];
+const VINTAGES = [2025, 2024, 2023, 2022, 2021, 2020];
+
+// Convert CatalogListing to CreditListing for compatibility with CreditListingCard
+function toCreditListing(catalog: CatalogListing): CreditListing {
+  return {
+    id: catalog.id,
+    projectName: catalog.projectName,
+    projectType: catalog.projectType,
+    registry: catalog.registry,
+    methodologyId: catalog.methodologyId,
+    vintageYear: catalog.vintageYear,
+    pricePerTon: catalog.pricePerTon,
+    availableCredits: catalog.availableCredits,
+    country: catalog.country,
+    description: catalog.description,
+    qualityScore: catalog.qualityScore,
+    qualityBreakdown: catalog.qualityBreakdown,
+    coBenefits: catalog.coBenefits,
+    sdgAlignment: catalog.sdgAlignment,
+    verificationBody: catalog.verificationBody,
+    imageUrl: catalog.imageUrl,
+  };
+}
 
 export function MarketplaceListings() {
   const { user } = useAuth();
-  const [listings, setListings] = useState<CreditListing[]>(MOCK_LISTINGS);
-  const [filteredListings, setFilteredListings] = useState<CreditListing[]>(MOCK_LISTINGS);
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [sortBy, setSortBy] = useState('quality_desc');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   
@@ -196,77 +66,57 @@ export function MarketplaceListings() {
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedRegistries, setSelectedRegistries] = useState<string[]>([]);
   const [selectedVintages, setSelectedVintages] = useState<number[]>([]);
-  const [priceRange, setPriceRange] = useState([0, 3000]);
+  const [priceRange, setPriceRange] = useState([0, 5000]);
   const [minQualityScore, setMinQualityScore] = useState(0);
 
   // Purchase state
   const [selectedListing, setSelectedListing] = useState<CreditListing | null>(null);
   const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
 
-  // Apply filters
+  // Debounce search input
   useEffect(() => {
-    let filtered = [...listings];
+    const timer = setTimeout(() => setDebouncedSearch(searchQuery), 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
-    // Search
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(l => 
-        l.projectName.toLowerCase().includes(query) ||
-        l.country.toLowerCase().includes(query) ||
-        l.description?.toLowerCase().includes(query)
-      );
-    }
+  // Fetch from database with filters
+  const { listings: catalogListings, loading, error, refetch } = useCreditsCatalog({
+    projectTypes: selectedTypes.length > 0 ? selectedTypes : undefined,
+    registries: selectedRegistries.length > 0 ? selectedRegistries : undefined,
+    vintages: selectedVintages.length > 0 ? selectedVintages : undefined,
+    minPrice: priceRange[0] > 0 ? priceRange[0] : undefined,
+    maxPrice: priceRange[1] < 5000 ? priceRange[1] : undefined,
+    minQualityScore: minQualityScore > 0 ? minQualityScore : undefined,
+    searchQuery: debouncedSearch || undefined,
+  });
 
-    // Project type filter
-    if (selectedTypes.length > 0) {
-      filtered = filtered.filter(l => selectedTypes.includes(l.projectType));
-    }
-
-    // Registry filter
-    if (selectedRegistries.length > 0) {
-      filtered = filtered.filter(l => selectedRegistries.includes(l.registry));
-    }
-
-    // Vintage filter
-    if (selectedVintages.length > 0) {
-      filtered = filtered.filter(l => selectedVintages.includes(l.vintageYear));
-    }
-
-    // Price range filter
-    filtered = filtered.filter(l => 
-      l.pricePerTon >= priceRange[0] && l.pricePerTon <= priceRange[1]
-    );
-
-    // Quality score filter
-    if (minQualityScore > 0) {
-      filtered = filtered.filter(l => l.qualityScore >= minQualityScore);
-    }
-
-    // Sort
+  // Apply client-side sorting
+  const sortedListings = useMemo(() => {
+    const listings = [...catalogListings];
+    
     switch (sortBy) {
       case 'quality_desc':
-        filtered.sort((a, b) => b.qualityScore - a.qualityScore);
+        listings.sort((a, b) => b.qualityScore - a.qualityScore);
         break;
       case 'price_asc':
-        filtered.sort((a, b) => a.pricePerTon - b.pricePerTon);
+        listings.sort((a, b) => a.pricePerTon - b.pricePerTon);
         break;
       case 'price_desc':
-        filtered.sort((a, b) => b.pricePerTon - a.pricePerTon);
+        listings.sort((a, b) => b.pricePerTon - a.pricePerTon);
         break;
       case 'vintage_desc':
-        filtered.sort((a, b) => b.vintageYear - a.vintageYear);
+        listings.sort((a, b) => b.vintageYear - a.vintageYear);
         break;
       case 'available_desc':
-        filtered.sort((a, b) => b.availableCredits - a.availableCredits);
+        listings.sort((a, b) => b.availableCredits - a.availableCredits);
         break;
     }
 
-    setFilteredListings(filtered);
-  }, [listings, searchQuery, selectedTypes, selectedRegistries, selectedVintages, priceRange, minQualityScore, sortBy]);
+    return listings;
+  }, [catalogListings, sortBy]);
 
   const handlePurchase = (listing: CreditListing) => {
     if (!user) {
-      // Redirect to login
       window.location.href = '/login';
       return;
     }
@@ -275,7 +125,7 @@ export function MarketplaceListings() {
   };
 
   const handleViewDetails = (listing: CreditListing) => {
-    // In production, navigate to detail page
+    // TODO: Navigate to detail page
     console.log('View details:', listing.id);
   };
 
@@ -301,7 +151,7 @@ export function MarketplaceListings() {
     setSelectedTypes([]);
     setSelectedRegistries([]);
     setSelectedVintages([]);
-    setPriceRange([0, 3000]);
+    setPriceRange([0, 5000]);
     setMinQualityScore(0);
     setSearchQuery('');
   };
@@ -311,7 +161,7 @@ export function MarketplaceListings() {
     selectedRegistries.length + 
     selectedVintages.length + 
     (minQualityScore > 0 ? 1 : 0) +
-    (priceRange[0] > 0 || priceRange[1] < 3000 ? 1 : 0);
+    (priceRange[0] > 0 || priceRange[1] < 5000 ? 1 : 0);
 
   return (
     <div className="space-y-6">
@@ -418,7 +268,7 @@ export function MarketplaceListings() {
                     value={priceRange}
                     onValueChange={setPriceRange}
                     min={0}
-                    max={3000}
+                    max={5000}
                     step={50}
                     className="mt-2"
                   />
@@ -467,7 +317,7 @@ export function MarketplaceListings() {
       {/* Results count */}
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          Showing {filteredListings.length} of {listings.length} projects
+          Showing {sortedListings.length} project{sortedListings.length !== 1 ? 's' : ''}
         </p>
         {activeFiltersCount > 0 && (
           <Button variant="link" size="sm" onClick={clearFilters}>
@@ -476,8 +326,31 @@ export function MarketplaceListings() {
         )}
       </div>
 
-      {/* Listings grid */}
-      {filteredListings.length === 0 ? (
+      {/* Loading state */}
+      {loading && (
+        <Card>
+          <CardContent className="py-12 text-center">
+            <Loader2 className="h-12 w-12 mx-auto text-primary animate-spin mb-4" />
+            <h3 className="text-lg font-semibold mb-2">Loading Projects</h3>
+            <p className="text-muted-foreground">Fetching verified carbon credits...</p>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Error state */}
+      {error && !loading && (
+        <Card>
+          <CardContent className="py-12 text-center">
+            <Leaf className="h-12 w-12 mx-auto text-destructive mb-4" />
+            <h3 className="text-lg font-semibold mb-2">Error Loading Projects</h3>
+            <p className="text-muted-foreground mb-4">{error.message}</p>
+            <Button onClick={() => refetch()}>Try Again</Button>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Empty state */}
+      {!loading && !error && sortedListings.length === 0 && (
         <Card>
           <CardContent className="py-12 text-center">
             <Leaf className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
@@ -485,15 +358,18 @@ export function MarketplaceListings() {
             <p className="text-muted-foreground">Try adjusting your filters or search query.</p>
           </CardContent>
         </Card>
-      ) : (
+      )}
+
+      {/* Listings grid */}
+      {!loading && !error && sortedListings.length > 0 && (
         <div className={viewMode === 'grid' 
           ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
           : 'space-y-4'
         }>
-          {filteredListings.map(listing => (
+          {sortedListings.map(catalogListing => (
             <CreditListingCard
-              key={listing.id}
-              listing={listing}
+              key={catalogListing.id}
+              listing={toCreditListing(catalogListing)}
               onPurchase={handlePurchase}
               onViewDetails={handleViewDetails}
             />
@@ -512,6 +388,7 @@ export function MarketplaceListings() {
           }}
           onSuccess={(orderId) => {
             console.log('Purchase successful:', orderId);
+            refetch(); // Refresh listings after purchase
           }}
         />
       )}
