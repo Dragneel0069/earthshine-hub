@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Search, SlidersHorizontal, LayoutGrid, List, Leaf, Loader2 } from 'lucide-react';
+import { Search, SlidersHorizontal, LayoutGrid, List, Leaf, Loader2, FlaskConical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { CreditListingCard, CreditListing } from './CreditListingCard';
 import { PurchaseFlow } from './PurchaseFlow';
 import { useCreditsCatalog, CatalogListing } from '@/hooks/useCreditsCatalog';
@@ -72,6 +73,7 @@ export function MarketplaceListings() {
   // Purchase state
   const [selectedListing, setSelectedListing] = useState<CreditListing | null>(null);
   const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
+  const [demoMode, setDemoMode] = useState(false);
 
   // Debounce search input
   useEffect(() => {
@@ -115,13 +117,18 @@ export function MarketplaceListings() {
     return listings;
   }, [catalogListings, sortBy]);
 
-  const handlePurchase = (listing: CreditListing) => {
-    if (!user) {
+  const handlePurchase = (listing: CreditListing, useDemoMode = false) => {
+    if (!user && !useDemoMode) {
       window.location.href = '/login';
       return;
     }
     setSelectedListing(listing);
+    setDemoMode(useDemoMode);
     setIsPurchaseOpen(true);
+  };
+
+  const handleDemoPurchase = (listing: CreditListing) => {
+    handlePurchase(listing, true);
   };
 
   const handleViewDetails = (listing: CreditListing) => {
@@ -165,6 +172,32 @@ export function MarketplaceListings() {
 
   return (
     <div className="space-y-6">
+      {/* Demo Mode Banner */}
+      {!user && (
+        <Alert className="bg-yellow-50 border-yellow-200">
+          <FlaskConical className="h-4 w-4 text-yellow-600" />
+          <AlertDescription className="text-yellow-700 flex items-center justify-between">
+            <span>
+              <strong>Test Mode Available:</strong> Try the purchase flow without signing in.
+            </span>
+            <Button 
+              size="sm" 
+              variant="outline" 
+              className="ml-4 border-yellow-400 text-yellow-800 hover:bg-yellow-100"
+              onClick={() => {
+                if (sortedListings.length > 0) {
+                  handleDemoPurchase(toCreditListing(sortedListings[0]));
+                }
+              }}
+              disabled={sortedListings.length === 0}
+            >
+              <FlaskConical className="h-3 w-3 mr-1" />
+              Try Demo Purchase
+            </Button>
+          </AlertDescription>
+        </Alert>
+      )}
+
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="relative flex-1 max-w-md">
@@ -372,6 +405,7 @@ export function MarketplaceListings() {
               listing={toCreditListing(catalogListing)}
               onPurchase={handlePurchase}
               onViewDetails={handleViewDetails}
+              onDemoPurchase={!user ? handleDemoPurchase : undefined}
             />
           ))}
         </div>
@@ -385,11 +419,15 @@ export function MarketplaceListings() {
           onClose={() => {
             setIsPurchaseOpen(false);
             setSelectedListing(null);
+            setDemoMode(false);
           }}
           onSuccess={(orderId) => {
             console.log('Purchase successful:', orderId);
-            refetch(); // Refresh listings after purchase
+            if (!demoMode) {
+              refetch(); // Refresh listings after real purchase
+            }
           }}
+          demoMode={demoMode}
         />
       )}
     </div>

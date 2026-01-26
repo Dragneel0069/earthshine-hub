@@ -1,4 +1,4 @@
-import { MapPin, Calendar, Leaf, Award, TrendingUp, ShoppingCart } from 'lucide-react';
+import { MapPin, Calendar, Leaf, Award, TrendingUp, ShoppingCart, FlaskConical } from 'lucide-react';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -24,10 +24,11 @@ export interface CreditListing {
   imageUrl?: string;
 }
 
-interface CreditListingCardProps {
+export interface CreditListingCardProps {
   listing: CreditListing;
   onPurchase: (listing: CreditListing) => void;
   onViewDetails: (listing: CreditListing) => void;
+  onDemoPurchase?: (listing: CreditListing) => void;
 }
 
 const PROJECT_TYPE_LABELS: Record<string, string> = {
@@ -74,7 +75,7 @@ const SDG_ICONS: Record<number, { icon: string; name: string }> = {
   17: { icon: '🤲', name: 'Partnerships' },
 };
 
-export function CreditListingCard({ listing, onPurchase, onViewDetails }: CreditListingCardProps) {
+export function CreditListingCard({ listing, onPurchase, onViewDetails, onDemoPurchase }: CreditListingCardProps) {
   const tier = getQualityTier(listing.qualityScore);
   
   return (
@@ -179,7 +180,7 @@ export function CreditListingCard({ listing, onPurchase, onViewDetails }: Credit
         </div>
       </CardContent>
 
-      <CardFooter className="gap-2">
+      <CardFooter className="gap-2 flex-wrap">
         <Button variant="outline" className="flex-1" onClick={() => onViewDetails(listing)}>
           View Details
         </Button>
@@ -187,6 +188,16 @@ export function CreditListingCard({ listing, onPurchase, onViewDetails }: Credit
           <ShoppingCart className="h-4 w-4 mr-2" />
           Purchase
         </Button>
+        {onDemoPurchase && (
+          <Button 
+            variant="secondary" 
+            className="w-full mt-1 bg-yellow-100 hover:bg-yellow-200 text-yellow-800 border-yellow-300"
+            onClick={() => onDemoPurchase(listing)}
+          >
+            <FlaskConical className="h-4 w-4 mr-2" />
+            Try Demo
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );
