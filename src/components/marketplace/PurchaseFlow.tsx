@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ShoppingCart, AlertCircle, CheckCircle, Loader2, Building2, FileText, CreditCard, Shield } from 'lucide-react';
+import { ShoppingCart, AlertCircle, CheckCircle, Loader2, Building2, FileText, CreditCard, Shield, FlaskConical } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -9,16 +9,17 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
 import { CreditListing } from './CreditListingCard';
 import { useOrganization } from '@/hooks/useOrganization';
 import { useMarketplaceOrders } from '@/hooks/useMarketplaceOrders';
 import { useToast } from '@/hooks/use-toast';
-
 interface PurchaseFlowProps {
   listing: CreditListing;
   isOpen: boolean;
   onClose: () => void;
   onSuccess: (orderId: string) => void;
+  demoMode?: boolean; // Enable testing without organization
 }
 
 type PurchaseStep = 'quantity' | 'beneficiary' | 'review' | 'payment' | 'success';
@@ -26,10 +27,14 @@ type PurchaseStep = 'quantity' | 'beneficiary' | 'review' | 'payment' | 'success
 const GST_RATE = 0.18;
 const PLATFORM_FEE_RATE = 0.05;
 
-export function PurchaseFlow({ listing, isOpen, onClose, onSuccess }: PurchaseFlowProps) {
+export function PurchaseFlow({ listing, isOpen, onClose, onSuccess, demoMode = false }: PurchaseFlowProps) {
   const { organization, hasOrganization } = useOrganization();
   const { initiateOrder, markOrderPaid } = useMarketplaceOrders();
   const { toast } = useToast();
+  
+  // In demo mode, simulate having an organization
+  const effectiveHasOrganization = demoMode || hasOrganization;
+  const effectiveOrgName = demoMode ? 'Demo Organization Pvt Ltd' : organization?.name;
   
   const [step, setStep] = useState<PurchaseStep>('quantity');
   const [isLoading, setIsLoading] = useState(false);
@@ -38,7 +43,7 @@ export function PurchaseFlow({ listing, isOpen, onClose, onSuccess }: PurchaseFl
 
   // Form state
   const [quantity, setQuantity] = useState(1);
-  const [beneficiaryName, setBeneficiaryName] = useState(organization?.name || '');
+  const [beneficiaryName, setBeneficiaryName] = useState(effectiveOrgName || '');
   const [beneficiaryType, setBeneficiaryType] = useState('organization');
   const [retirementReason, setRetirementReason] = useState('');
   const [acceptedTerms, setAcceptedTerms] = useState(false);
@@ -53,7 +58,7 @@ export function PurchaseFlow({ listing, isOpen, onClose, onSuccess }: PurchaseFl
   const resetForm = () => {
     setStep('quantity');
     setQuantity(1);
-    setBeneficiaryName(organization?.name || '');
+    setBeneficiaryName(effectiveOrgName || '');
     setBeneficiaryType('organization');
     setRetirementReason('');
     setAcceptedTerms(false);
@@ -69,6 +74,23 @@ export function PurchaseFlow({ listing, isOpen, onClose, onSuccess }: PurchaseFl
   };
 
   const handleInitiateOrder = async () => {
+    // In demo mode, simulate order creation
+    if (demoMode) {
+      setIsLoading(true);
+      await new Promise(resolve => setTimeout(resolve, 800)); // Simulate network delay
+      const demoOrderId = `demo-${Date.now()}`;
+      const demoOrderNumber = `DEMO-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+      setOrderId(demoOrderId);
+      setOrderNumber(demoOrderNumber);
+      setStep('payment');
+      setIsLoading(false);
+      toast({
+        title: 'Demo Mode',
+        description: 'Order simulated successfully. No real transaction created.',
+      });
+      return;
+    }
+
     if (!hasOrganization) {
       toast({
         variant: 'destructive',
@@ -107,6 +129,20 @@ export function PurchaseFlow({ listing, isOpen, onClose, onSuccess }: PurchaseFl
     if (!orderId) return;
 
     setIsLoading(true);
+    
+    // In demo mode, simulate payment
+    if (demoMode) {
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate payment delay
+      setStep('success');
+      onSuccess(orderId);
+      setIsLoading(false);
+      toast({
+        title: 'Demo Payment Complete',
+        description: 'This was a simulated payment. No real transaction occurred.',
+      });
+      return;
+    }
+
     try {
       // Simulate payment reference
       const paymentRef = `PAY-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
@@ -129,7 +165,7 @@ export function PurchaseFlow({ listing, isOpen, onClose, onSuccess }: PurchaseFl
   const canProceedToReview = quantity > 0 && quantity <= listing.availableCredits;
   const canProceedToPayment = beneficiaryName.trim() && acceptedTerms && acceptedDisclaimer;
 
-  if (!hasOrganization) {
+  if (!effectiveHasOrganization) {
     return (
       <Dialog open={isOpen} onOpenChange={handleClose}>
         <DialogContent className="max-w-md">
@@ -162,11 +198,27 @@ export function PurchaseFlow({ listing, isOpen, onClose, onSuccess }: PurchaseFl
           <DialogTitle className="flex items-center gap-2">
             <ShoppingCart className="h-5 w-5" />
             {step === 'success' ? 'Order Confirmed' : 'Purchase Carbon Credits'}
+            {demoMode && (
+              <Badge variant="outline" className="ml-2 text-xs bg-yellow-100 text-yellow-800 border-yellow-300">
+                <FlaskConical className="h-3 w-3 mr-1" />
+                Demo Mode
+              </Badge>
+            )}
           </DialogTitle>
           <DialogDescription>
             {listing.projectName}
           </DialogDescription>
         </DialogHeader>
+
+        {demoMode && step === 'quantity' && (
+          <Alert className="bg-yellow-50 border-yellow-200">
+            <FlaskConical className="h-4 w-4 text-yellow-600" />
+            <AlertTitle className="text-yellow-800">Testing Mode Active</AlertTitle>
+            <AlertDescription className="text-yellow-700">
+              You're viewing the purchase flow in demo mode. No real transactions will be created.
+            </AlertDescription>
+          </Alert>
+        )}
 
         {/* Step 1: Quantity Selection */}
         {step === 'quantity' && (
