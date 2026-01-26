@@ -277,8 +277,13 @@ export function GuidedOnboarding({ open: controlledOpen, onComplete }: GuidedOnb
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-xl p-0 overflow-hidden bg-gradient-to-b from-background to-muted/30" aria-describedby="guided-onboarding-description">
+    <Dialog open={isOpen} onOpenChange={() => {}}>
+      <DialogContent 
+        className="max-w-xl p-0 overflow-hidden bg-gradient-to-b from-background to-muted/30" 
+        aria-describedby="guided-onboarding-description"
+        onPointerDownOutside={(e) => e.preventDefault()}
+        onEscapeKeyDown={(e) => e.preventDefault()}
+      >
         <VisuallyHidden>
           <DialogTitle>Welcome Setup</DialogTitle>
           <DialogDescription id="guided-onboarding-description">Set up your organization on Zero Graph</DialogDescription>
