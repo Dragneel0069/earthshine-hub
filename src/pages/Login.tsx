@@ -9,6 +9,8 @@ import { Leaf, Loader2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { loginSchema } from "@/lib/validation";
 import { SEO } from "@/components/shared/SEO";
+import { useRateLimiter } from "@/hooks/useRateLimiter";
+import { logSecurityEvent } from "@/lib/security";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -19,6 +21,11 @@ const Login = () => {
   
   const { signIn, signInWithGoogle, user, loading } = useAuth();
   const navigate = useNavigate();
+  const { checkLimit, isLimited, reset: resetRateLimit } = useRateLimiter({ 
+    key: 'login', 
+    maxAttempts: 5, 
+    windowMs: 300000 // 5 minutes
+  });
 
   useEffect(() => {
     if (!loading && user) {
@@ -29,6 +36,16 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
+
+    // Rate limiting check
+    if (!checkLimit()) {
+      logSecurityEvent({
+        type: 'rate_limit',
+        message: 'Login rate limit triggered',
+        timestamp: Date.now(),
+      });
+      return;
+    }
 
     const result = loginSchema.safeParse({ email, password });
     if (!result.success) {
@@ -45,7 +62,15 @@ const Login = () => {
     const { error } = await signIn(email, password);
     setIsLoading(false);
 
-    if (!error) {
+    if (error) {
+      logSecurityEvent({
+        type: 'auth_failure',
+        message: 'Login failed',
+        details: { email: email.substring(0, 3) + '***' },
+        timestamp: Date.now(),
+      });
+    } else {
+      resetRateLimit(); // Reset rate limit on successful login
       navigate("/dashboard");
     }
   };
@@ -165,7 +190,7 @@ const Login = () => {
                   <p className="text-sm text-destructive">{errors.password}</p>
                 )}
               </div>
-              <Button type="submit" className="w-full h-11" disabled={isLoading}>
+              <Button type="submit" className="w-full h-11" disabled={isLoading || isLimited}>
                 {isLoading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
                 Sign in
               </Button>

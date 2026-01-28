@@ -9,6 +9,9 @@ import { Leaf, CheckCircle2, Loader2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { signupSchema } from "@/lib/validation";
 import { SEO } from "@/components/shared/SEO";
+import { PasswordStrengthIndicator } from "@/components/auth/PasswordStrengthIndicator";
+import { useFormSecurity, HoneypotField } from "@/hooks/useFormSecurity";
+import { useRateLimiter } from "@/hooks/useRateLimiter";
 
 const benefits = [
   "Track emissions across all operations",
@@ -26,8 +29,11 @@ const Signup = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [honeypot, setHoneypot] = useState("");
 
   const { signUp, signInWithGoogle, user, loading } = useAuth();
+  const { validateSubmission } = useFormSecurity({ minSubmitTime: 3 });
+  const { checkLimit, isLimited } = useRateLimiter({ key: 'signup', maxAttempts: 5, windowMs: 300000 });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,6 +45,24 @@ const Signup = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
+
+    // Security checks
+    const securityCheck = validateSubmission();
+    if (!securityCheck.valid) {
+      console.warn('Security validation failed:', securityCheck.reason);
+      return; // Silent fail for bots
+    }
+
+    // Rate limiting check
+    if (!checkLimit()) {
+      return;
+    }
+
+    // Honeypot check (bot trap)
+    if (honeypot) {
+      console.warn('Honeypot triggered');
+      return;
+    }
 
     const result = signupSchema.safeParse({ firstName, lastName, company, email, password });
     if (!result.success) {
@@ -226,12 +250,18 @@ const Signup = () => {
                     className="h-11"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    autoComplete="new-password"
                   />
+                  <PasswordStrengthIndicator password={password} />
                   {errors.password && (
                     <p className="text-sm text-destructive">{errors.password}</p>
                   )}
                 </div>
-                <Button type="submit" className="w-full h-11" disabled={isLoading}>
+
+                {/* Honeypot field - hidden from users, traps bots */}
+                <HoneypotField value={honeypot} onChange={setHoneypot} name="_website" />
+
+                <Button type="submit" className="w-full h-11" disabled={isLoading || isLimited}>
                   {isLoading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
                   Create account
                 </Button>
