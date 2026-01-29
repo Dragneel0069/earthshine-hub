@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Zap, Shield, BarChart3, Globe2, ChevronDown, TrendingUp, Target, Leaf, FileText, Play } from "lucide-react";
 import { EarthGlobe } from "@/components/3d/EarthGlobe";
-import { TestimonialsSection } from "@/components/landing/TestimonialsSection";
+
 import { TrustBadges } from "@/components/landing/TrustBadges";
 import { KnowledgeAgentSection } from "@/components/landing/KnowledgeAgentSection";
 import { IndiaHeroSection } from "@/components/landing/IndiaHeroSection";
@@ -496,8 +496,6 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Testimonials */}
-        <TestimonialsSection />
 
         {/* Trust Badges */}
         <TrustBadges />
