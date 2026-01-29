@@ -52,85 +52,362 @@
 
 ## 🛡️ Protection Layers
 
-### 1. CDN + WAF Configuration (Cloudflare Recommended)
+### 1. Cloudflare Production Configuration
 
-**Required Settings:**
-```
-SSL/TLS: Full (strict)
-Minimum TLS Version: 1.2
+#### Step 1: Add Domain to Cloudflare
+
+1. Log in to [Cloudflare Dashboard](https://dash.cloudflare.com)
+2. Click "Add a Site" → Enter `zerograph.in`
+3. Select plan (Pro recommended for WAF)
+4. Update nameservers at your registrar to Cloudflare's NS records
+
+#### Step 2: SSL/TLS Configuration
+
+**Dashboard Path:** `zerograph.in` → SSL/TLS → Overview
+
+```yaml
+Encryption Mode: Full (strict)
 Always Use HTTPS: ON
-HSTS: ON (max-age: 2 years, includeSubDomains, preload)
+Minimum TLS Version: TLS 1.2
+TLS 1.3: ON
+Automatic HTTPS Rewrites: ON
 ```
 
-**Rate Limiting Rules:**
-```
-Rule 1: Login Endpoint
-- Path: /api/auth/*
-- Rate: 10 requests per minute per IP
-- Action: Challenge then Block
+**Dashboard Path:** `zerograph.in` → SSL/TLS → Edge Certificates
 
-Rule 2: API Endpoints
-- Path: /functions/*
-- Rate: 60 requests per minute per IP
-- Action: Challenge then Block
-
-Rule 3: Global
-- Rate: 1000 requests per minute per IP
-- Action: Challenge
+```yaml
+HSTS: 
+  Status: ON
+  Max Age: 12 months (31536000)
+  Include Subdomains: ON
+  Preload: ON
+  No-Sniff Header: ON
 ```
 
-**WAF Rules (OWASP Core Ruleset):**
-```
-- SQL Injection: Block
-- XSS: Block
-- Remote Code Execution: Block
-- Path Traversal: Block
-- Protocol Violations: Block
-- Log4j: Block
+#### Step 3: WAF Rules Configuration
+
+**Dashboard Path:** `zerograph.in` → Security → WAF → Managed Rules
+
+**Enable OWASP Core Ruleset:**
+```yaml
+Cloudflare Managed Ruleset: ON
+  Action: Block
+  Sensitivity: High
+
+OWASP Core Ruleset: ON
+  Paranoia Level: PL2
+  Action: Block
+  
+Specific Rule Categories:
+  - SQL Injection: Block
+  - Cross-Site Scripting (XSS): Block
+  - Remote Code Execution (RCE): Block
+  - Local File Inclusion (LFI): Block
+  - PHP Injection: Block
+  - Command Injection: Block
+  - Log4j (CVE-2021-44228): Block
 ```
 
-**Bot Management:**
+**Dashboard Path:** `zerograph.in` → Security → WAF → Custom Rules
+
+**Rule 1: Block Known Attack Patterns**
+```json
+{
+  "expression": "(http.request.uri.query contains \"<script\") or (http.request.uri.query contains \"javascript:\") or (http.request.uri.query contains \"onerror=\") or (http.request.body.raw contains \"<script\")",
+  "action": "block",
+  "description": "Block XSS attack patterns"
+}
 ```
-- Known Bots: Allow (verified)
-- Likely Bots: Challenge
-- Automated: Block
-- Unverified: Challenge
+
+**Rule 2: Block SQL Injection Patterns**
+```json
+{
+  "expression": "(http.request.uri.query contains \"UNION SELECT\") or (http.request.uri.query contains \"1=1\") or (http.request.uri.query contains \"DROP TABLE\") or (http.request.uri.query contains \"--\")",
+  "action": "block",
+  "description": "Block SQL injection patterns"
+}
+```
+
+**Rule 3: Protect Admin Routes**
+```json
+{
+  "expression": "(http.request.uri.path contains \"/admin\") and (not ip.src in {YOUR_ADMIN_IPS})",
+  "action": "challenge",
+  "description": "Challenge admin route access"
+}
+```
+
+#### Step 4: Rate Limiting Rules
+
+**Dashboard Path:** `zerograph.in` → Security → WAF → Rate limiting rules
+
+**Rule 1: Authentication Endpoints (Critical)**
+```yaml
+Name: Auth Rate Limit
+Expression: (http.request.uri.path contains "/auth")
+Characteristics: IP
+Period: 1 minute
+Requests: 10
+Action: Block for 10 minutes
+Response: 429 Too Many Requests
+```
+
+**Rule 2: Edge Functions**
+```yaml
+Name: Edge Functions Rate Limit
+Expression: (http.request.uri.path contains "/functions/v1")
+Characteristics: IP
+Period: 1 minute  
+Requests: 60
+Action: Block for 5 minutes
+Response: 429 Too Many Requests
+```
+
+**Rule 3: Global Rate Limit**
+```yaml
+Name: Global Rate Limit
+Expression: (http.request.uri.path eq "*")
+Characteristics: IP
+Period: 1 minute
+Requests: 300
+Action: Challenge
+Response: Interactive Challenge
+```
+
+**Rule 4: Signup Abuse Prevention**
+```yaml
+Name: Signup Rate Limit
+Expression: (http.request.uri.path contains "/signup") and (http.request.method eq "POST")
+Characteristics: IP
+Period: 1 hour
+Requests: 5
+Action: Block for 1 hour
+Response: 429 Too Many Requests
+```
+
+**Rule 5: API Heavy Endpoints**
+```yaml
+Name: RAG Chat Rate Limit
+Expression: (http.request.uri.path contains "/functions/v1/rag-chat")
+Characteristics: IP
+Period: 1 minute
+Requests: 20
+Action: Block for 2 minutes
+```
+
+#### Step 5: Bot Management
+
+**Dashboard Path:** `zerograph.in` → Security → Bots
+
+```yaml
+Bot Fight Mode: ON
+Super Bot Fight Mode (Pro+):
+  Definitely Automated: Block
+  Likely Automated: Managed Challenge
+  Verified Bots: Allow
+  Static Resources: Skip (for performance)
+  
+JavaScript Detections: ON
+```
+
+#### Step 6: DDoS Protection
+
+**Dashboard Path:** `zerograph.in` → Security → DDoS
+
+```yaml
+HTTP DDoS Attack Protection: ON
+  Sensitivity: High
+  Action: Block
+  
+Network-layer DDoS: ON (automatic)
+
+Advanced DDoS Settings:
+  - Enable attack analytics
+  - Enable attack alerts
+```
+
+**Under Attack Mode (Emergency Only):**
+```yaml
+# Enable via: zerograph.in → Overview → Quick Actions
+# This adds a 5-second challenge to ALL visitors
+# Use only during active attacks
+```
+
+#### Step 7: Firewall Rules for India Focus
+
+**Dashboard Path:** `zerograph.in` → Security → WAF → Custom Rules
+
+**Optional: Geo-based Throttling**
+```json
+{
+  "expression": "(ip.geoip.country ne \"IN\") and (http.request.uri.path contains \"/functions\")",
+  "action": "challenge",
+  "description": "Challenge non-India API requests"
+}
+```
+
+**Block Known Bad ASNs:**
+```json
+{
+  "expression": "(ip.geoip.asnum in {AS12345 AS67890})",
+  "action": "block",
+  "description": "Block known malicious ASNs"
+}
+```
+
+#### Step 8: Page Rules for Caching & Security
+
+**Dashboard Path:** `zerograph.in` → Rules → Page Rules
+
+**Rule 1: Cache Static Assets**
+```yaml
+URL: *zerograph.in/assets/*
+Settings:
+  - Cache Level: Cache Everything
+  - Edge Cache TTL: 1 month
+  - Browser Cache TTL: 1 week
+```
+
+**Rule 2: No Cache for Auth**
+```yaml
+URL: *zerograph.in/auth/*
+Settings:
+  - Cache Level: Bypass
+  - Security Level: High
+```
+
+**Rule 3: API Security**
+```yaml
+URL: *zerograph.in/functions/*
+Settings:
+  - Cache Level: Bypass
+  - Security Level: High
+  - Browser Integrity Check: ON
 ```
 
 ---
 
-### 2. Security Headers Configuration
+### 2. Security Headers via Cloudflare Transform Rules
 
-Add to your hosting/CDN configuration:
+**Dashboard Path:** `zerograph.in` → Rules → Transform Rules → Modify Response Header
 
-```nginx
-# Nginx Configuration
-add_header X-Frame-Options "DENY" always;
-add_header X-Content-Type-Options "nosniff" always;
-add_header X-XSS-Protection "1; mode=block" always;
-add_header Referrer-Policy "strict-origin-when-cross-origin" always;
-add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
-add_header Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(self)" always;
-add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://ai.gateway.lovable.dev https://*.supabase.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://*.supabase.co https://images.unsplash.com; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://ai.gateway.lovable.dev; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests" always;
+**Create Rule: Security Headers**
+```yaml
+Rule Name: Add Security Headers
+When: All incoming requests
+Then: Set static headers
+
+Headers to Add:
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(self)
+  Cross-Origin-Embedder-Policy: credentialless
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
 ```
 
-**Cloudflare Workers (alternative):**
-```javascript
-addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request));
-});
+**CSP Header (Content-Security-Policy):**
+```
+default-src 'self'; script-src 'self' 'unsafe-inline' https://ai.gateway.lovable.dev https://*.supabase.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://*.supabase.co https://images.unsplash.com; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://ai.gateway.lovable.dev; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests
+```
 
-async function handleRequest(request) {
-  const response = await fetch(request);
-  const newResponse = new Response(response.body, response);
-  
-  newResponse.headers.set('X-Frame-Options', 'DENY');
-  newResponse.headers.set('X-Content-Type-Options', 'nosniff');
-  newResponse.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-  newResponse.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
-  
-  return newResponse;
-}
+### 3. Cloudflare Workers for Advanced Security
+
+**Dashboard Path:** `zerograph.in` → Workers & Pages → Create Worker
+
+**Worker: Security Headers & Logging**
+```javascript
+// security-headers-worker.js
+export default {
+  async fetch(request, env, ctx) {
+    const response = await fetch(request);
+    const newResponse = new Response(response.body, response);
+    
+    // Security Headers
+    newResponse.headers.set('X-Frame-Options', 'DENY');
+    newResponse.headers.set('X-Content-Type-Options', 'nosniff');
+    newResponse.headers.set('X-XSS-Protection', '1; mode=block');
+    newResponse.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+    newResponse.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=(self)');
+    newResponse.headers.set('Cross-Origin-Embedder-Policy', 'credentialless');
+    newResponse.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
+    
+    // CSP
+    newResponse.headers.set('Content-Security-Policy', 
+      "default-src 'self'; " +
+      "script-src 'self' 'unsafe-inline' https://ai.gateway.lovable.dev https://*.supabase.co; " +
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+      "font-src 'self' https://fonts.gstatic.com data:; " +
+      "img-src 'self' data: blob: https://*.supabase.co https://images.unsplash.com; " +
+      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://ai.gateway.lovable.dev; " +
+      "frame-ancestors 'none'; " +
+      "form-action 'self'; " +
+      "base-uri 'self'; " +
+      "object-src 'none'; " +
+      "upgrade-insecure-requests"
+    );
+    
+    // Remove server identification
+    newResponse.headers.delete('Server');
+    newResponse.headers.delete('X-Powered-By');
+    
+    return newResponse;
+  }
+};
+```
+
+**Worker: Rate Limiting with IP Tracking**
+```javascript
+// advanced-rate-limit-worker.js
+export default {
+  async fetch(request, env, ctx) {
+    const ip = request.headers.get('CF-Connecting-IP');
+    const path = new URL(request.url).pathname;
+    
+    // Check if IP is blocked
+    const blocked = await env.RATE_LIMIT_KV.get(`blocked:${ip}`);
+    if (blocked) {
+      return new Response(JSON.stringify({ 
+        error: 'Too many requests',
+        retry_after: blocked 
+      }), { 
+        status: 429,
+        headers: { 
+          'Content-Type': 'application/json',
+          'Retry-After': blocked
+        }
+      });
+    }
+    
+    // Track request count
+    const key = `requests:${ip}:${Math.floor(Date.now() / 60000)}`;
+    const count = parseInt(await env.RATE_LIMIT_KV.get(key) || '0') + 1;
+    
+    // Auth endpoints: 10/min
+    if (path.includes('/auth') && count > 10) {
+      await env.RATE_LIMIT_KV.put(`blocked:${ip}`, '600', { expirationTtl: 600 });
+      return new Response('Rate limited', { status: 429 });
+    }
+    
+    // API endpoints: 60/min
+    if (path.includes('/functions') && count > 60) {
+      await env.RATE_LIMIT_KV.put(`blocked:${ip}`, '300', { expirationTtl: 300 });
+      return new Response('Rate limited', { status: 429 });
+    }
+    
+    await env.RATE_LIMIT_KV.put(key, count.toString(), { expirationTtl: 120 });
+    
+    return fetch(request);
+  }
+};
+```
+
+**Deploy Worker Route:**
+```yaml
+Route: *zerograph.in/*
+Worker: security-headers-worker
 ```
 
 ---
@@ -284,28 +561,69 @@ if (!result.success) {
 - [ ] Update dependencies to latest secure versions
 - [ ] Review RLS policies for all tables
 - [ ] Test authentication flows
+- [ ] Verify password strength indicator works
+- [ ] Test rate limiting on login/signup
 
-### CDN/Hosting Configuration
-- [ ] Enable HTTPS with TLS 1.2+
-- [ ] Configure HSTS header
-- [ ] Set up WAF rules
-- [ ] Configure rate limiting
-- [ ] Enable DDoS protection
-- [ ] Set security headers
+### Cloudflare Configuration
+- [ ] Domain added to Cloudflare
+- [ ] SSL/TLS set to "Full (strict)"
+- [ ] Minimum TLS version set to 1.2
+- [ ] TLS 1.3 enabled
+- [ ] HSTS enabled (12 months, includeSubDomains, preload)
+- [ ] Always Use HTTPS enabled
+- [ ] Automatic HTTPS Rewrites enabled
+
+### Cloudflare WAF & Security
+- [ ] Cloudflare Managed Ruleset enabled
+- [ ] OWASP Core Ruleset enabled (PL2)
+- [ ] Custom XSS blocking rule created
+- [ ] Custom SQL injection blocking rule created
+- [ ] Bot Fight Mode enabled
+- [ ] DDoS protection enabled (High sensitivity)
+
+### Cloudflare Rate Limiting
+- [ ] Auth endpoints: 10 req/min
+- [ ] Edge Functions: 60 req/min
+- [ ] Global: 300 req/min
+- [ ] Signup: 5 req/hour
+- [ ] RAG Chat: 20 req/min
+
+### Cloudflare Headers & Rules
+- [ ] Security headers transform rule created
+- [ ] CSP header configured
+- [ ] Static assets caching enabled
+- [ ] Auth routes bypass cache
+- [ ] API routes high security level
 
 ### Supabase Configuration
-- [ ] Enable leaked password protection
+- [ ] Enable leaked password protection (Dashboard → Auth → Settings → Security)
 - [ ] Verify RLS enabled on all tables
 - [ ] Review function search_path settings
 - [ ] Enable audit logging
 - [ ] Configure backup policies
+- [ ] Disable anonymous signups
+- [ ] Enable email confirmation
 
-### Post-Deployment
-- [ ] Test all security headers (securityheaders.com)
+### Post-Deployment Verification
+- [ ] Test security headers at [securityheaders.com](https://securityheaders.com/?q=zerograph.in)
+- [ ] Test SSL at [SSL Labs](https://www.ssllabs.com/ssltest/analyze.html?d=zerograph.in)
 - [ ] Verify CSP doesn't break functionality
-- [ ] Test rate limiting behavior
+- [ ] Test rate limiting behavior manually
 - [ ] Monitor error logs for security events
-- [ ] Set up alerts for auth failures
+- [ ] Set up Cloudflare alerts for:
+  - [ ] DDoS attacks
+  - [ ] Rate limit triggers
+  - [ ] WAF blocks
+  - [ ] SSL errors
+
+### Cloudflare Notifications Setup
+**Dashboard Path:** Manage Account → Notifications
+
+Create alerts for:
+- [ ] DDoS Attack Alerter
+- [ ] Firewall Events Alert
+- [ ] Health Checks Notification
+- [ ] Security Events Summary (weekly)
 
 ---
 
