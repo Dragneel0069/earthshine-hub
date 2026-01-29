@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Zap, Shield, BarChart3, Globe2, ChevronDown, TrendingUp, Target, Leaf, FileText, Play } from "lucide-react";
 import { EarthGlobe } from "@/components/3d/EarthGlobe";
 
-import { TrustBadges } from "@/components/landing/TrustBadges";
+import { SocialProofStats } from "@/components/landing/SocialProofStats";
 import { KnowledgeAgentSection } from "@/components/landing/KnowledgeAgentSection";
 import { IndiaHeroSection } from "@/components/landing/IndiaHeroSection";
 import { QuickCalculatorWidget } from "@/components/landing/QuickCalculatorWidget";
@@ -497,8 +497,8 @@ const Index = () => {
         </section>
 
 
-        {/* Trust Badges */}
-        <TrustBadges />
+        {/* Social Proof Stats */}
+        <SocialProofStats />
 
         {/* Section 4: CTA - Glass Morphism */}
         <section className="py-16 md:py-32 relative overflow-hidden">
