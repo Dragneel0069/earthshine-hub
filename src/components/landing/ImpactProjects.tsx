@@ -2,6 +2,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Sun, TreePine, Wind, Flame } from "lucide-react";
+import { OptimizedImage } from "@/components/shared/OptimizedImage";
+
+// Blur placeholders for each image (green-tinted for eco theme)
+const SOLAR_BLUR = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIzMDAiIGZpbGw9IiMxYTM2MmQiLz48L3N2Zz4=';
+const FOREST_BLUR = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIzMDAiIGZpbGw9IiMwZjNkMmIiLz48L3N2Zz4=';
+const FLAME_BLUR = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIzMDAiIGZpbGw9IiMyYTI1MWEiLz48L3N2Zz4=';
+const WIND_BLUR = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIzMDAiIGZpbGw9IiMxZTNhNGYiLz48L3N2Zz4=';
 
 const projectTypes = [
   {
@@ -11,6 +18,7 @@ const projectTypes = [
     location: "Pan India",
     credits: "50,000+ Credits Available",
     image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=400&h=300&fit=crop",
+    blurDataURL: SOLAR_BLUR,
   },
   {
     icon: TreePine,
@@ -19,6 +27,7 @@ const projectTypes = [
     location: "Karnataka, Uttarakhand, Odisha",
     credits: "25,000+ Credits Available",
     image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400&h=300&fit=crop",
+    blurDataURL: FOREST_BLUR,
   },
   {
     icon: Flame,
@@ -27,6 +36,7 @@ const projectTypes = [
     location: "Bihar, Jharkhand, MP",
     credits: "30,000+ Credits Available",
     image: "https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=400&h=300&fit=crop",
+    blurDataURL: FLAME_BLUR,
   },
   {
     icon: Wind,
@@ -35,6 +45,7 @@ const projectTypes = [
     location: "Tamil Nadu, Gujarat",
     credits: "40,000+ Credits Available",
     image: "https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=400&h=300&fit=crop",
+    blurDataURL: WIND_BLUR,
   },
 ];
 
@@ -58,12 +69,14 @@ export function ImpactProjects() {
               className="group overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2"
             >
               <div className="aspect-[4/3] overflow-hidden relative">
-                <img
+                <OptimizedImage
                   src={project.image}
                   alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  blurDataURL={project.blurDataURL}
+                  aspectRatio="4/3"
+                  className="transition-transform duration-500 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent pointer-events-none" />
                 <div className="absolute bottom-4 left-4">
                   <div className="rounded-lg bg-primary p-2">
                     <project.icon className="h-5 w-5 text-primary-foreground" />
