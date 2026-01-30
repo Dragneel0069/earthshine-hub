@@ -466,3 +466,55 @@
     opacity: 0.5;
   }
 }
+
+/* Shimmer animation for image loading placeholders */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Skeleton loading animation */
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--muted)) 0%,
+    hsl(var(--muted-foreground) / 0.1) 50%,
+    hsl(var(--muted)) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* LCP optimization - prevent layout shift */
+.aspect-hero {
+  aspect-ratio: 16 / 9;
+}
+
+.aspect-card {
+  aspect-ratio: 4 / 3;
+}
+
+.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+
+/* Blur placeholder base styles */
+.blur-placeholder {
+  filter: blur(20px);
+  transform: scale(1.1);
+  transition: opacity 0.5s ease-out;
+}
+
+/* Image loading transition */
+.image-loaded {
+  opacity: 1;
+  transition: opacity 0.5s ease-out;
+}
+
+.image-loading {
+  opacity: 0;
+}

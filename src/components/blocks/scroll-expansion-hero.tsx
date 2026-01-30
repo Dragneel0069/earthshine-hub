@@ -136,6 +136,7 @@ const ScrollExpandMedia = ({
                 muted
                 loop
                 playsInline
+                preload="auto"
                 onLoadedData={() => setIsLoaded(true)}
                 className="w-full h-full object-cover"
                 style={{
@@ -146,6 +147,9 @@ const ScrollExpandMedia = ({
               <img
                 src={src}
                 alt={title}
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
                 onLoad={() => setIsLoaded(true)}
                 className="w-full h-full object-cover"
                 style={{

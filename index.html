@@ -138,6 +138,12 @@
     <link rel="apple-touch-icon" href="/pwa-192x192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/pwa-192x192.png" />
     <link rel="mask-icon" href="/favicon.png" color="#059669" />
+
+    <!-- Preload Critical Assets for LCP Optimization -->
+    <link rel="preload" href="/src/assets/hero-india-solar.jpg" as="image" fetchpriority="high" />
+    <link rel="preload" href="/src/assets/hero-renewable-energy.mp4" as="video" type="video/mp4" />
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+    <link rel="dns-prefetch" href="https://images.unsplash.com" />
   </head>
 
   <body>
