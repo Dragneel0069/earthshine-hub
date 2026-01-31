@@ -7,6 +7,8 @@ const platformLinks = [
   { label: "Calculators", href: "/calculators" },
   { label: "Reports", href: "/reports" },
   { label: "Marketplace", href: "/marketplace" },
+  { label: "Data Import", href: "/data-import" },
+  { label: "Suppliers", href: "/suppliers" },
 ];
 
 const resourceLinks = [
@@ -14,19 +16,20 @@ const resourceLinks = [
   { label: "Blog", href: "/blog" },
   { label: "Compliance Hub", href: "/compliance" },
   { label: "Knowledge Agent", href: "/knowledge" },
+  { label: "Certifications", href: "/certifications" },
+  { label: "Readiness Quiz", href: "/quiz" },
 ];
 
 const companyLinks = [
   { label: "About", href: "/about" },
   { label: "Pricing", href: "/pricing" },
-  { label: "Contact", href: "/consultation" },
+  { label: "Consultation", href: "/consultation" },
 ];
 
 const legalLinks = [
   { label: "Terms", href: "/terms" },
   { label: "Privacy", href: "/privacy" },
   { label: "Cookies", href: "/privacy#cookies" },
-  { label: "Methodology", href: "/methodology" },
 ];
 
 export function Footer() {
