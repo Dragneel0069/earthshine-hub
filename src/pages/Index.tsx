@@ -134,8 +134,9 @@ const Index = () => {
     <PageTransition>
       <SEO 
         url="/"
-        description="India's leading carbon emissions tracking platform. Track, reduce, and offset your organization's carbon footprint with real-time analytics and verified carbon credits."
-        keywords="carbon footprint India, carbon credits, emissions tracking, sustainability platform, GHG protocol, BRSR compliance, carbon offset, net zero, climate action"
+        title="India's #1 Carbon Accounting & BRSR Compliance Platform"
+        description="Zero Graph is India's leading carbon accounting platform. Track Scope 1, 2, 3 emissions, automate BRSR compliance, buy verified carbon credits, and plan your net zero journey. Trusted by 500+ Indian companies."
+        keywords="zerograph, zero graph, carbon accounting India, carbon footprint calculator India, BRSR compliance software, carbon credits India, emissions tracking, GHG protocol India, net zero India, ESG reporting, Scope 1 2 3, carbon management, sustainability platform, SEBI BRSR, carbon credit marketplace"
       />
       <div ref={containerRef} className="min-h-screen bg-background overflow-hidden">
         {/* Fixed Navbar over scroll hero */}
