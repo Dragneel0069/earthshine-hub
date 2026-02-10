@@ -10,20 +10,20 @@ interface SEOProps {
   noIndex?: boolean;
 }
 
-const BASE_URL = 'https://earthshine-hub.lovable.app';
+const BASE_URL = 'https://zerograph.in';
 const DEFAULT_IMAGE = `${BASE_URL}/og-image.png`;
 const SITE_NAME = 'Zero Graph';
 
 export function SEO({
   title,
-  description = "India's leading carbon emissions tracking platform for businesses. Track, reduce, and offset your organization's carbon footprint.",
-  keywords = 'carbon footprint, carbon credits, emissions tracking, sustainability, India, GHG protocol, BRSR, carbon offset, net zero',
+  description = "Zero Graph is India's #1 carbon accounting platform. Track emissions, automate BRSR compliance, buy verified carbon credits, and achieve net zero.",
+  keywords = 'zerograph, zero graph, carbon accounting India, carbon footprint calculator, BRSR compliance, carbon credits India, emissions tracking, sustainability platform, GHG protocol, net zero India, ESG reporting, carbon offset',
   image = DEFAULT_IMAGE,
   url,
   type = 'website',
   noIndex = false,
 }: SEOProps) {
-  const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} - Track, Reduce & Offset Your Carbon Footprint`;
+  const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} - India's #1 Carbon Accounting & BRSR Compliance Platform`;
   const fullUrl = url ? `${BASE_URL}${url}` : BASE_URL;
 
   return (

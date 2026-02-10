@@ -1,5 +1,5 @@
 # Zero Graph Robots.txt
-# https://earthshine-hub.lovable.app/robots.txt
+# https://zerograph.in/robots.txt
 
 # Allow all crawlers
 User-agent: Googlebot
@@ -24,6 +24,8 @@ Allow: /
 # Disallow authenticated/private areas
 Disallow: /dashboard
 Disallow: /reports
+Disallow: /data-import
+Disallow: /suppliers
 Disallow: /api/
 Disallow: /*.json$
 
@@ -31,7 +33,7 @@ Disallow: /*.json$
 Crawl-delay: 1
 
 # Sitemap location
-Sitemap: https://earthshine-hub.lovable.app/sitemap.xml
+Sitemap: https://zerograph.in/sitemap.xml
 
 # Security.txt location
-Security: https://earthshine-hub.lovable.app/.well-known/security.txt
+Security: https://zerograph.in/.well-known/security.txt
