@@ -184,6 +184,12 @@ export default function Blog() {
 
     return (
       <div className="min-h-screen bg-background">
+        <SEO 
+          title={post.title}
+          url={`/blog/${post.slug}`}
+          description={post.excerpt || `Read "${post.title}" on Zero Graph's climate education blog.`}
+          type="article"
+        />
         <Navbar />
         <main className="container py-8 max-w-4xl">
           <Button variant="ghost" asChild className="mb-6">
@@ -254,6 +260,12 @@ export default function Blog() {
   // Blog listing view
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Blog | Climate Education & Insights"
+        url="/blog"
+        description="Expert articles on carbon accounting, BRSR compliance, sustainability reporting, and climate action strategies for Indian businesses."
+        keywords="carbon accounting blog, sustainability articles India, BRSR guide, climate education, ESG insights, net zero strategies"
+      />
       <Navbar />
       <main className="container py-8">
         <div className="text-center mb-12">
