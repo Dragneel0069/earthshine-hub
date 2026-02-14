@@ -2,9 +2,17 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { FileText, Download, Calendar, TrendingDown, Building2, Truck, Zap, Factory } from "lucide-react";
+import { FileText, Download, Calendar, Building2, Truck, Zap, Factory, FileSpreadsheet, Table2 } from "lucide-react";
 import { BRSRReportGenerator } from "@/components/reports/BRSRReportGenerator";
 import { SEO } from "@/components/shared/SEO";
+import { exportCSV, exportExcel, type ExportColumn } from "@/lib/export-utils";
+import { toast } from "sonner";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const reports = [
   {
@@ -42,11 +50,56 @@ const reports = [
 ];
 
 const quickStats = [
-  { icon: Building2, label: "Scope 1", value: "8,200 kg", change: "-12%" },
-  { icon: Zap, label: "Scope 2", value: "15,400 kg", change: "-22%" },
-  { icon: Truck, label: "Scope 3", value: "4,850 kg", change: "-8%" },
-  { icon: Factory, label: "Total", value: "28,450 kg", change: "-18%" },
+  { icon: Building2, label: "Scope 1", value: "8,200 kg", change: "-12%", raw: 8200 },
+  { icon: Zap, label: "Scope 2", value: "15,400 kg", change: "-22%", raw: 15400 },
+  { icon: Truck, label: "Scope 3", value: "4,850 kg", change: "-8%", raw: 4850 },
+  { icon: Factory, label: "Total", value: "28,450 kg", change: "-18%", raw: 28450 },
 ];
+
+const emissionsColumns: ExportColumn[] = [
+  { header: "Scope", key: "scope" },
+  { header: "Emissions (kg CO₂e)", key: "emissions" },
+  { header: "Change (%)", key: "change" },
+];
+
+const reportColumns: ExportColumn[] = [
+  { header: "Report Title", key: "title" },
+  { header: "Description", key: "description" },
+  { header: "Date", key: "date" },
+  { header: "Status", key: "status" },
+  { header: "Type", key: "type" },
+];
+
+const getEmissionsExportData = () =>
+  quickStats.map((s) => ({
+    scope: s.label,
+    emissions: s.raw,
+    change: s.change,
+  }));
+
+const getReportsExportData = () =>
+  reports.map((r) => ({
+    title: r.title,
+    description: r.description,
+    date: r.date,
+    status: r.status,
+    type: r.type,
+  }));
+
+const handleExport = (format: "csv" | "excel", type: "emissions" | "reports") => {
+  const isEmissions = type === "emissions";
+  const data = isEmissions ? getEmissionsExportData() : getReportsExportData();
+  const columns = isEmissions ? emissionsColumns : reportColumns;
+  const filename = isEmissions ? "emissions_summary" : "reports_list";
+  const sheetName = isEmissions ? "Emissions" : "Reports";
+
+  if (format === "csv") {
+    exportCSV(data, columns, filename);
+  } else {
+    exportExcel(data, columns, filename, sheetName);
+  }
+  toast.success(`${sheetName} exported as ${format === "csv" ? "CSV" : "Excel"}`);
+};
 
 const Reports = () => {
   return (
@@ -67,14 +120,42 @@ const Reports = () => {
               Generate and download emissions reports
             </p>
           </div>
-          <BRSRReportGenerator
-            trigger={
-              <Button className="gap-2">
-                <FileText className="h-4 w-4" />
-                Generate BRSR Report
-              </Button>
-            }
-          />
+          <div className="flex items-center gap-2 flex-wrap">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="gap-2">
+                  <Download className="h-4 w-4" />
+                  Export Data
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuItem onClick={() => handleExport("csv", "emissions")}>
+                  <Table2 className="h-4 w-4 mr-2" />
+                  Emissions Summary (CSV)
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleExport("excel", "emissions")}>
+                  <FileSpreadsheet className="h-4 w-4 mr-2" />
+                  Emissions Summary (Excel)
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleExport("csv", "reports")}>
+                  <Table2 className="h-4 w-4 mr-2" />
+                  Reports List (CSV)
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleExport("excel", "reports")}>
+                  <FileSpreadsheet className="h-4 w-4 mr-2" />
+                  Reports List (Excel)
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <BRSRReportGenerator
+              trigger={
+                <Button className="gap-2">
+                  <FileText className="h-4 w-4" />
+                  Generate BRSR Report
+                </Button>
+              }
+            />
+          </div>
         </div>
 
         {/* Quick Stats */}
