@@ -36,6 +36,7 @@ import Suppliers from "./pages/Suppliers";
 import MarketplaceEnhanced from "./pages/MarketplaceEnhanced";
 import Integrations from "./pages/Integrations";
 import CBAMCompliance from "./pages/CBAMCompliance";
+import ComponentShowcase from "./pages/ComponentShowcase";
 
 const queryClient = new QueryClient();
 
@@ -74,6 +75,7 @@ const App = () => (
                   <Route path="/suppliers" element={<ProtectedRoute><Suppliers /></ProtectedRoute>} />
                   <Route path="/integrations" element={<ProtectedRoute><Integrations /></ProtectedRoute>} />
                   <Route path="/cbam" element={<ProtectedRoute><CBAMCompliance /></ProtectedRoute>} />
+                  <Route path="/showcase" element={<ComponentShowcase />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
