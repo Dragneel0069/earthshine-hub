@@ -19,6 +19,8 @@ import { SEO } from "@/components/shared/SEO";
 import ScrollExpandMedia from "@/components/blocks/scroll-expansion-hero";
 import heroImage from "@/assets/hero-india-solar.jpg";
 import heroVideo from "@/assets/hero-renewable-energy.mp4";
+import { RevealWaveImage } from "@/components/ui/reveal-wave-image";
+import greenBuildingImg from "@/assets/green-building-india.jpg";
 import { Footer } from "@/components/layout/Footer";
 
 const stats = [
@@ -300,73 +302,18 @@ const Index = () => {
           <div className="container relative z-10 px-4 md:px-6">
             <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
               <ScrollReveal animation="fadeRight">
-                <div className="relative">
-                  {/* Dashboard Mockup */}
-                  <motion.div 
-                    className="relative glass-strong rounded-xl md:rounded-2xl p-1 shadow-glow"
-                    whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
-                  >
-                    <div className="bg-card rounded-lg md:rounded-xl p-4 md:p-6 space-y-3 md:space-y-4">
-                      <div className="flex items-center justify-between mb-3 md:mb-4">
-                        <div className="flex items-center gap-1.5 md:gap-2">
-                          <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-destructive/50" />
-                          <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-warning/50" />
-                          <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-success/50" />
-                        </div>
-                        <span className="text-[10px] md:text-xs text-muted-foreground font-mono">zerograph.in/dashboard</span>
-                      </div>
-                      
-                      {/* Mini charts */}
-                      <div className="grid grid-cols-3 gap-2 md:gap-4">
-                        {[
-                          { label: "Scope 1", value: "450", color: "bg-primary" },
-                          { label: "Scope 2", value: "380", color: "bg-secondary" },
-                          { label: "Scope 3", value: "720", color: "bg-warning" },
-                        ].map((item, i) => (
-                          <motion.div 
-                            key={i}
-                            className="p-2 md:p-3 rounded-lg bg-muted/50"
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ delay: i * 0.1 }}
-                          >
-                            <div className={`w-1.5 h-1.5 md:w-2 md:h-2 rounded-full ${item.color} mb-1.5 md:mb-2`} />
-                            <p className="text-[10px] md:text-xs text-muted-foreground">{item.label}</p>
-                            <p className="text-sm md:text-lg font-bold font-display">{item.value}</p>
-                            <p className="text-[10px] md:text-xs text-muted-foreground">tCO₂e</p>
-                          </motion.div>
-                        ))}
-                      </div>
-
-                      {/* Graph preview */}
-                      <div className="h-20 md:h-32 rounded-lg bg-muted/30 relative overflow-hidden">
-                        <svg className="w-full h-full" viewBox="0 0 400 100" preserveAspectRatio="none">
-                          <motion.path
-                            d="M0,80 C50,70 100,90 150,60 C200,30 250,50 300,40 C350,30 400,45 400,35"
-                            fill="none"
-                            stroke="hsl(var(--primary))"
-                            strokeWidth="2"
-                            initial={{ pathLength: 0 }}
-                            whileInView={{ pathLength: 1 }}
-                            transition={{ duration: 1.5 }}
-                          />
-                          <motion.path
-                            d="M0,90 C50,85 100,75 150,80 C200,85 250,70 300,75 C350,80 400,65 400,70"
-                            fill="none"
-                            stroke="hsl(var(--secondary))"
-                            strokeWidth="2"
-                            strokeDasharray="5 5"
-                            initial={{ pathLength: 0 }}
-                            whileInView={{ pathLength: 1 }}
-                            transition={{ duration: 1.5, delay: 0.3 }}
-                          />
-                        </svg>
-                        <div className="absolute bottom-1.5 md:bottom-2 right-1.5 md:right-2 text-[10px] md:text-xs text-muted-foreground">
-                          Live emissions trend
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
+                <div className="relative rounded-xl md:rounded-2xl overflow-hidden shadow-glow h-[300px] md:h-[450px]">
+                  <RevealWaveImage
+                    src={greenBuildingImg}
+                    revealRadius={0.25}
+                    revealSoftness={0.5}
+                    pixelSize={3}
+                    waveSpeed={0.4}
+                    waveFrequency={3.0}
+                    waveAmplitude={0.15}
+                    mouseRadius={0.25}
+                    className="w-full h-full"
+                  />
                 </div>
               </ScrollReveal>
 
