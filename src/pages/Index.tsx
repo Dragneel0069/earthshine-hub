@@ -14,14 +14,12 @@ import { PageTransition } from "@/components/animations/PageTransition";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { StaggerContainer, StaggerItem } from "@/components/animations/StaggerContainer";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, lazy, Suspense } from "react";
+import { useRef } from "react";
 import { SEO } from "@/components/shared/SEO";
 import ScrollExpandMedia from "@/components/blocks/scroll-expansion-hero";
 import heroImage from "@/assets/hero-india-solar.jpg";
 import heroVideo from "@/assets/hero-renewable-energy.mp4";
 import greenBuildingImg from "@/assets/green-building-india.jpg";
-
-const RevealWaveImage = lazy(() => import("@/components/ui/reveal-wave-image").then(m => ({ default: m.RevealWaveImage })));
 import { Footer } from "@/components/layout/Footer";
 
 const stats = [
@@ -304,19 +302,12 @@ const Index = () => {
             <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
               <ScrollReveal animation="fadeRight">
                 <div className="relative rounded-xl md:rounded-2xl overflow-hidden shadow-glow h-[300px] md:h-[450px]">
-                  <Suspense fallback={<div className="w-full h-full bg-muted animate-pulse rounded-xl" />}>
-                    <RevealWaveImage
-                      src={greenBuildingImg}
-                      revealRadius={0.25}
-                      revealSoftness={0.5}
-                      pixelSize={3}
-                      waveSpeed={0.4}
-                      waveFrequency={3.0}
-                      waveAmplitude={0.15}
-                      mouseRadius={0.25}
-                      className="w-full h-full"
-                    />
-                  </Suspense>
+                  <img
+                    src={greenBuildingImg}
+                    alt="Sustainable green building in India"
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
                 </div>
               </ScrollReveal>
 
