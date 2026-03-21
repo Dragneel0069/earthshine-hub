@@ -59,7 +59,7 @@ export class GlobalErrorBoundary extends Component<Props, State> {
                 Our team has been notified and is working to fix the issue.
               </p>
 
-              {process.env.NODE_ENV === 'development' && this.state.error && (
+              {import.meta.env.DEV && this.state.error && (
                 <div className="mb-6 p-4 bg-muted rounded-lg text-left overflow-auto max-h-40">
                   <p className="text-sm font-mono text-destructive">
                     {this.state.error.toString()}
