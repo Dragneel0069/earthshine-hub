@@ -290,8 +290,7 @@ const TermsOfService = () => {
       </div>
       </>
 
-      </>
-
+  
 
   );
 };

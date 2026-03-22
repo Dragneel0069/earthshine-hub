@@ -18,8 +18,7 @@ const KnowledgeAgent = () => {
       </div>
       </>
 
-      </>
-
+  
 
   );
 };

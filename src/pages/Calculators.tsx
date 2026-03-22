@@ -220,8 +220,7 @@ const Calculators = () => {
       </div>
       </>
 
-      </>
-
+  
 
   );
 };

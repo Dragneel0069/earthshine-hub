@@ -374,8 +374,7 @@ const Methodology = () => {
       </div>
       </>
 
-      </>
-
+  
 
   );
 };
