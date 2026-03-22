@@ -4,7 +4,7 @@ import { TotalEmissionsCounter } from "@/components/dashboard/TotalEmissionsCoun
 import { MonthlyTrendChart } from "@/components/dashboard/MonthlyTrendChart";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
-import { Dashboard3DScene } from "@/components/3d/Dashboard3DScene";
+import { EmissionsByScope } from "@/components/dashboard/EmissionsByScope";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
