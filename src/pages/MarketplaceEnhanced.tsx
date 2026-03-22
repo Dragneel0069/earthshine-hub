@@ -36,14 +36,14 @@ export default function MarketplaceEnhanced() {
                 <ShoppingCart className="h-4 w-4" />
                 <span>Carbon Credit Marketplace</span>
               </div>
-              <motion.h1 
+              <h1 
                 className="text-3xl lg:text-5xl font-bold mb-4"
               >
                 <span>Verified Indian </span>
                 <span className="bg-gradient-to-r from-primary to-green-400 bg-clip-text text-transparent">
                   Carbon Credits
                 </span>
-              </motion.h1>
+              </h1>
               <p 
                 className="text-muted-foreground mb-8"
               >

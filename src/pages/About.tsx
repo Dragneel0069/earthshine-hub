@@ -99,7 +99,7 @@ const About = () => {
                 <Leaf className="h-4 w-4" />
                 <span>About Zero Graph</span>
               </div>
-              <motion.h1 
+              <h1 
                 className="text-4xl lg:text-6xl font-bold font-display mb-6"
               >
                 <span className="text-foreground">India's Partner for</span>
@@ -107,7 +107,7 @@ const About = () => {
                 <span className="bg-gradient-to-r from-primary via-secondary to-lime bg-clip-text text-transparent">
                   Credible Climate Action
                 </span>
-              </motion.h1>
+              </h1>
               <p 
                 className="text-lg text-muted-foreground"
               >

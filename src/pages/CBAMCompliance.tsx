@@ -36,14 +36,14 @@ export default function CBAMCompliance() {
                 </Badge>
               </div>
 
-              <motion.h1
+              <h1
                 className="text-3xl lg:text-4xl font-bold mb-4"
               >
                 Carbon Border Adjustment Mechanism
                 <span className="block text-muted-foreground text-xl lg:text-2xl font-normal mt-2">
                   CBAM Compliance for Indian Exporters
                 </span>
-              </motion.h1>
+              </h1>
 
               <p
                 className="text-muted-foreground mb-6"

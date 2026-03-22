@@ -57,7 +57,7 @@ const Calculators = () => {
                 <Calculator className="h-4 w-4" />
                 <span>GHG Protocol Aligned Calculator</span>
               </div>
-              <motion.h1 
+              <h1 
                 className="text-3xl lg:text-5xl font-bold font-display mb-4"
               >
                 <span className="text-foreground">Enterprise Carbon</span>
@@ -65,7 +65,7 @@ const Calculators = () => {
                 <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
                   Footprint Calculator
                 </span>
-              </motion.h1>
+              </h1>
               <p 
                 className="text-muted-foreground max-w-xl mx-auto"
               >
