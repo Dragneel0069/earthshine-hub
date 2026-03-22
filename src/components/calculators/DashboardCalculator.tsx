@@ -1,5 +1,4 @@
 import { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -232,10 +231,8 @@ export function DashboardCalculator() {
   return (
     <div className="flex h-[calc(100vh-200px)] min-h-[600px] gap-6">
       {/* Sidebar Navigation */}
-      <motion.div 
+      <div 
         className="w-64 shrink-0"
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
       >
         <Card className="h-full bg-card border border-border shadow-sm">
           <CardHeader className="pb-4">
@@ -250,7 +247,7 @@ export function DashboardCalculator() {
               const value = getScopeValue(item.id);
 
               return (
-                <motion.button
+                <button
                   key={item.id}
                   onClick={() => setActiveScope(item.id)}
                   className={`w-full p-3 rounded-xl text-left transition-all ${
@@ -258,9 +255,6 @@ export function DashboardCalculator() {
                       ? "bg-primary/10 border border-primary/30 shadow-sm" 
                       : "hover:bg-muted/50 border border-transparent"
                   }`}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
                 >
                   <div className="flex items-center gap-3">
                     <div className={`p-2 rounded-lg ${item.bgColor}`}>
@@ -282,7 +276,7 @@ export function DashboardCalculator() {
                       </p>
                     </div>
                   </div>
-                </motion.button>
+                </button>
               );
             })}
 
@@ -307,14 +301,11 @@ export function DashboardCalculator() {
             </Button>
           </CardContent>
         </Card>
-      </motion.div>
+      </div>
 
       {/* Main Calculator Area */}
-      <motion.div 
+      <div 
         className="flex-1"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
       >
         <Card className="h-full bg-card border border-border shadow-sm overflow-hidden">
           {/* Progress Stepper */}
@@ -351,7 +342,6 @@ export function DashboardCalculator() {
           {/* Calculator Content */}
           <ScrollArea className="h-[calc(100%-64px)]">
             <div className="p-6">
-              <AnimatePresence mode="wait">
                 {activeScope === "scope1" && (
                   <Scope1Form
                     key="scope1"
@@ -396,18 +386,14 @@ export function DashboardCalculator() {
                     hydrogenTonnes={hydrogenTonnes} setHydrogenTonnes={setHydrogenTonnes}
                   />
                 )}
-              </AnimatePresence>
             </div>
           </ScrollArea>
         </Card>
-      </motion.div>
+      </div>
 
       {/* Fixed Results Panel */}
-      <motion.div 
+      <div 
         className="w-80 shrink-0"
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.3 }}
       >
         <Card className="h-full bg-card border border-border shadow-sm overflow-hidden">
           <CardHeader className="border-b border-border bg-muted/30">
@@ -424,8 +410,6 @@ export function DashboardCalculator() {
                 <motion.p 
                   className="text-4xl font-bold text-primary"
                   key={totalTonnes}
-                  initial={{ scale: 1.1, opacity: 0.5 }}
-                  animate={{ scale: 1, opacity: 1 }}
                 >
                   {totalTonnes.toFixed(1)}
                 </motion.p>
@@ -532,7 +516,7 @@ export function DashboardCalculator() {
             </CardContent>
           </ScrollArea>
         </Card>
-      </motion.div>
+      </div>
     </div>
   );
 }
@@ -553,10 +537,7 @@ function Scope1Form({
   refrigerantType, setRefrigerantType,
 }: any) {
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
+    <div
       className="space-y-8"
     >
       <div>
@@ -616,7 +597,7 @@ function Scope1Form({
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -626,10 +607,7 @@ function Scope2Form({
   dgDiesel, setDgDiesel,
 }: any) {
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
+    <div
       className="space-y-8"
     >
       <div>
@@ -660,7 +638,7 @@ function Scope2Form({
           <InputField label="DG Set Diesel (L/month)" value={dgDiesel} onChange={setDgDiesel} />
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -674,10 +652,7 @@ function Scope3Form({
   downstreamTransportTonneKm, setDownstreamTransportTonneKm,
 }: any) {
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
+    <div
       className="space-y-8"
     >
       <div>
@@ -721,7 +696,7 @@ function Scope3Form({
           <InputField label="Avg. Commute Distance (km)" value={avgCommute} onChange={setAvgCommute} />
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -734,10 +709,7 @@ function ProcessForm({
   hydrogenTonnes, setHydrogenTonnes,
 }: any) {
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
+    <div
       className="space-y-8"
     >
       <div>
@@ -756,7 +728,7 @@ function ProcessForm({
         <InputField label="Ammonia (tonnes/year)" value={ammoniaTonnes} onChange={setAmmoniaTonnes} />
         <InputField label="Hydrogen (tonnes/year)" value={hydrogenTonnes} onChange={setHydrogenTonnes} />
       </div>
-    </motion.div>
+    </div>
   );
 }
 

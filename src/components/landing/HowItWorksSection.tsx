@@ -1,7 +1,5 @@
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ScrollReveal } from '@/components/animations/ScrollReveal';
 import { 
   Upload, 
   BarChart3, 
@@ -53,7 +51,7 @@ export function HowItWorksSection() {
       <div className="absolute inset-0 grid-background opacity-20" />
       
       <div className="container relative z-10 px-4 md:px-6">
-        <ScrollReveal className="text-center max-w-3xl mx-auto mb-10 md:mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-10 md:mb-16">
           <div className="inline-flex items-center gap-2 rounded-full glass px-3 md:px-4 py-1.5 md:py-2 text-xs md:text-sm font-medium text-secondary mb-4 md:mb-6">
             <Leaf className="h-3.5 w-3.5 md:h-4 md:w-4" />
             <span>HOW IT WORKS</span>
@@ -66,17 +64,13 @@ export function HowItWorksSection() {
           <p className="text-sm md:text-lg text-muted-foreground">
             Go from scattered data to actionable climate strategy in minutes, not months.
           </p>
-        </ScrollReveal>
+        </div>
 
         {/* Steps Grid */}
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-8 md:mb-12">
           {steps.map((step, index) => (
-            <motion.div
+            <div
               key={step.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.15 }}
-              viewport={{ once: true }}
               className="group relative"
             >
               {/* Connector Line (desktop only) */}
@@ -109,15 +103,12 @@ export function HowItWorksSection() {
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+        <div
           className="text-center"
         >
           <div className="inline-flex flex-col sm:flex-row gap-3 md:gap-4">
@@ -136,7 +127,7 @@ export function HowItWorksSection() {
           <p className="mt-3 md:mt-4 text-xs md:text-sm text-muted-foreground">
             No credit card required • 14-day free trial • Cancel anytime
           </p>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

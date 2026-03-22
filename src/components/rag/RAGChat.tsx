@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Send, Bot, User, FileText, Loader2, Sparkles, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -214,9 +213,7 @@ export function RAGChat({ conversationId }: RAGChatProps) {
       <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
         <div className="space-y-4 max-w-3xl mx-auto">
           {messages.length === 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+            <div
               className="py-8"
             >
               <div className="text-center mb-8">
@@ -238,16 +235,12 @@ export function RAGChat({ conversationId }: RAGChatProps) {
                 }}
                 className="max-w-xl mx-auto"
               />
-            </motion.div>
+            </div>
           )}
 
-          <AnimatePresence mode="popLayout">
             {messages.map((message) => (
-              <motion.div
+              <div
                 key={message.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
                 className={`flex gap-3 ${
                   message.role === "user" ? "justify-end" : "justify-start"
                 }`}
@@ -291,14 +284,11 @@ export function RAGChat({ conversationId }: RAGChatProps) {
                     <User className="w-4 h-4 text-primary-foreground" />
                   </div>
                 )}
-              </motion.div>
+              </div>
             ))}
-          </AnimatePresence>
 
           {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+            <div
               className="flex gap-3"
             >
               <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
@@ -307,7 +297,7 @@ export function RAGChat({ conversationId }: RAGChatProps) {
               <div className="glass-strong rounded-2xl px-4 py-3">
                 <Loader2 className="w-4 h-4 animate-spin text-primary" />
               </div>
-            </motion.div>
+            </div>
           )}
         </div>
       </ScrollArea>

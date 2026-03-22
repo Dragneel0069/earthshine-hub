@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import {
   Shield,
   Check,
@@ -197,11 +196,8 @@ export function BlockchainVerification({
         {isVerifying && (
           <div className="space-y-3 py-4">
             {verificationSteps.map((step, index) => (
-              <motion.div
+              <div
                 key={step.step}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
                 className="flex items-center gap-3"
               >
                 <div
@@ -230,16 +226,14 @@ export function BlockchainVerification({
                 >
                   {step.step}
                 </span>
-              </motion.div>
+              </div>
             ))}
           </div>
         )}
 
         {/* Verification Complete */}
         {verificationData && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
+          <div
             className="space-y-4"
           >
             <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
@@ -266,12 +260,8 @@ export function BlockchainVerification({
               )}
             </Button>
 
-            <AnimatePresence>
               {showDetails && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
+                <div
                   className="space-y-3 overflow-hidden"
                 >
                   <div className="p-3 bg-muted/30 rounded-lg space-y-3">
@@ -341,10 +331,9 @@ export function BlockchainVerification({
                       View on IPFS
                     </Button>
                   </div>
-                </motion.div>
+                </div>
               )}
-            </AnimatePresence>
-          </motion.div>
+          </div>
         )}
 
         {/* Disclaimer */}

@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { 
   Calculator,
   ArrowRight,
@@ -22,8 +21,6 @@ import { DashboardCalculator } from "@/components/calculators/DashboardCalculato
 import { EnergyCalculator } from "@/components/calculators/EnergyCalculator";
 import { TransportCalculator } from "@/components/calculators/TransportCalculator";
 import { SupplyChainCalculator } from "@/components/calculators/SupplyChainCalculator";
-import { ScrollReveal } from "@/components/animations/ScrollReveal";
-import { PageTransition } from "@/components/animations/PageTransition";
 import { SEO } from "@/components/shared/SEO";
 
 const nextSteps = [
@@ -34,8 +31,7 @@ const nextSteps = [
 
 const Calculators = () => {
   return (
-    <PageTransition>
-      <SEO 
+    <SEO 
         title="Carbon Footprint Calculator"
         url="/calculators"
         description="Calculate your organization's carbon footprint with India-specific emission factors. Comprehensive Scope 1, 2 & 3 emissions tracking aligned with GHG Protocol."
@@ -48,27 +44,20 @@ const Calculators = () => {
         <section className="relative py-16 overflow-hidden bg-gradient-to-b from-muted to-background">
           {/* Background effects */}
           <div className="absolute inset-0 grid-background opacity-20" />
-          <motion.div 
+          <div 
             className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[150px]"
-            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           />
           
           <div className="container relative z-10">
             <div className="max-w-3xl mx-auto text-center">
-              <motion.div 
+              <div 
                 className="inline-flex items-center gap-2 rounded-full bg-accent border border-border px-4 py-2 text-sm font-medium text-primary mb-4"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
               >
                 <Calculator className="h-4 w-4" />
                 <span>GHG Protocol Aligned Calculator</span>
-              </motion.div>
+              </div>
               <motion.h1 
                 className="text-3xl lg:text-5xl font-bold font-display mb-4"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
               >
                 <span className="text-foreground">Enterprise Carbon</span>
                 <br />
@@ -78,20 +67,14 @@ const Calculators = () => {
               </motion.h1>
               <motion.p 
                 className="text-muted-foreground max-w-xl mx-auto"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
               >
                 Comprehensive Scope 1, 2 & 3 emissions tracking with India-specific emission factors. 
                 Built for heavy industries including steel, cement, chemicals & more.
               </motion.p>
 
               {/* Feature Pills */}
-              <motion.div 
+              <div 
                 className="flex flex-wrap justify-center gap-2 mt-6"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
               >
                 {["Steel & Iron", "Cement", "Chemicals", "Aluminum", "Refinery"].map((industry, i) => (
                   <span 
@@ -101,7 +84,7 @@ const Calculators = () => {
                     {industry}
                   </span>
                 ))}
-              </motion.div>
+              </div>
             </div>
           </div>
         </section>
@@ -152,7 +135,7 @@ const Calculators = () => {
         <section className="py-20 relative bg-background">
           <div className="absolute inset-0 bg-gradient-to-t from-accent/30 to-transparent" />
           <div className="container relative z-10">
-            <ScrollReveal className="text-center mb-12">
+            <div className="text-center mb-12">
               <div className="inline-flex items-center gap-2 rounded-full bg-accent border border-border px-4 py-2 text-sm font-medium text-primary mb-6">
                 <Sparkles className="h-4 w-4" />
                 <span>WHAT'S NEXT</span>
@@ -160,16 +143,12 @@ const Calculators = () => {
               <h2 className="text-2xl lg:text-3xl font-bold font-display text-foreground">
                 Your <span className="text-primary">Decarbonization</span> Journey
               </h2>
-            </ScrollReveal>
+            </div>
             
             <div className="grid gap-6 md:grid-cols-3 max-w-4xl mx-auto">
               {nextSteps.map((step, index) => (
-                <motion.div
+                <div
                   key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
                 >
                   <Card className="text-center bg-card border border-border hover:border-primary/50 hover:shadow-lg transition-all h-full">
                     <CardContent className="p-6">
@@ -180,18 +159,18 @@ const Calculators = () => {
                       <p className="text-sm text-muted-foreground">{step.description}</p>
                     </CardContent>
                   </Card>
-                </motion.div>
+                </div>
               ))}
             </div>
             
-            <ScrollReveal className="text-center mt-12">
+            <div className="text-center mt-12">
               <Link to="/consultation">
                 <Button size="lg" className="gap-2 shadow-lg">
                   Get Expert Guidance 
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
-            </ScrollReveal>
+            </div>
           </div>
         </section>
 
@@ -238,7 +217,6 @@ const Calculators = () => {
           </div>
         </footer>
       </div>
-    </PageTransition>
   );
 };
 

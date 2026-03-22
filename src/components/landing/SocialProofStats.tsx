@@ -1,4 +1,3 @@
-import { motion, useInView, useSpring, useTransform } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { Building2, Leaf, Globe2, TrendingDown, Users, Award } from "lucide-react";
 
@@ -48,11 +47,7 @@ function AnimatedCounter({ value, suffix = "", prefix = "" }: { value: number; s
 
 function StatItem({ value, suffix, prefix, label, description, icon: Icon, delay = 0 }: StatItemProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay }}
-      viewport={{ once: true }}
+    <div
       className="group relative p-6 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-xl transition-all duration-300"
     >
       {/* Background gradient on hover */}
@@ -72,7 +67,7 @@ function StatItem({ value, suffix, prefix, label, description, icon: Icon, delay
         
         <p className="text-sm text-muted-foreground">{description}</p>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -125,10 +120,7 @@ export function SocialProofStats() {
       
       <div className="container relative z-10">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+        <div
           className="text-center mb-12"
         >
           <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
@@ -140,7 +132,7 @@ export function SocialProofStats() {
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Join hundreds of Indian companies using Zero Graph to measure, reduce, and offset their carbon footprint.
           </p>
-        </motion.div>
+        </div>
 
         {/* Stats Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
@@ -150,10 +142,7 @@ export function SocialProofStats() {
         </div>
 
         {/* Trusted By Logos */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
+        <div
           className="pt-8 border-t border-border"
         >
           <p className="text-center text-xs text-muted-foreground uppercase tracking-wider mb-6">
@@ -166,12 +155,8 @@ export function SocialProofStats() {
             <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10" />
             
             {/* Scrolling logos */}
-            <motion.div
+            <div
               className="flex gap-12 items-center"
-              animate={{ x: [0, -50 * trustedBy.length] }}
-              transition={{
-                x: {
-                  repeat: Infinity,
                   repeatType: "loop",
                   duration: 20,
                   ease: "linear",
@@ -186,15 +171,12 @@ export function SocialProofStats() {
                   {company}
                 </span>
               ))}
-            </motion.div>
+            </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Certifications Row */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+        <div
           className="mt-12 flex flex-wrap justify-center gap-6"
         >
           {[
@@ -212,7 +194,7 @@ export function SocialProofStats() {
               <span className="text-xs text-muted-foreground">• {cert.sublabel}</span>
             </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

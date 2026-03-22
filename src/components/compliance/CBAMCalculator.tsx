@@ -1,5 +1,4 @@
 import { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import {
   Globe,
   FileText,
@@ -267,13 +266,9 @@ export function CBAMCalculator() {
             <CardContent>
               <ScrollArea className="max-h-[400px]">
                 <div className="space-y-4">
-                  <AnimatePresence mode="popLayout">
                     {productLines.map((line, index) => (
-                      <motion.div
+                      <div
                         key={line.id}
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
                         className="grid grid-cols-12 gap-3 items-end p-3 bg-muted/30 rounded-lg"
                       >
                         <div className="col-span-4">
@@ -356,9 +351,8 @@ export function CBAMCalculator() {
                             <Trash2 className="w-4 h-4 text-muted-foreground" />
                           </Button>
                         </div>
-                      </motion.div>
+                      </div>
                     ))}
-                  </AnimatePresence>
                 </div>
               </ScrollArea>
             </CardContent>

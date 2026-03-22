@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
-import { motion } from "framer-motion";
 import {
   Select,
   SelectContent,
@@ -33,8 +32,6 @@ import {
   Droplets,
   ShoppingCart,
 } from "lucide-react";
-import { PageTransition } from "@/components/animations/PageTransition";
-import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { SEO } from "@/components/shared/SEO";
 import { MarketplaceSkeleton, ProjectCardSkeleton, ProjectCardListSkeleton } from "@/components/skeletons/MarketplaceSkeleton";
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
@@ -307,8 +304,7 @@ const Marketplace = () => {
     priceRange[1] !== 5000;
 
   return (
-    <PageTransition>
-      <SEO 
+    <SEO 
         title="Carbon Credit Marketplace"
         url="/marketplace"
         description="Browse and purchase verified Indian carbon credits from renewable energy, forestry, and clean cookstove projects. VCS, Gold Standard, and ICER certified."
@@ -336,27 +332,20 @@ const Marketplace = () => {
         {/* Hero Banner */}
         <section className="relative py-16 overflow-hidden">
           <div className="absolute inset-0 grid-background opacity-20" />
-          <motion.div 
+          <div 
             className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-primary/20 rounded-full blur-[150px]"
-            animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.3, 0.2] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           />
           
           <div className="container relative z-10">
             <div className="max-w-3xl mx-auto text-center">
-              <motion.div 
+              <div 
                 className="inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-sm font-medium text-primary mb-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
               >
                 <ShoppingCart className="h-4 w-4" />
                 <span>Carbon Credit Marketplace</span>
-              </motion.div>
+              </div>
               <motion.h1 
                 className="text-3xl lg:text-5xl font-bold font-display mb-4"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
               >
                 <span className="text-foreground">Verified Indian </span>
                 <span className="bg-gradient-to-r from-primary via-secondary to-lime bg-clip-text text-transparent">
@@ -365,9 +354,6 @@ const Marketplace = () => {
               </motion.h1>
               <motion.p 
                 className="text-muted-foreground"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
               >
                 Support India's Path to Net Zero with verified offset projects
               </motion.p>
@@ -557,11 +543,8 @@ const Marketplace = () => {
 
                   if (viewMode === "list") {
                     return (
-                      <motion.div
+                      <div
                         key={credit.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.05 }}
                       >
                         <Card className="flex flex-col sm:flex-row items-stretch glass-strong border-primary/10 hover:border-primary/30 hover:shadow-glow transition-all">
                           <div className="p-4 sm:p-5 flex items-center justify-center bg-gradient-to-br from-primary/10 to-secondary/5 sm:w-28">
@@ -614,17 +597,13 @@ const Marketplace = () => {
                             </div>
                           </div>
                         </Card>
-                      </motion.div>
+                      </div>
                     );
                   }
 
                   return (
-                    <motion.div
+                    <div
                       key={credit.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                      whileHover={{ y: -5, scale: 1.02 }}
                     >
                       <Card className="h-full glass-strong border-primary/10 hover:border-primary/30 hover:shadow-glow transition-all">
                         <CardHeader className="pb-3">
@@ -670,7 +649,7 @@ const Marketplace = () => {
                           </div>
                         </CardFooter>
                       </Card>
-                    </motion.div>
+                    </div>
                   );
                 })}
               </div>
@@ -702,7 +681,6 @@ const Marketplace = () => {
           </>
         )}
       </div>
-    </PageTransition>
   );
 };
 

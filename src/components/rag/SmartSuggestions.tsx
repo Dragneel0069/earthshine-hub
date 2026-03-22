@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, TrendingUp, BookOpen, FileQuestion, Lightbulb, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -144,49 +143,36 @@ export function SmartSuggestions({
       </div>
 
       {/* Suggestions */}
-      <AnimatePresence mode="wait">
         {activeCategory ? (
           // Show category-specific suggestions
-          <motion.div
+          <div
             key={activeCategory}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
             className="space-y-2"
           >
             {SUGGESTION_CATEGORIES.find((c) => c.id === activeCategory)?.suggestions.map(
               (suggestion, index) => (
-                <motion.button
+                <button
                   key={suggestion}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
                   onClick={() => onSuggestionClick(suggestion)}
                   className="w-full text-left px-3 py-2 rounded-lg bg-muted/50 hover:bg-muted text-sm transition-colors"
                 >
                   {suggestion}
-                </motion.button>
+                </button>
               )
             )}
-          </motion.div>
+          </div>
         ) : (
           // Show mixed suggestions
-          <motion.div
+          <div
             key="mixed"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
             className="grid gap-2"
           >
             {displayedSuggestions.map((suggestion, index) => {
               const category = getCategoryForSuggestion(suggestion);
               const Icon = category?.icon || Sparkles;
               return (
-                <motion.button
+                <button
                   key={suggestion}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
                   onClick={() => onSuggestionClick(suggestion)}
                   className="flex items-start gap-3 w-full text-left px-3 py-2.5 rounded-lg bg-muted/50 hover:bg-muted text-sm transition-colors group"
                 >
@@ -198,12 +184,11 @@ export function SmartSuggestions({
                     )}
                   />
                   <span className="flex-1">{suggestion}</span>
-                </motion.button>
+                </button>
               );
             })}
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
 
       {/* Recent Topics */}
       {recentTopics.length > 0 && !activeCategory && (

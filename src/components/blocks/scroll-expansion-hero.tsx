@@ -1,8 +1,6 @@
 'use client';
 
 import { useRef, useEffect, useState, ReactNode } from 'react';
-import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
-
 interface ScrollExpandMediaProps {
   src: string;
   poster?: string;
@@ -79,7 +77,7 @@ const ScrollExpandMedia = ({
   return (
     <div ref={containerRef} className="relative h-[200vh]">
       {/* Fixed container that fades out */}
-      <motion.div 
+      <div 
         className="fixed inset-0 z-10"
         style={{ 
           opacity: sectionOpacity,
@@ -99,7 +97,7 @@ const ScrollExpandMedia = ({
         {/* Fixed container for media */}
         <div className="absolute inset-0 z-10 flex items-center justify-center">
           {/* Title overlay */}
-          <motion.div
+          <div
             className="absolute inset-0 z-20 flex flex-col items-center justify-center pointer-events-none"
             style={{ opacity: titleOpacity, y: titleY }}
           >
@@ -116,10 +114,10 @@ const ScrollExpandMedia = ({
             <p className="text-white/60 text-sm mt-4 animate-pulse">
               {scrollToExpand}
             </p>
-          </motion.div>
+          </div>
 
           {/* Media container */}
-          <motion.div
+          <div
             className="relative w-full h-full overflow-hidden"
             style={{
               scale: mediaScale,
@@ -191,25 +189,25 @@ const ScrollExpandMedia = ({
             />
 
             {/* Dark overlay for content readability */}
-            <motion.div
+            <div
               className="absolute inset-0 bg-black pointer-events-none"
               style={{ opacity: overlayOpacity }}
             />
-          </motion.div>
+          </div>
 
           {/* Content overlay */}
           {children && (
-            <motion.div
+            <div
               className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none"
               style={{ opacity: contentOpacity, y: contentY }}
             >
               <div className="pointer-events-auto max-w-4xl mx-auto px-6">
                 {children}
               </div>
-            </motion.div>
+            </div>
           )}
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };

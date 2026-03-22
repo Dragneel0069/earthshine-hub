@@ -1,7 +1,5 @@
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ScrollReveal } from '@/components/animations/ScrollReveal';
 import { 
   ShieldCheck, 
   FileText, 
@@ -53,7 +51,7 @@ export function MethodologySection() {
       <div className="container relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* Left: Methodology Overview */}
-          <ScrollReveal animation="fadeRight">
+          <div>
             <div className="space-y-6">
               <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-sm font-medium text-primary">
                 <BookOpen className="h-4 w-4" />
@@ -72,12 +70,8 @@ export function MethodologySection() {
 
               <div className="grid sm:grid-cols-2 gap-4">
                 {methodologyPoints.map((point, index) => (
-                  <motion.div
+                  <div
                     key={point.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    viewport={{ once: true }}
                     className="p-4 rounded-xl bg-card border border-border hover:shadow-lg transition-shadow"
                   >
                     <div className="flex items-start gap-3">
@@ -89,7 +83,7 @@ export function MethodologySection() {
                         <p className="text-xs text-muted-foreground">{point.description}</p>
                       </div>
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
 
@@ -101,14 +95,11 @@ export function MethodologySection() {
                 </Button>
               </Link>
             </div>
-          </ScrollReveal>
+          </div>
 
           {/* Right: Data Sources */}
-          <ScrollReveal animation="fadeLeft" delay={0.2}>
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
+          <div>
+            <div
               className="glass-strong rounded-2xl p-6 lg:p-8"
             >
               <div className="flex items-center gap-3 mb-6">
@@ -125,12 +116,8 @@ export function MethodologySection() {
 
               <div className="space-y-3">
                 {dataSources.map((source, index) => (
-                  <motion.div
+                  <div
                     key={source.name}
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 + index * 0.05 }}
-                    viewport={{ once: true }}
                     className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
                   >
                     <div className="flex items-center gap-3">
@@ -140,7 +127,7 @@ export function MethodologySection() {
                     <span className="text-xs text-muted-foreground bg-background px-2 py-1 rounded">
                       {source.type}
                     </span>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
 
@@ -150,8 +137,8 @@ export function MethodologySection() {
                   CEA CO₂ baseline database and IPCC guidelines.
                 </p>
               </div>
-            </motion.div>
-          </ScrollReveal>
+            </div>
+          </div>
         </div>
       </div>
     </section>

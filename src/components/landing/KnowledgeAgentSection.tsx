@@ -1,11 +1,8 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { Brain, Send, Sparkles, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
-import { ScrollReveal } from "@/components/animations/ScrollReveal";
-
 const sampleQuestions = [
   "What are carbon credits?",
   "Explain BRSR compliance",
@@ -56,19 +53,16 @@ export function KnowledgeAgentSection() {
     <section className="relative py-24 overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0 dot-background opacity-20" />
-      <motion.div
+      <div
         className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[150px]"
-        animate={{
-          scale: [1, 1.1, 1],
           opacity: [0.1, 0.2, 0.1],
         }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
       />
 
       <div className="container relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left side - Info */}
-          <ScrollReveal animation="fadeRight">
+          <div>
             <div className="space-y-6">
               <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-sm font-medium text-primary">
                 <Brain className="h-4 w-4" />
@@ -92,16 +86,13 @@ export function KnowledgeAgentSection() {
                   "Carbon credit market insights",
                   "Emission reduction strategies",
                 ].map((item, i) => (
-                  <motion.li
+                  <li
                     key={i}
                     className="flex items-center gap-3"
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.1 }}
                   >
                     <div className="w-1.5 h-1.5 rounded-full bg-primary shadow-glow" />
                     <span className="text-muted-foreground">{item}</span>
-                  </motion.li>
+                  </li>
                 ))}
               </ul>
 
@@ -112,13 +103,12 @@ export function KnowledgeAgentSection() {
                 </Button>
               </Link>
             </div>
-          </ScrollReveal>
+          </div>
 
           {/* Right side - Chat Preview */}
-          <ScrollReveal animation="fadeLeft" delay={0.2}>
-            <motion.div
+          <div>
+            <div
               className="glass-strong rounded-2xl p-1 shadow-glow"
-              whileHover={{ scale: 1.01, transition: { duration: 0.3 } }}
             >
               <div className="bg-card rounded-xl overflow-hidden">
                 {/* Chat Header */}
@@ -138,10 +128,8 @@ export function KnowledgeAgentSection() {
                 {/* Messages */}
                 <div className="h-[280px] overflow-y-auto p-4 space-y-4">
                   {messages.map((message, i) => (
-                    <motion.div
+                    <div
                       key={i}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
                       className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
                     >
                       <div
@@ -153,12 +141,10 @@ export function KnowledgeAgentSection() {
                       >
                         {message.content}
                       </div>
-                    </motion.div>
+                    </div>
                   ))}
                   {isTyping && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
+                    <div
                       className="flex items-center gap-1 text-muted-foreground"
                     >
                       <div className="flex gap-1">
@@ -166,7 +152,7 @@ export function KnowledgeAgentSection() {
                         <span className="w-2 h-2 rounded-full bg-primary/50 animate-bounce" style={{ animationDelay: "150ms" }} />
                         <span className="w-2 h-2 rounded-full bg-primary/50 animate-bounce" style={{ animationDelay: "300ms" }} />
                       </div>
-                    </motion.div>
+                    </div>
                   )}
                 </div>
 
@@ -200,8 +186,8 @@ export function KnowledgeAgentSection() {
                   </div>
                 </form>
               </div>
-            </motion.div>
-          </ScrollReveal>
+            </div>
+          </div>
         </div>
       </div>
     </section>

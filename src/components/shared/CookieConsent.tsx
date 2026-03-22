@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Cookie, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { initializeGA } from "@/hooks/useAnalytics";
 
@@ -35,13 +34,8 @@ export function CookieConsent() {
   };
 
   return (
-    <AnimatePresence>
       {showBanner && (
-        <motion.div
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 100, opacity: 0 }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        <div
           className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6"
         >
           <div className="container max-w-4xl mx-auto">
@@ -97,8 +91,7 @@ export function CookieConsent() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       )}
-    </AnimatePresence>
   );
 }
