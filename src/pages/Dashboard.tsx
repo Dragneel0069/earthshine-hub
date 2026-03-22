@@ -248,7 +248,6 @@ const Dashboard = () => {
                 <div className="grid gap-6 lg:grid-cols-3 mb-8">
             {/* 3D Visualization - Spans 2 columns */}
             <ScrollReveal className="lg:col-span-2" animation="fadeRight">
-              <ErrorBoundary section="3D Visualization">
                 <EmissionsByScope />
             </ScrollReveal>
 
