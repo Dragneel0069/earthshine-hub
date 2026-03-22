@@ -13,7 +13,8 @@ export default function MarketplaceEnhanced() {
   const { user } = useAuth();
 
   return (
-    <SEO 
+    <>
+      <SEO 
         title="Carbon Credit Marketplace | Zero Graph"
         description="Browse and purchase verified carbon credits with quality scoring. Verra, Gold Standard certified projects from India."
       />

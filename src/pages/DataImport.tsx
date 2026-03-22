@@ -39,7 +39,8 @@ export default function DataImport() {
   };
 
   return (
-    <SEO 
+    <>
+      <SEO 
         title="Data Import | Zero Graph" 
         description="Import your emissions data via CSV for bulk processing" 
       />

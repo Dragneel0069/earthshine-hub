@@ -153,7 +153,8 @@ const standards = [
 
 const Methodology = () => {
   return (
-    <SEO 
+    <>
+      <SEO 
         title="Methodology & Data Sources"
         url="/methodology"
         description="Learn about Zero Graph's carbon accounting methodology, emission factor sources, and compliance with international standards like GHG Protocol and ISO 14064."

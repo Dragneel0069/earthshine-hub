@@ -70,7 +70,8 @@ const team = [
 
 const About = () => {
   return (
-    <SEO 
+    <>
+      <SEO 
         title="About Us"
         url="/about"
         description="Learn about Zero Graph's mission to help Indian businesses achieve net-zero emissions through accurate carbon tracking and verified offset solutions."

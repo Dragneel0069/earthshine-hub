@@ -4,7 +4,8 @@ import { SEO } from "@/components/shared/SEO";
 
 const KnowledgeAgent = () => {
   return (
-    <SEO 
+    <>
+      <SEO 
         title="Sustainability Knowledge Agent"
         url="/knowledge"
         description="Ask questions about carbon emissions, sustainability practices, and climate regulations. Get AI-powered answers from our knowledge base."

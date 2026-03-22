@@ -5,7 +5,8 @@ import { AccountingIntegrations } from "@/components/integrations/AccountingInte
 
 export default function Integrations() {
   return (
-    <SEO 
+    <>
+      <SEO 
         title="Integrations"
         url="/integrations"
         description="Connect Zero Graph with your accounting software. Native integrations with Tally, Zoho Books, QuickBooks, and more for automated carbon tracking."

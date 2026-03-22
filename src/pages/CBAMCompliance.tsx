@@ -8,7 +8,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function CBAMCompliance() {
   return (
-    <SEO
+    <>
+      <SEO
         title="CBAM Compliance | EU Carbon Border Adjustment"
         description="Calculate and report embedded carbon emissions for EU exports. CBAM calculator, timeline, and India exposure analysis for steel, aluminium, cement, and fertilizer exporters."
         url="/cbam"

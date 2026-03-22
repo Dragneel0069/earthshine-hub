@@ -97,7 +97,8 @@ const Dashboard = () => {
   ];
 
   return (
-    <SEO 
+    <>
+      <SEO 
         title="Emissions Dashboard"
         url="/dashboard"
         description="Monitor and manage your organization's carbon emissions with real-time analytics, trend charts, and actionable insights."

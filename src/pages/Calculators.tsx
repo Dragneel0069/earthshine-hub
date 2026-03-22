@@ -31,7 +31,8 @@ const nextSteps = [
 
 const Calculators = () => {
   return (
-    <SEO 
+    <>
+      <SEO 
         title="Carbon Footprint Calculator"
         url="/calculators"
         description="Calculate your organization's carbon footprint with India-specific emission factors. Comprehensive Scope 1, 2 & 3 emissions tracking aligned with GHG Protocol."

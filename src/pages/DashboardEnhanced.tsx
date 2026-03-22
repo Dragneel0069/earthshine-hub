@@ -33,7 +33,8 @@ import {
 
 const DashboardEnhanced = () => {
   return (
-    <SEO 
+    <>
+      <SEO 
         title="Carbon Dashboard - India Climate Intelligence"
         url="/dashboard"
         description="Comprehensive carbon accounting dashboard for Indian enterprises with Scope 1, 2, 3 emissions tracking and BRSR compliance."

@@ -304,7 +304,8 @@ const Marketplace = () => {
     priceRange[1] !== 5000;
 
   return (
-    <SEO 
+    <>
+      <SEO 
         title="Carbon Credit Marketplace"
         url="/marketplace"
         description="Browse and purchase verified Indian carbon credits from renewable energy, forestry, and clean cookstove projects. VCS, Gold Standard, and ICER certified."

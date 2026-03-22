@@ -8,7 +8,8 @@ import { Building2, FileText } from 'lucide-react';
 
 export default function Suppliers() {
   return (
-    <SEO 
+    <>
+      <SEO 
         title="Supply Chain & Vendor Surveys" 
         description="Manage your supply chain emissions, track Scope 3 data from suppliers, and collect emission data through vendor surveys" 
         url="/suppliers"
