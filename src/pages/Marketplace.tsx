@@ -682,6 +682,7 @@ const Marketplace = () => {
           </>
         )}
       </div>
+    </>
   );
 };
 

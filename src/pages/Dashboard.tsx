@@ -434,6 +434,7 @@ const Dashboard = () => {
           )}
         </main>
       </div>
+    </>
   );
 };
 
