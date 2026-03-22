@@ -108,12 +108,12 @@ const About = () => {
                   Credible Climate Action
                 </span>
               </motion.h1>
-              <motion.p 
+              <p 
                 className="text-lg text-muted-foreground"
               >
                 We provide the technology, expertise, and standards for Indian businesses to measure 
                 their impact, reduce emissions, and achieve Net Zero goals with confidence.
-              </motion.p>
+              </p>
             </div>
           </div>
         </section>

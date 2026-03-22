@@ -316,10 +316,6 @@ export function GuidedOnboarding({ open: controlledOpen, onComplete }: GuidedOnb
         <div className="px-6 pb-6 min-h-[400px] flex flex-col">
             <div
               key={step}
-              custom={direction}
-              initial="enter"
-              animate="center"
-              exit="exit"
               className="flex-1"
             >
               {/* Step Content */}

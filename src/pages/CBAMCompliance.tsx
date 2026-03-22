@@ -45,12 +45,12 @@ export default function CBAMCompliance() {
                 </span>
               </motion.h1>
 
-              <motion.p
+              <p
                 className="text-muted-foreground mb-6"
               >
                 The EU CBAM applies to imports of iron & steel, aluminium, cement, fertilizers,
                 electricity, and hydrogen. Calculate your exposure and prepare for compliance.
-              </motion.p>
+              </p>
 
               <Alert className="border-amber-500/50 bg-amber-50 dark:bg-amber-950/20">
                 <AlertTriangle className="h-4 w-4 text-amber-600" />

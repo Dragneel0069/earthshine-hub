@@ -44,11 +44,11 @@ export default function MarketplaceEnhanced() {
                   Carbon Credits
                 </span>
               </motion.h1>
-              <motion.p 
+              <p 
                 className="text-muted-foreground mb-8"
               >
                 Quality-scored credits with full traceability and audit-ready retirement certificates
-              </motion.p>
+              </p>
 
               {/* Stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">

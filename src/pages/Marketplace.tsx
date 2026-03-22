@@ -353,11 +353,11 @@ const Marketplace = () => {
                   Carbon Credits
                 </span>
               </motion.h1>
-              <motion.p 
+              <p 
                 className="text-muted-foreground"
               >
                 Support India's Path to Net Zero with verified offset projects
-              </motion.p>
+              </p>
             </div>
           </div>
         </section>

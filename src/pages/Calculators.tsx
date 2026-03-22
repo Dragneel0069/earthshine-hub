@@ -66,12 +66,12 @@ const Calculators = () => {
                   Footprint Calculator
                 </span>
               </motion.h1>
-              <motion.p 
+              <p 
                 className="text-muted-foreground max-w-xl mx-auto"
               >
                 Comprehensive Scope 1, 2 & 3 emissions tracking with India-specific emission factors. 
                 Built for heavy industries including steel, cement, chemicals & more.
-              </motion.p>
+              </p>
 
               {/* Feature Pills */}
               <div 

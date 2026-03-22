@@ -407,12 +407,12 @@ export function DashboardCalculator() {
               {/* Total Emissions */}
               <div className="text-center p-4 rounded-xl bg-primary/5 border border-primary/20">
                 <p className="text-sm text-muted-foreground mb-1">Total Emissions</p>
-                <motion.p 
+                <p 
                   className="text-4xl font-bold text-primary"
                   key={totalTonnes}
                 >
                   {totalTonnes.toFixed(1)}
-                </motion.p>
+                </p>
                 <p className="text-sm text-muted-foreground">tCO₂e/year</p>
               </div>
 

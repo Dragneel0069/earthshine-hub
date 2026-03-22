@@ -94,12 +94,12 @@ export function TrustBadges() {
           </p>
           <div className="flex flex-wrap justify-center items-center gap-8">
             {clientLogos.map((logo, index) => (
-              <motion.span
+              <span
                 key={logo}
                 className="text-lg font-display font-semibold text-muted-foreground/60 hover:text-foreground transition-colors cursor-default"
               >
                 {logo}
-              </motion.span>
+              </span>
             ))}
           </div>
         </div>
