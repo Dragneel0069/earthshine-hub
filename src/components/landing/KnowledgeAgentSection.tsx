@@ -53,11 +53,7 @@ export function KnowledgeAgentSection() {
     <section className="relative py-24 overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0 dot-background opacity-20" />
-      <div
-        className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[150px]"
-          opacity: [0.1, 0.2, 0.1],
-        }}
-      />
+      <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[150px]" />
 
       <div className="container relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
