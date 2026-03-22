@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Download, X, Smartphone } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
@@ -67,12 +65,7 @@ export function InstallPrompt() {
   if (isInstalled || !showPrompt) return null;
 
   return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ y: 100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: 100, opacity: 0 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      <div
         className="fixed bottom-20 left-4 right-4 md:bottom-6 md:left-auto md:right-6 md:max-w-sm z-50"
       >
         <div className="relative bg-card/95 backdrop-blur-xl border border-border/50 rounded-xl p-4 shadow-2xl">
@@ -118,7 +111,6 @@ export function InstallPrompt() {
             </div>
           </div>
         </div>
-      </motion.div>
-    </AnimatePresence>
+      </div>
   );
 }

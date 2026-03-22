@@ -26,8 +26,6 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-
 interface GuidedOnboardingProps {
   open?: boolean;
   onComplete?: () => void;
@@ -291,11 +289,8 @@ export function GuidedOnboarding({ open: controlledOpen, onComplete }: GuidedOnb
         
         {/* Progress Bar */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-muted">
-          <motion.div 
+          <div 
             className="h-full bg-primary"
-            initial={{ width: 0 }}
-            animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.3 }}
           />
         </div>
 
@@ -319,15 +314,8 @@ export function GuidedOnboarding({ open: controlledOpen, onComplete }: GuidedOnb
         </div>
 
         <div className="px-6 pb-6 min-h-[400px] flex flex-col">
-          <AnimatePresence mode="wait" custom={direction}>
-            <motion.div
+            <div
               key={step}
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
               className="flex-1"
             >
               {/* Step Content */}
@@ -485,8 +473,7 @@ export function GuidedOnboarding({ open: controlledOpen, onComplete }: GuidedOnb
                   </div>
                 </div>
               )}
-            </motion.div>
-          </AnimatePresence>
+            </div>
 
           {/* Navigation */}
           <div className="flex justify-between mt-6 pt-4 border-t">

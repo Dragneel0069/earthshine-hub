@@ -13,8 +13,6 @@ import {
   Calendar
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { PageTransition } from '@/components/animations/PageTransition';
-import { ScrollReveal } from '@/components/animations/ScrollReveal';
 import { SEO } from '@/components/shared/SEO';
 
 // Import new dashboard components
@@ -35,7 +33,7 @@ import {
 
 const DashboardEnhanced = () => {
   return (
-    <PageTransition>
+    <>
       <SEO 
         title="Carbon Dashboard - India Climate Intelligence"
         url="/dashboard"
@@ -46,7 +44,7 @@ const DashboardEnhanced = () => {
         <Navbar />
         <main className="container py-8 space-y-8">
           {/* Header */}
-          <ScrollReveal>
+          <div>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
                 <div className="flex items-center gap-3 mb-2">
@@ -76,18 +74,18 @@ const DashboardEnhanced = () => {
                 </Button>
               </div>
             </div>
-          </ScrollReveal>
+          </div>
 
           {/* Key Metrics Overview */}
-          <ScrollReveal delay={0.1}>
+          <div>
             <EmissionsOverview 
               currentFootprint={mockCurrentFootprint}
               previousFootprint={mockPreviousFootprint}
             />
-          </ScrollReveal>
+          </div>
 
           {/* Main Content Tabs */}
-          <ScrollReveal delay={0.2}>
+          <div>
             <Tabs defaultValue="overview" className="space-y-6">
               <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
                 <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -317,10 +315,10 @@ const DashboardEnhanced = () => {
                 </Card>
               </TabsContent>
             </Tabs>
-          </ScrollReveal>
+          </div>
 
           {/* Action Items */}
-          <ScrollReveal delay={0.3}>
+          <div>
             <Card className="border-primary/50 bg-primary/5">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -358,10 +356,13 @@ const DashboardEnhanced = () => {
                 </div>
               </CardContent>
             </Card>
-          </ScrollReveal>
+          </div>
         </main>
       </div>
-    </PageTransition>
+      </>
+
+  
+
   );
 };
 

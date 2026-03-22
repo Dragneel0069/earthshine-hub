@@ -1,11 +1,10 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { RAGAgent } from "@/components/rag/RAGAgent";
-import { PageTransition } from "@/components/animations/PageTransition";
 import { SEO } from "@/components/shared/SEO";
 
 const KnowledgeAgent = () => {
   return (
-    <PageTransition>
+    <>
       <SEO 
         title="Sustainability Knowledge Agent"
         url="/knowledge"
@@ -17,7 +16,10 @@ const KnowledgeAgent = () => {
           <RAGAgent />
         </main>
       </div>
-    </PageTransition>
+      </>
+
+  
+
   );
 };
 

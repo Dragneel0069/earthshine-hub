@@ -1,5 +1,4 @@
 import { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -274,11 +273,8 @@ export function BentoCalculator() {
       {/* Bento Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         {/* Scope 1 - Large card */}
-        <motion.div 
+        <div 
           className="lg:col-span-7"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
         >
           <Collapsible open={scope1Open} onOpenChange={setScope1Open}>
             <Card className="glass-strong border-orange-500/20 overflow-hidden">
@@ -423,14 +419,11 @@ export function BentoCalculator() {
               </CollapsibleContent>
             </Card>
           </Collapsible>
-        </motion.div>
+        </div>
 
         {/* Scope 2 - Medium card */}
-        <motion.div 
+        <div 
           className="lg:col-span-5"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
         >
           <Collapsible open={scope2Open} onOpenChange={setScope2Open}>
             <Card className="glass-strong border-yellow-500/20 h-full">
@@ -493,14 +486,11 @@ export function BentoCalculator() {
               </CollapsibleContent>
             </Card>
           </Collapsible>
-        </motion.div>
+        </div>
 
         {/* Scope 3 - Full width */}
-        <motion.div 
+        <div 
           className="lg:col-span-12"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
         >
           <Collapsible open={scope3Open} onOpenChange={setScope3Open}>
             <Card className="glass-strong border-blue-500/20">
@@ -608,14 +598,11 @@ export function BentoCalculator() {
               </CollapsibleContent>
             </Card>
           </Collapsible>
-        </motion.div>
+        </div>
 
         {/* Process Emissions - Heavy Industry */}
-        <motion.div 
+        <div 
           className="lg:col-span-8"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
         >
           <Collapsible open={processOpen} onOpenChange={setProcessOpen}>
             <Card className="glass-strong border-red-500/20">
@@ -737,14 +724,11 @@ export function BentoCalculator() {
               </CollapsibleContent>
             </Card>
           </Collapsible>
-        </motion.div>
+        </div>
 
         {/* Quick Stats Card */}
-        <motion.div 
+        <div 
           className="lg:col-span-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
         >
           <Card className="glass-strong border-emerald-500/20 h-full">
             <CardHeader className="pb-2">
@@ -789,16 +773,12 @@ export function BentoCalculator() {
               )}
             </CardContent>
           </Card>
-        </motion.div>
+        </div>
       </div>
 
       {/* Floating Summary Bar */}
-      <AnimatePresence>
         {hasInput && (
-          <motion.div
-            initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 100, opacity: 0 }}
+          <div
             className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-background/80 backdrop-blur-xl border-t border-primary/20"
           >
             <div className="container mx-auto">
@@ -876,9 +856,8 @@ export function BentoCalculator() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
     </div>
   );
 }

@@ -1,13 +1,10 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Calculator, Leaf, ArrowRight, Zap, Car, Factory, Home } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { ScrollReveal } from '@/components/animations/ScrollReveal';
-
 // India-specific emission factors
 const emissionFactors = {
   electricity: 0.82, // kg CO₂/kWh (Indian grid average)
@@ -48,7 +45,7 @@ export function QuickCalculatorWidget() {
       <div className="absolute inset-0 dot-background opacity-20" />
       
       <div className="container relative z-10">
-        <ScrollReveal className="text-center max-w-3xl mx-auto mb-12">
+        <div className="text-center max-w-3xl mx-auto mb-12">
           <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-sm font-medium text-primary mb-6">
             <Calculator className="h-4 w-4" />
             <span>FREE TOOL</span>
@@ -61,12 +58,9 @@ export function QuickCalculatorWidget() {
           <p className="text-lg text-muted-foreground">
             Quick calculation using India-specific emission factors from CEA and IPCC standards.
           </p>
-        </ScrollReveal>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+        <div
           className="max-w-2xl mx-auto"
         >
           <div className="glass-strong rounded-3xl p-8 lg:p-10 shadow-xl">
@@ -119,9 +113,7 @@ export function QuickCalculatorWidget() {
 
             {/* Result Display */}
             {result !== null && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
+              <div
                 className="bg-primary/5 border border-primary/20 rounded-2xl p-6 text-center"
               >
                 <p className="text-sm text-muted-foreground mb-2">Estimated Monthly Emissions</p>
@@ -151,7 +143,7 @@ export function QuickCalculatorWidget() {
                     </Button>
                   </Link>
                 </div>
-              </motion.div>
+              </div>
             )}
 
             {/* Data Source Badge */}
@@ -164,7 +156,7 @@ export function QuickCalculatorWidget() {
               <span className="font-medium text-foreground">GHG Protocol</span>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

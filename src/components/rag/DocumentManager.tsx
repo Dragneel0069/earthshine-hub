@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { 
   Upload, 
   FileText, 
@@ -396,10 +395,8 @@ export function DocumentManager({ documents, onDocumentsChange, isLoading }: Doc
         ) : (
           <div className="space-y-3">
             {documents.map((doc) => (
-              <motion.div
+              <div
                 key={doc.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
               >
                 <Card className="p-4 glass-strong">
                   <div className="flex items-start justify-between gap-3">
@@ -442,7 +439,7 @@ export function DocumentManager({ documents, onDocumentsChange, isLoading }: Doc
                     </div>
                   </div>
                 </Card>
-              </motion.div>
+              </div>
             ))}
           </div>
         )}

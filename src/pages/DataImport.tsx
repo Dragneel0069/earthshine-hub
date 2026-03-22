@@ -1,7 +1,6 @@
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { SEO } from '@/components/shared/SEO';
-import { PageTransition } from '@/components/animations/PageTransition';
 import { CSVImporter } from '@/components/data-import/CSVImporter';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -40,7 +39,7 @@ export default function DataImport() {
   };
 
   return (
-    <PageTransition>
+    <>
       <SEO 
         title="Data Import | Zero Graph" 
         description="Import your emissions data via CSV for bulk processing" 
@@ -177,6 +176,7 @@ export default function DataImport() {
       </main>
       
       <Footer />
-    </PageTransition>
+      </>
+
   );
 }

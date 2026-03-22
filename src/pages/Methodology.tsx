@@ -1,6 +1,4 @@
 import { Navbar } from "@/components/layout/Navbar";
-import { PageTransition } from "@/components/animations/PageTransition";
-import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { SEO } from "@/components/shared/SEO";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -155,7 +153,7 @@ const standards = [
 
 const Methodology = () => {
   return (
-    <PageTransition>
+    <>
       <SEO 
         title="Methodology & Data Sources"
         url="/methodology"
@@ -168,7 +166,7 @@ const Methodology = () => {
         <main id="main-content" className="py-12 lg:py-20">
           <div className="container">
             {/* Hero */}
-            <ScrollReveal className="text-center max-w-3xl mx-auto mb-16">
+            <div className="text-center max-w-3xl mx-auto mb-16">
               <Badge variant="outline" className="mb-4">
                 <BookOpen className="h-3 w-3 mr-1" />
                 Transparency & Trust
@@ -180,19 +178,19 @@ const Methodology = () => {
                 We believe in complete transparency. Here's exactly how we calculate emissions, 
                 where our data comes from, and which standards we follow.
               </p>
-            </ScrollReveal>
+            </div>
 
             {/* How We Calculate */}
             <section className="mb-20">
-              <ScrollReveal>
+              <div>
                 <h2 className="text-2xl lg:text-3xl font-bold font-display mb-8 text-center">
                   How We Calculate Emissions
                 </h2>
-              </ScrollReveal>
+              </div>
               
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {methodologySteps.map((step, index) => (
-                  <ScrollReveal key={step.step} delay={index * 0.1}>
+                  <div>
                     <Card className="h-full hover-lift">
                       <CardHeader>
                         <div className="flex items-center gap-3 mb-2">
@@ -214,14 +212,14 @@ const Methodology = () => {
                         </ul>
                       </CardContent>
                     </Card>
-                  </ScrollReveal>
+                  </div>
                 ))}
               </div>
             </section>
 
             {/* Data Sources */}
             <section className="mb-20">
-              <ScrollReveal>
+              <div>
                 <div className="flex items-center gap-3 justify-center mb-8">
                   <Database className="h-6 w-6 text-primary" />
                   <h2 className="text-2xl lg:text-3xl font-bold font-display">
@@ -232,11 +230,11 @@ const Methodology = () => {
                   We use only authoritative, peer-reviewed, and government-published emission factors. 
                   Our factors are updated annually to reflect the latest data.
                 </p>
-              </ScrollReveal>
+              </div>
               
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {dataSources.map((source, index) => (
-                  <ScrollReveal key={source.name} delay={index * 0.05}>
+                  <div>
                     <Card className="h-full hover-lift group">
                       <CardHeader>
                         <div className="flex items-start justify-between">
@@ -266,25 +264,25 @@ const Methodology = () => {
                         </a>
                       </CardContent>
                     </Card>
-                  </ScrollReveal>
+                  </div>
                 ))}
               </div>
             </section>
 
             {/* Standards & Compliance */}
             <section className="mb-20">
-              <ScrollReveal>
+              <div>
                 <div className="flex items-center gap-3 justify-center mb-8">
                   <Shield className="h-6 w-6 text-primary" />
                   <h2 className="text-2xl lg:text-3xl font-bold font-display">
                     Standards & Compliance
                   </h2>
                 </div>
-              </ScrollReveal>
+              </div>
               
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {standards.map((standard, index) => (
-                  <ScrollReveal key={standard.name} delay={index * 0.05}>
+                  <div>
                     <Card className="hover-lift">
                       <CardContent className="pt-6">
                         <div className="flex items-start justify-between mb-2">
@@ -299,14 +297,14 @@ const Methodology = () => {
                         <p className="text-sm text-muted-foreground">{standard.description}</p>
                       </CardContent>
                     </Card>
-                  </ScrollReveal>
+                  </div>
                 ))}
               </div>
             </section>
 
             {/* Calculation Example */}
             <section className="mb-20">
-              <ScrollReveal>
+              <div>
                 <Card className="bg-muted/30">
                   <CardHeader>
                     <div className="flex items-center gap-3">
@@ -342,11 +340,11 @@ const Methodology = () => {
                     </div>
                   </CardContent>
                 </Card>
-              </ScrollReveal>
+              </div>
             </section>
 
             {/* CTA */}
-            <ScrollReveal>
+            <div>
               <div className="text-center">
                 <Card className="inline-block p-8">
                   <div className="flex items-center gap-3 justify-center mb-4">
@@ -370,11 +368,14 @@ const Methodology = () => {
                   </div>
                 </Card>
               </div>
-            </ScrollReveal>
+            </div>
           </div>
         </main>
       </div>
-    </PageTransition>
+      </>
+
+  
+
   );
 };
 

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import { Brain, FileText, MessageSquare, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RAGChat } from "./RAGChat";
@@ -43,10 +42,7 @@ export function RAGAgent() {
   return (
     <div className="h-[calc(100vh-80px)] flex">
       {/* Sidebar - Document Manager */}
-      <motion.div
-        initial={false}
-        animate={{ width: sidebarCollapsed ? 0 : 380 }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
+      <div
         className="relative border-r border-border/50 bg-card/30 overflow-hidden flex-shrink-0"
       >
         <div className="w-[380px] h-full">
@@ -56,7 +52,7 @@ export function RAGAgent() {
             isLoading={isLoadingDocs}
           />
         </div>
-      </motion.div>
+      </div>
 
       {/* Toggle Button */}
       <Button

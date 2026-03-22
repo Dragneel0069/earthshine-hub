@@ -1,7 +1,6 @@
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { SEO } from '@/components/shared/SEO';
-import { PageTransition } from '@/components/animations/PageTransition';
 import { SupplierPortal } from '@/components/suppliers/SupplierPortal';
 import { VendorSurvey } from '@/components/suppliers/VendorSurvey';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -9,7 +8,7 @@ import { Building2, FileText } from 'lucide-react';
 
 export default function Suppliers() {
   return (
-    <PageTransition>
+    <>
       <SEO 
         title="Supply Chain & Vendor Surveys" 
         description="Manage your supply chain emissions, track Scope 3 data from suppliers, and collect emission data through vendor surveys" 
@@ -51,6 +50,7 @@ export default function Suppliers() {
       </main>
       
       <Footer />
-    </PageTransition>
+      </>
+
   );
 }

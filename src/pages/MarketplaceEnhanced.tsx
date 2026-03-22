@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { PageTransition } from "@/components/animations/PageTransition";
 import { SEO } from "@/components/shared/SEO";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -10,13 +9,11 @@ import { ShoppingCart, Leaf, Award, FileText, Shield, AlertTriangle } from "luci
 import { MarketplaceListings } from "@/components/marketplace/MarketplaceListings";
 import { MyOrders } from "@/components/marketplace/MyOrders";
 import { useAuth } from "@/hooks/useAuth";
-import { motion } from "framer-motion";
-
 export default function MarketplaceEnhanced() {
   const { user } = useAuth();
 
   return (
-    <PageTransition>
+    <>
       <SEO 
         title="Carbon Credit Marketplace | Zero Graph"
         description="Browse and purchase verified carbon credits with quality scoring. Verra, Gold Standard certified projects from India."
@@ -27,39 +24,31 @@ export default function MarketplaceEnhanced() {
         {/* Hero */}
         <section className="relative py-16 overflow-hidden">
           <div className="absolute inset-0 grid-background opacity-20" />
-          <motion.div 
+          <div 
             className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-primary/20 rounded-full blur-[150px]"
-            animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.3, 0.2] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           />
           
           <div className="container relative z-10">
             <div className="max-w-3xl mx-auto text-center">
-              <motion.div 
+              <div 
                 className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary mb-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
               >
                 <ShoppingCart className="h-4 w-4" />
                 <span>Carbon Credit Marketplace</span>
-              </motion.div>
-              <motion.h1 
+              </div>
+              <h1 
                 className="text-3xl lg:text-5xl font-bold mb-4"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
               >
                 <span>Verified Indian </span>
                 <span className="bg-gradient-to-r from-primary to-green-400 bg-clip-text text-transparent">
                   Carbon Credits
                 </span>
-              </motion.h1>
-              <motion.p 
+              </h1>
+              <p 
                 className="text-muted-foreground mb-8"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
               >
                 Quality-scored credits with full traceability and audit-ready retirement certificates
-              </motion.p>
+              </p>
 
               {/* Stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
@@ -120,6 +109,7 @@ export default function MarketplaceEnhanced() {
 
         <Footer />
       </div>
-    </PageTransition>
+      </>
+
   );
 }

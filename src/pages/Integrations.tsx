@@ -1,12 +1,11 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { SEO } from "@/components/shared/SEO";
-import { PageTransition } from "@/components/animations/PageTransition";
 import { AccountingIntegrations } from "@/components/integrations/AccountingIntegrations";
 
 export default function Integrations() {
   return (
-    <PageTransition>
+    <>
       <SEO 
         title="Integrations"
         url="/integrations"
@@ -22,6 +21,7 @@ export default function Integrations() {
       </main>
 
       <Footer />
-    </PageTransition>
+      </>
+
   );
 }

@@ -26,10 +26,6 @@ import {
 } from "lucide-react";
 import { useEmissionsSummary } from "@/hooks/useEmissions";
 import { Link } from "react-router-dom";
-import { PageTransition } from "@/components/animations/PageTransition";
-import { ScrollReveal } from "@/components/animations/ScrollReveal";
-import { StaggerContainer, StaggerItem } from "@/components/animations/StaggerContainer";
-import { motion } from "framer-motion";
 import { SEO } from "@/components/shared/SEO";
 import { DashboardSkeleton } from "@/components/skeletons/DashboardSkeleton";
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
@@ -101,7 +97,7 @@ const Dashboard = () => {
   ];
 
   return (
-    <PageTransition>
+    <>
       <SEO 
         title="Emissions Dashboard"
         url="/dashboard"
@@ -116,7 +112,7 @@ const Dashboard = () => {
           ) : (
             <>
           {/* Header */}
-          <ScrollReveal>
+          <div>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-2">
               <div>
                 <div className="flex items-center gap-3 mb-2">
@@ -144,20 +140,20 @@ const Dashboard = () => {
                 </Button>
               </div>
             </div>
-          </ScrollReveal>
+          </div>
 
           {/* Key Metrics Overview */}
           <ErrorBoundary section="Emissions Overview">
-            <ScrollReveal delay={0.1}>
+            <div>
               <EmissionsOverview 
                 currentFootprint={mockCurrentFootprint}
                 previousFootprint={mockPreviousFootprint}
               />
-            </ScrollReveal>
+            </div>
           </ErrorBoundary>
 
           {/* Enhanced Analytics Section */}
-          <ScrollReveal delay={0.2}>
+          <div>
             <Tabs defaultValue="overview" className="space-y-6">
               <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
                 <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -247,12 +243,12 @@ const Dashboard = () => {
               <TabsContent value="3d" className="space-y-6">
                 <div className="grid gap-6 lg:grid-cols-3 mb-8">
             {/* 3D Visualization - Spans 2 columns */}
-            <ScrollReveal className="lg:col-span-2" animation="fadeRight">
+            <div className="lg:col-span-2">
                 <EmissionsByScope />
-            </ScrollReveal>
+            </div>
 
             {/* Total Emissions Counter */}
-            <ScrollReveal animation="fadeLeft" delay={0.1}>
+            <div>
               <div className="space-y-6">
                 <TotalEmissionsCounter 
                   totalEmissions={summary?.totalEmissions || 0}
@@ -262,10 +258,7 @@ const Dashboard = () => {
                 />
                 
                 {/* Quick Insight Card */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
+                <div
                 >
                   <Card className="border-0 bg-gradient-to-br from-primary/10 to-primary/5">
                     <CardContent className="p-4">
@@ -282,17 +275,16 @@ const Dashboard = () => {
                       </div>
                     </CardContent>
                   </Card>
-                </motion.div>
+                </div>
               </div>
-            </ScrollReveal>
+            </div>
           </div>
 
           {/* Stats Grid */}
-          <StaggerContainer className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8" staggerDelay={0.1}>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
             {statsCards.map((stat) => (
-              <StaggerItem key={stat.title}>
-                <motion.div
-                  whileHover={{ y: -4, transition: { duration: 0.2 } }}
+              <div key={stat.title}>
+                <div
                 >
                   <Card 
                     className="group relative overflow-hidden border-0 bg-card hover:shadow-lg transition-all duration-300"
@@ -319,14 +311,14 @@ const Dashboard = () => {
                       </div>
                     </CardContent>
                   </Card>
-                </motion.div>
-              </StaggerItem>
+                </div>
+              </div>
             ))}
-          </StaggerContainer>
+          </div>
 
           {/* Charts Grid */}
           <div className="grid gap-6 lg:grid-cols-3 mb-8">
-            <ScrollReveal className="lg:col-span-2" animation="fadeUp">
+            <div className="lg:col-span-2">
               <ErrorBoundary section="Monthly Trend Chart">
                 <MonthlyTrendChart 
                   data={summary?.monthlyTrend} 
@@ -334,29 +326,29 @@ const Dashboard = () => {
                   isLoading={isLoading}
                 />
               </ErrorBoundary>
-            </ScrollReveal>
-            <ScrollReveal animation="fadeUp" delay={0.1}>
+            </div>
+            <div>
               <ErrorBoundary section="Quick Actions">
                 <QuickActions />
               </ErrorBoundary>
-            </ScrollReveal>
+            </div>
           </div>
               </TabsContent>
 
               {/* Legacy View Tab */}
               <TabsContent value="legacy" className="space-y-6">
                 <div className="grid gap-6 lg:grid-cols-3">
-                  <ScrollReveal className="lg:col-span-2" animation="fadeUp">
+                  <div className="lg:col-span-2">
                     <ErrorBoundary section="Recent Activity">
                       <RecentActivity 
                         activities={summary?.recentActivity} 
                         isLoading={isLoading}
                       />
                     </ErrorBoundary>
-                  </ScrollReveal>
+                  </div>
                   
                   {/* CTA Card */}
-                  <ScrollReveal animation="fadeUp" delay={0.1}>
+                  <div>
                     <Card className="border-0 bg-gradient-to-br from-primary via-emerald-600 to-teal-600 text-white overflow-hidden relative">
                       <div className="absolute inset-0 opacity-20">
                         <div 
@@ -368,11 +360,7 @@ const Dashboard = () => {
                         />
                       </div>
                       <CardContent className="p-6 relative z-10">
-                        <motion.div
-                          initial={{ opacity: 0, scale: 0.9 }}
-                          whileInView={{ opacity: 1, scale: 1 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.5 }}
+                        <div
                         >
                           <div className="flex items-center gap-2 mb-4">
                             <Zap className="h-8 w-8" />
@@ -388,17 +376,17 @@ const Dashboard = () => {
                             Upgrade to Pro
                             <ArrowUpRight className="h-4 w-4" />
                           </Button>
-                        </motion.div>
+                        </div>
                       </CardContent>
                     </Card>
-                  </ScrollReveal>
+                  </div>
                 </div>
               </TabsContent>
             </Tabs>
-          </ScrollReveal>
+          </div>
 
           {/* Action Items */}
-          <ScrollReveal delay={0.3}>
+          <div>
             <Card className="border-primary/50 bg-primary/5">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -436,17 +424,17 @@ const Dashboard = () => {
 478:                 </div>
 479:               </CardContent>
 480:             </Card>
-481:           </ScrollReveal>
+481:           </div>
 482: 
 483:           {/* Integrations Quick Access */}
-484:           <ScrollReveal delay={0.4}>
+484:           <div>
 485:             <AccountingIntegrations compact />
-486:           </ScrollReveal>
+486:           </div>
             </>
           )}
         </main>
       </div>
-    </PageTransition>
+    </>
   );
 };
 

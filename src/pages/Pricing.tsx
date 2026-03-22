@@ -5,7 +5,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { Check, X, Sparkles, Building2, Rocket, HelpCircle, Calculator, Users, ArrowRight, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { SEO } from "@/components/shared/SEO";
 import { Switch } from "@/components/ui/switch";
@@ -154,11 +153,8 @@ export default function Pricing() {
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
         <div className="container relative">
-          <motion.div 
+          <div 
             className="text-center max-w-3xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
           >
             <Badge variant="outline" className="mb-4 border-primary/30 text-primary">
               💰 Save 20% with annual billing
@@ -200,7 +196,7 @@ export default function Pricing() {
                 </span>
               ))}
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -208,11 +204,8 @@ export default function Pricing() {
       <section className="py-12 container">
         <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {plans.map((plan, index) => (
-            <motion.div
+            <div
               key={plan.name}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <Card 
                 className={`relative h-full flex flex-col ${
@@ -289,16 +282,13 @@ export default function Pricing() {
                   </Link>
                 </CardFooter>
               </Card>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         {/* Calculator CTA */}
-        <motion.div 
+        <div 
           className="text-center mt-12"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
         >
           <p className="text-muted-foreground mb-4">Not sure which plan fits your needs?</p>
           <Link to="/calculators">
@@ -307,17 +297,14 @@ export default function Pricing() {
               Try Our Free Calculator
             </Button>
           </Link>
-        </motion.div>
+        </div>
       </section>
 
       {/* Feature Comparison Table */}
       <section className="py-20 bg-muted/20">
         <div className="container">
-          <motion.div 
+          <div 
             className="text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
           >
             <h2 className="text-3xl font-display font-bold mb-4">
               Compare Plans
@@ -325,13 +312,10 @@ export default function Pricing() {
             <p className="text-muted-foreground">
               See what's included at each level
             </p>
-          </motion.div>
+          </div>
           
-          <motion.div 
+          <div 
             className="max-w-4xl mx-auto overflow-hidden rounded-xl border border-border/50 bg-card"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
           >
             <div className="overflow-x-auto">
               <table className="w-full">
@@ -367,17 +351,14 @@ export default function Pricing() {
                 </tbody>
               </table>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* FAQs */}
       <section className="py-20 container">
-        <motion.div 
+        <div 
           className="text-center mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
         >
           <h2 className="text-3xl font-display font-bold mb-4">
             Frequently Asked Questions
@@ -385,13 +366,10 @@ export default function Pricing() {
           <p className="text-muted-foreground">
             Have questions? We've got answers.
           </p>
-        </motion.div>
+        </div>
         
-        <motion.div 
+        <div 
           className="max-w-3xl mx-auto"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
         >
           <Accordion type="single" collapsible className="w-full">
             {faqs.map((faq, index) => (
@@ -408,17 +386,14 @@ export default function Pricing() {
               </AccordionItem>
             ))}
           </Accordion>
-        </motion.div>
+        </div>
       </section>
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-primary/5 to-primary/10">
         <div className="container">
-          <motion.div 
+          <div 
             className="max-w-3xl mx-auto text-center"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
           >
             <Zap className="h-12 w-12 text-primary mx-auto mb-4" />
             <h2 className="text-3xl font-display font-bold mb-4">
@@ -443,7 +418,7 @@ export default function Pricing() {
             <p className="text-sm text-muted-foreground mt-4">
               No credit card required • Cancel anytime
             </p>
-          </motion.div>
+          </div>
         </div>
       </section>
 

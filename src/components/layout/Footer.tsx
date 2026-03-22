@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import zeroGraphLogo from "@/assets/zerograph-logo.png";
 
 const platformLinks = [
@@ -40,7 +39,7 @@ export function Footer() {
       <div className="container px-4 md:px-6">
         <div className="grid gap-8 md:gap-12 grid-cols-2 md:grid-cols-2 lg:grid-cols-5 mb-8 md:mb-12">
           {/* Brand Column */}
-          <ScrollReveal delay={0} className="col-span-2 lg:col-span-2">
+          <div>
             <div className="flex items-center gap-2 mb-3 md:mb-4">
               <img 
                 src={zeroGraphLogo} 
@@ -77,10 +76,10 @@ export function Footer() {
                 </svg>
               </a>
             </div>
-          </ScrollReveal>
+          </div>
 
           {/* Platform Links */}
-          <ScrollReveal delay={0.1}>
+          <div>
             <h4 className="font-semibold text-sm md:text-base mb-3 md:mb-4">Platform</h4>
             <nav aria-label="Platform navigation">
               <ul className="space-y-2 md:space-y-3 text-xs md:text-sm text-muted-foreground">
@@ -93,10 +92,10 @@ export function Footer() {
                 ))}
               </ul>
             </nav>
-          </ScrollReveal>
+          </div>
 
           {/* Resources Links */}
-          <ScrollReveal delay={0.2}>
+          <div>
             <h4 className="font-semibold text-sm md:text-base mb-3 md:mb-4">Resources</h4>
             <nav aria-label="Resources navigation">
               <ul className="space-y-2 md:space-y-3 text-xs md:text-sm text-muted-foreground">
@@ -109,10 +108,10 @@ export function Footer() {
                 ))}
               </ul>
             </nav>
-          </ScrollReveal>
+          </div>
 
           {/* Company Links */}
-          <ScrollReveal delay={0.3}>
+          <div>
             <h4 className="font-semibold text-sm md:text-base mb-3 md:mb-4">Company</h4>
             <nav aria-label="Company navigation">
               <ul className="space-y-2 md:space-y-3 text-xs md:text-sm text-muted-foreground">
@@ -130,7 +129,7 @@ export function Footer() {
                 </li>
               </ul>
             </nav>
-          </ScrollReveal>
+          </div>
         </div>
 
         {/* Bottom Bar */}

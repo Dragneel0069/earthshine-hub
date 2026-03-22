@@ -1,6 +1,5 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Card, CardContent } from "@/components/ui/card";
-import { motion } from "framer-motion";
 import { 
   FileText, 
   Users, 
@@ -15,7 +14,6 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { PageTransition } from "@/components/animations/PageTransition";
 import { SEO } from "@/components/shared/SEO";
 
 const sections = [
@@ -176,7 +174,7 @@ We aim to respond to all inquiries within 2 business days.`
 
 const TermsOfService = () => {
   return (
-    <PageTransition>
+    <>
       <SEO title="Terms of Service" url="/terms" description="Read Zero Graph's terms of service. Understand your rights and responsibilities when using our carbon tracking platform." />
       <div className="min-h-screen bg-background">
         <Navbar />
@@ -184,9 +182,7 @@ const TermsOfService = () => {
         {/* Hero Section */}
         <section className="py-16 bg-gradient-to-b from-muted to-background">
           <div className="container">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+            <div
               className="text-center max-w-3xl mx-auto"
             >
               <div className="inline-flex items-center gap-2 rounded-full bg-accent border border-border px-4 py-2 text-sm font-medium text-primary mb-6">
@@ -202,7 +198,7 @@ const TermsOfService = () => {
               <p className="text-sm text-muted-foreground">
                 Last updated: January 22, 2026
               </p>
-            </motion.div>
+            </div>
           </div>
         </section>
 
@@ -231,13 +227,9 @@ const TermsOfService = () => {
           <div className="container">
             <div className="max-w-4xl mx-auto space-y-8">
               {sections.map((section, index) => (
-                <motion.div
+                <div
                   key={section.id}
                   id={section.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.05 }}
                 >
                   <Card className="border-border hover:shadow-md transition-shadow">
                     <CardContent className="p-6 md:p-8">
@@ -260,7 +252,7 @@ const TermsOfService = () => {
                       </div>
                     </CardContent>
                   </Card>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
@@ -296,7 +288,10 @@ const TermsOfService = () => {
           </div>
         </footer>
       </div>
-    </PageTransition>
+      </>
+
+  
+
   );
 };
 

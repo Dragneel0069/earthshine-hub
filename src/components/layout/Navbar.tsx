@@ -30,7 +30,6 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { motion } from "framer-motion";
 import zeroGraphLogo from "@/assets/zerograph-logo.png";
 
 const solutions = [
@@ -164,11 +163,8 @@ export function Navbar() {
         Skip to main content
       </a>
       
-      <motion.nav 
+      <nav 
         className="sticky top-0 z-50 w-full border-b border-border/50 glass"
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5 }}
         role="navigation"
         aria-label="Main navigation"
       >
@@ -346,11 +342,8 @@ export function Navbar() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <motion.div 
+        <div 
           className="border-t border-border/50 bg-background/95 backdrop-blur-xl lg:hidden max-h-[calc(100vh-4rem)] overflow-y-auto"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
         >
           <div className="container py-4 space-y-3">
             <div className="space-y-1">
@@ -401,9 +394,9 @@ export function Navbar() {
               </Link>
             </div>
           </div>
-        </motion.div>
+        </div>
       )}
-      </motion.nav>
+      </nav>
     </>
   );
 }

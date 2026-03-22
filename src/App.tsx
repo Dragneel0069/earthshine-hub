@@ -29,7 +29,7 @@ import KnowledgeAgent from "./pages/KnowledgeAgent";
 import Pricing from "./pages/Pricing";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
-import ScrollDemo from "./pages/ScrollDemo";
+
 import Methodology from "./pages/Methodology";
 import DataImport from "./pages/DataImport";
 import Suppliers from "./pages/Suppliers";

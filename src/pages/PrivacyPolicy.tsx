@@ -1,7 +1,6 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { motion } from "framer-motion";
 import { Shield, Database, Cookie, Globe, UserCheck, Mail, Clock, Lock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { SEO } from "@/components/shared/SEO";
@@ -245,11 +244,8 @@ export default function PrivacyPolicy() {
       <section className="relative py-16 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
         <div className="container relative">
-          <motion.div 
+          <div 
             className="text-center max-w-3xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
           >
             <Badge variant="outline" className="mb-4 border-primary/30 text-primary">
               Legal
@@ -263,16 +259,13 @@ export default function PrivacyPolicy() {
             <p className="text-sm text-muted-foreground">
               Last updated: {lastUpdated}
             </p>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Table of Contents */}
       <section className="py-8 container">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+        <div
         >
           <Card className="max-w-3xl mx-auto border-border/50">
             <CardContent className="p-6">
@@ -291,20 +284,16 @@ export default function PrivacyPolicy() {
               </nav>
             </CardContent>
           </Card>
-        </motion.div>
+        </div>
       </section>
 
       {/* Policy Sections */}
       <section className="py-8 container">
         <div className="max-w-3xl mx-auto space-y-8">
           {sections.map((section, index) => (
-            <motion.div
+            <div
               key={section.id}
               id={section.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.05 }}
             >
               <Card className="border-border/50">
                 <CardContent className="p-6">
@@ -359,18 +348,15 @@ export default function PrivacyPolicy() {
                   </div>
                 </CardContent>
               </Card>
-            </motion.div>
+            </div>
           ))}
         </div>
       </section>
 
       {/* Footer CTA */}
       <section className="py-16 container">
-        <motion.div 
+        <div 
           className="max-w-3xl mx-auto text-center"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
         >
           <p className="text-muted-foreground mb-4">
             Have questions about our privacy practices?
@@ -381,7 +367,7 @@ export default function PrivacyPolicy() {
           >
             Contact our Data Protection Officer →
           </Link>
-        </motion.div>
+        </div>
       </section>
 
       <div className="h-20" />
