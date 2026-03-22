@@ -8,11 +8,45 @@ interface SEOProps {
   url?: string;
   type?: 'website' | 'article';
   noIndex?: boolean;
+  jsonLd?: Record<string, unknown>;
 }
 
 const BASE_URL = 'https://zerograph.in';
 const DEFAULT_IMAGE = `${BASE_URL}/og-image.png`;
 const SITE_NAME = 'Zero Graph';
+
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Zero Graph',
+  url: BASE_URL,
+  logo: `${BASE_URL}/logo.png`,
+  description: "India's leading carbon accounting and BRSR compliance platform for enterprises and SMEs.",
+  foundingDate: '2024',
+  areaServed: 'IN',
+  sameAs: [
+    'https://x.com/zeraboronkagraph',
+    'https://www.linkedin.com/company/zero-graph',
+  ],
+  contactPoint: {
+    '@type': 'ContactPoint',
+    email: 'info@zerograph.in',
+    contactType: 'customer service',
+    availableLanguage: ['English', 'Hindi'],
+  },
+};
+
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: SITE_NAME,
+  url: BASE_URL,
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: `${BASE_URL}/knowledge-agent?q={search_term_string}`,
+    'query-input': 'required name=search_term_string',
+  },
+};
 
 export function SEO({
   title,
@@ -22,6 +56,7 @@ export function SEO({
   url,
   type = 'website',
   noIndex = false,
+  jsonLd,
 }: SEOProps) {
   const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} - India's #1 Carbon Accounting & BRSR Compliance Platform`;
   const fullUrl = url ? `${BASE_URL}${url}` : BASE_URL;
@@ -51,6 +86,19 @@ export function SEO({
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={image} />
+
+      {/* JSON-LD Structured Data */}
+      <script type="application/ld+json">
+        {JSON.stringify(organizationJsonLd)}
+      </script>
+      <script type="application/ld+json">
+        {JSON.stringify(websiteJsonLd)}
+      </script>
+      {jsonLd && (
+        <script type="application/ld+json">
+          {JSON.stringify(jsonLd)}
+        </script>
+      )}
     </Helmet>
   );
 }
