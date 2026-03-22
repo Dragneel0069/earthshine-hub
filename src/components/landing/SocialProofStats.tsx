@@ -12,8 +12,8 @@ interface StatItemProps {
 }
 
 function AnimatedCounter({ value, suffix = "", prefix = "" }: { value: number; suffix?: string; prefix?: string }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.5 });
+  const ref = useRef<HTMLSpanElement>(null);
+  const [displayValue, setDisplayValue] = useState(0);
   const [displayValue, setDisplayValue] = useState(0);
 
   useEffect(() => {
