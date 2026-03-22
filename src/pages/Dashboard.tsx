@@ -249,48 +249,7 @@ const Dashboard = () => {
             {/* 3D Visualization - Spans 2 columns */}
             <ScrollReveal className="lg:col-span-2" animation="fadeRight">
               <ErrorBoundary section="3D Visualization">
-                <Card className="overflow-hidden border-0 bg-gradient-to-br from-card via-card to-primary/5 h-full">
-                  <CardHeader className="pb-2">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <CardTitle className="text-lg font-display flex items-center gap-2">
-                          <Globe2 className="h-5 w-5 text-primary" />
-                          3D Emissions Overview
-                        </CardTitle>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          Interactive visualization of your carbon footprint by scope
-                        </p>
-                      </div>
-                      <Badge variant="secondary" className="gap-1">
-                        <Activity className="h-3 w-3" />
-                        Live
-                      </Badge>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="p-0">
-                    <Dashboard3DScene 
-                      scope1={summary?.byScope.scope1 || 450}
-                      scope2={summary?.byScope.scope2 || 380}
-                      scope3={summary?.byScope.scope3 || 720}
-                    />
-                    {/* Legend */}
-                    <div className="flex flex-wrap items-center justify-center gap-6 p-4 border-t border-border/50">
-                      <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-full bg-emerald-500" />
-                        <span className="text-sm text-muted-foreground">Scope 1: {summary?.byScope.scope1?.toFixed(0) || 450} tCO₂e</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-full bg-blue-500" />
-                        <span className="text-sm text-muted-foreground">Scope 2: {summary?.byScope.scope2?.toFixed(0) || 380} tCO₂e</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-full bg-amber-500" />
-                        <span className="text-sm text-muted-foreground">Scope 3: {summary?.byScope.scope3?.toFixed(0) || 720} tCO₂e</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </ErrorBoundary>
+                <EmissionsByScope />
             </ScrollReveal>
 
             {/* Total Emissions Counter */}
