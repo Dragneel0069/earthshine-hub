@@ -176,5 +176,7 @@ export default function DataImport() {
       </main>
       
       <Footer />
+      </>
+
   );
 }

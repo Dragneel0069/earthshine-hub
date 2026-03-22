@@ -218,6 +218,11 @@ const Calculators = () => {
           </div>
         </footer>
       </div>
+      </>
+
+      </>
+
+
   );
 };
 

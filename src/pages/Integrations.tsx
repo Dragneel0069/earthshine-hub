@@ -21,5 +21,7 @@ export default function Integrations() {
       </main>
 
       <Footer />
+      </>
+
   );
 }

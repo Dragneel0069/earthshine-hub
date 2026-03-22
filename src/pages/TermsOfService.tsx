@@ -288,6 +288,11 @@ const TermsOfService = () => {
           </div>
         </footer>
       </div>
+      </>
+
+      </>
+
+
   );
 };
 

@@ -16,6 +16,11 @@ const KnowledgeAgent = () => {
           <RAGAgent />
         </main>
       </div>
+      </>
+
+      </>
+
+
   );
 };
 

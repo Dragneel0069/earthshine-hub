@@ -359,6 +359,11 @@ const DashboardEnhanced = () => {
           </div>
         </main>
       </div>
+      </>
+
+      </>
+
+
   );
 };
 

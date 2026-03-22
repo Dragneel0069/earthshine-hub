@@ -372,6 +372,11 @@ const Methodology = () => {
           </div>
         </main>
       </div>
+      </>
+
+      </>
+
+
   );
 };
 

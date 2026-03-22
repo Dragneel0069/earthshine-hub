@@ -50,5 +50,7 @@ export default function Suppliers() {
       </main>
       
       <Footer />
+      </>
+
   );
 }

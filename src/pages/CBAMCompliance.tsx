@@ -70,5 +70,7 @@ export default function CBAMCompliance() {
 
         <Footer />
       </div>
+      </>
+
   );
 }

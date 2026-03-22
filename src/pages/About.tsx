@@ -326,6 +326,11 @@ const About = () => {
           </div>
         </footer>
       </div>
+      </>
+
+      </>
+
+
   );
 };
 

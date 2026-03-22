@@ -109,5 +109,7 @@ export default function MarketplaceEnhanced() {
 
         <Footer />
       </div>
+      </>
+
   );
 }
